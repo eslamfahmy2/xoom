@@ -14,7 +14,7 @@ private val DarkColorPalette = darkColors(
 
     surface = Color.Black,
     onSurface = Color.White,
-    secondaryVariant = Color.DarkGray
+    secondaryVariant = editText
 
 )
 
@@ -25,7 +25,7 @@ private val LightColorPalette = lightColors(
 
     surface = Color.White,
     onSurface = Color.Black,
-    secondaryVariant = Color.DarkGray,
+    secondaryVariant = editText,
 
     // Other default colors to override
     background = Color.White,

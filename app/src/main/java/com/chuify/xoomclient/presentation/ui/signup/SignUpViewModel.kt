@@ -62,11 +62,20 @@ class ListViewModel @Inject constructor(
                                 is DataState.Loading -> {
                                     _state.value = SignUpState.Loading
                                 }
-                                is DataState.Success ->  {
+                                is DataState.Success -> {
                                     _state.value = SignUpState.Success(result.data)
                                 }
                             }
                         }
+                    }
+                    is SignUpIntent.EmailChange -> {
+                        _email.value = intent.data
+                    }
+                    is SignUpIntent.FirstNameChange -> {
+                        _firstName.value = intent.data
+                    }
+                    is SignUpIntent.LastNameChange -> {
+                        _lastName.value = intent.data
                     }
                 }
             }
