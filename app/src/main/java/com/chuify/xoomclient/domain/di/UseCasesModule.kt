@@ -3,6 +3,7 @@ package com.chuify.xoomclient.domain.di
 
 import com.chuify.xoomclient.domain.mapper.UserDtoMapper
 import com.chuify.xoomclient.domain.repository.AuthRepo
+import com.chuify.xoomclient.domain.usecase.auth.AuthInteraction
 import com.chuify.xoomclient.domain.usecase.auth.SignInUseCase
 import com.chuify.xoomclient.domain.usecase.auth.SignUpUseCase
 import dagger.Module
@@ -28,6 +29,13 @@ object UseCasesModule {
         repository: AuthRepo,
         mapperModule: UserDtoMapper,
     ) = SignUpUseCase(repo = repository, mapper = mapperModule)
+
+    @Singleton
+    @Provides
+    fun provideAuthInteractions(
+        signUpUseCase: SignUpUseCase,
+        signInUseCase: SignInUseCase,
+    ) = AuthInteraction(signIn = signInUseCase, signUp = signUpUseCase)
 
 
 }
