@@ -1,6 +1,7 @@
 package com.chuify.xoomclient.data.remote.network
 
 import com.chuify.xoomclient.data.remote.dto.UserDto
+import retrofit2.Response
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -8,7 +9,7 @@ import retrofit2.http.Query
 interface ApiInterface {
 
     @POST("login")
-    suspend fun login(@Query("phone") phone: String): UserDto
+    suspend fun login(@Query("phone") phone: String): Response<UserDto>
 
     //----------------------------------------------------------------------------------------------------
     @POST("register")
@@ -17,7 +18,7 @@ interface ApiInterface {
         @Query("lastname") lastname: String,
         @Query("email") email: String,
         @Query("phone") phone: String,
-    ): UserDto
+    ): Response<UserDto>
 
 
 }

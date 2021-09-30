@@ -112,6 +112,7 @@ class SignUpFragment : Fragment() {
                                             message = it,
                                             actionLabel = "Dismiss",
                                         )
+                                        viewModel.userIntent.send(SignUpIntent.Idl)
                                     }
                                 }
                             }

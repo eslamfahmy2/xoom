@@ -5,6 +5,7 @@ import com.chuify.xoomclient.domain.mapper.UserDtoMapper
 import com.chuify.xoomclient.domain.model.User
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.utils.DataState
+import com.chuify.xoomclient.domain.utils.ResponseState
 import com.chuify.xoomclient.domain.utils.Validator
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -26,9 +27,21 @@ class SignInUseCase @Inject constructor(
             val response = repo.login(
                 phone = phone
             )
-            val data = mapper.mapToDomainModel(response)
-            sharedPreferences.saveUser(response)
-            emit(DataState.Success(data))
+
+            when (response) {
+                is ResponseState.Error -> {
+                    emit(DataState.Error(response.message))
+                }
+                is ResponseState.Success -> {
+
+                    val data = mapper.mapToDomainModel(response.data)
+                    sharedPreferences.saveUser(response.data)
+                    emit(DataState.Success(data))
+
+                }
+            }
+
+
         } catch (e: Exception) {
             emit(DataState.Error(e.message))
         }

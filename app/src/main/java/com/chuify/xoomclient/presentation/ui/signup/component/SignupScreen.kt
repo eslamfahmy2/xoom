@@ -35,11 +35,15 @@ fun SignupScreen(
     userIntent: Channel<SignUpIntent>,
     navController: NavController,
 
+
     ) {
 
-    ConstraintLayout(modifier = Modifier
-        .fillMaxSize()
-        .padding(8.dp)) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+
+    ) {
 
         val (header, content, footer) = createRefs()
 

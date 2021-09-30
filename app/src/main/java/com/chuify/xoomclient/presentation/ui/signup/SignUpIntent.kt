@@ -6,4 +6,5 @@ sealed class SignUpIntent {
     data class EmailChange(val data: String) : SignUpIntent()
     object SignUp : SignUpIntent()
     object SignIn : SignUpIntent()
+    object Idl : SignUpIntent()
 }
