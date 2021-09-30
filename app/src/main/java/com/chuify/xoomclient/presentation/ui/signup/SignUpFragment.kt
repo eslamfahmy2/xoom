@@ -4,37 +4,38 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.*
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.chuify.xoomclient.presentation.components.AppBar
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
+import com.chuify.xoomclient.presentation.ui.BaseApplication
+import com.chuify.xoomclient.presentation.ui.signup.component.SignUpIdleScreen
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-@OptIn(ExperimentalComposeUiApi::class)
+
 @AndroidEntryPoint
 class SignUpFragment : Fragment() {
 
-    private val viewModel: ListViewModel by viewModels()
+    private val viewModel: SignUpViewModel by viewModels()
+
+    @Inject
+    lateinit var application: BaseApplication
 
 
+    @ExperimentalMaterialApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,224 +45,76 @@ class SignUpFragment : Fragment() {
             setContent {
 
                 XoomGasClientTheme(
-                    darkTheme = false
+                    darkTheme = application.isDark()
                 ) {
+
+                    val coroutineScope = rememberCoroutineScope()
+
+
+                    val state by remember {
+                        viewModel.state
+                    }
+
+                    val firstName by remember {
+                        viewModel.firstName
+                    }
+
+                    val lastName by remember {
+                        viewModel.lastName
+                    }
+
+                    val email by remember {
+                        viewModel.email
+                    }
+
                     Scaffold(
                         topBar = {
                             AppBar(
                                 title = "Signup",
                                 onToggleTheme = {
-
+                                    application.toggleTheme()
                                 }
                             )
+                        },
+                        bottomBar = {
+                            if (state is SignUpState.Error) {
+                                val show = mutableStateOf(true)
+                                if (show.value) {
+                                    Snackbar(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        action = {
+                                            show.value = false
+                                        }
+                                    ) {
+                                        Text(text = (state as SignUpState.Error).message.toString())
+                                    }
+                                }
+                            }
                         }
                     ) {
 
-                        val firstName by remember {
-                            viewModel.firstName
-                        }
+                        SignUpIdleScreen(
+                            firstName = firstName,
+                            lastName = lastName,
+                            email = email,
+                            coroutineScope = coroutineScope,
+                            userIntent = viewModel.userIntent
+                        )
 
-                        val lastName by remember {
-                            viewModel.lastName
-                        }
-
-                        val email by remember {
-                            viewModel.email
-                        }
-
-                        val coroutineScope = rememberCoroutineScope()
-
-                        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-
-                            val (header, content, footer) = createRefs()
-
-                            Column(
-                                modifier = Modifier
-                                    .wrapContentSize()
-                                    .constrainAs(header) {
-                                        top.linkTo(parent.top)
-                                        start.linkTo(parent.start)
-                                        bottom.linkTo(content.top)
-                                    },
+                        if (state is SignUpState.Loading) {
+                            Box(Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
                             ) {
-
-                                Text(
-                                    modifier = Modifier
-                                        .wrapContentSize()
-                                        .padding(start = 8.dp),
-                                    text = "Hello There !",
-                                    color = MaterialTheme.colors.onSurface,
-                                    fontSize = 28.sp
-                                )
-
-                                Text(
-                                    modifier = Modifier
-                                        .wrapContentSize()
-                                        .padding(start = 8.dp),
-                                    text = "Welcome to Xoom Gas",
-                                    color = MaterialTheme.colors.onSurface,
-                                    fontSize = 28.sp
-                                )
-
-                            }
-
-                            Column(modifier = Modifier
-                                .wrapContentSize()
-                                .constrainAs(content) {
-                                    top.linkTo(header.bottom)
-                                    start.linkTo(parent.start)
-                                    end.linkTo(parent.end)
-                                    bottom.linkTo(footer.top)
-                                }) {
-
-
-                                TextField(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp)
-                                        .background(
-                                            color = MaterialTheme.colors.surface,
-                                        ),
-                                    value = firstName,
-                                    onValueChange = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(SignUpIntent.FirstNameChange(
-                                                it))
-                                        }
-                                    },
-                                    label = {
-                                        Text(text = "First name")
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        autoCorrect = false,
-                                        keyboardType = KeyboardType.Text,
-                                        imeAction = ImeAction.Next
-                                    ),
-                                    textStyle = TextStyle(
-                                        color = MaterialTheme.colors.secondaryVariant,
-                                        fontSize = 22.sp
-                                    )
-
-                                )
-
-
-                                TextField(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp)
-                                        .background(
-                                            color = MaterialTheme.colors.surface,
-                                        ),
-                                    value = lastName,
-                                    onValueChange = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(SignUpIntent.LastNameChange(it))
-                                        }
-                                    },
-                                    label = {
-                                        Text(text = "Last name")
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        autoCorrect = false,
-                                        keyboardType = KeyboardType.Text,
-                                        imeAction = ImeAction.Next
-                                    ),
-                                    textStyle = TextStyle(
-                                        color = MaterialTheme.colors.secondaryVariant,
-                                        fontSize = 22.sp
-                                    )
-
-                                )
-
-
-                                TextField(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp)
-                                        .background(
-                                            color = MaterialTheme.colors.surface,
-                                        ),
-                                    value = email,
-                                    onValueChange = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(SignUpIntent.EmailChange(it))
-                                        }
-                                    },
-                                    label = {
-                                        Text(text = "Email")
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        autoCorrect = false,
-                                        keyboardType = KeyboardType.Text,
-                                        imeAction = ImeAction.Next
-                                    ),
-                                    textStyle = TextStyle(
-                                        color = MaterialTheme.colors.secondaryVariant,
-                                        fontSize = 22.sp
-                                    )
-
-                                )
-
-
-                                Button(
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .fillMaxWidth(),
-                                    onClick = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(SignUpIntent.SignUp)
-                                        }
-                                    })
-                                {
-                                    Text(
-                                        modifier = Modifier
-                                            .padding(8.dp)
-                                            .background(
-                                                shape = MaterialTheme.shapes.large,
-                                                color = MaterialTheme.colors.primary
-                                            ),
-                                        text = "Signup"
-                                    )
-                                }
-
-                            }
-
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .constrainAs(footer) {
-                                        top.linkTo(content.bottom)
-                                        start.linkTo(parent.start)
-                                        end.linkTo(parent.end)
-                                        bottom.linkTo(parent.bottom)
-                                    },
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .wrapContentSize()
-                                        .padding(start = 8.dp),
-                                    text = "Do you have account?",
-                                    color = MaterialTheme.colors.onSurface,
-                                    fontSize = 16.sp
-                                )
-
-                                Text(
-                                    modifier = Modifier
-                                        .wrapContentSize()
-                                        .padding(start = 8.dp),
-                                    text = "Login",
-                                    color = MaterialTheme.colors.primary,
-                                    fontSize = 16.sp
+                                CircularProgressIndicator(
+                                    modifier = Modifier.wrapContentSize()
                                 )
                             }
-
 
                         }
+
 
                     }
+
                 }
             }
         }

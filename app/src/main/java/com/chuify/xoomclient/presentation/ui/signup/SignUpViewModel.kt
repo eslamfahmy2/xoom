@@ -1,5 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.signup
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -13,10 +14,10 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "ListViewModel"
+const val TAG = "SignUpViewModel"
 
 @HiltViewModel
-class ListViewModel @Inject constructor(
+class SignUpViewModel @Inject constructor(
     private val useCase: AuthInteraction,
 ) : ViewModel() {
 
@@ -25,16 +26,16 @@ class ListViewModel @Inject constructor(
     private val _firstName: MutableState<String> = mutableStateOf("")
     val firstName get() = _firstName
 
-    private val _lastName: MutableState<String> = mutableStateOf("")
+    private val _lastName: MutableState<String> = mutableStateOf("fahmy")
     val lastName get() = _lastName
 
-    private val _email: MutableState<String> = mutableStateOf("")
+    private val _email: MutableState<String> = mutableStateOf("eslam@fa.com")
     val email get() = _email
 
-    private val _phone: MutableState<String> = mutableStateOf("")
+    private val _phone: MutableState<String> = mutableStateOf("+2011123312461")
     val phone get() = _phone
 
-    private val _state: MutableState<SignUpState> = mutableStateOf(SignUpState.Loading)
+    private val _state: MutableState<SignUpState> = mutableStateOf(SignUpState.Idl)
     val state get() = _state
 
 
@@ -57,12 +58,15 @@ class ListViewModel @Inject constructor(
                         ).collect { result ->
                             when (result) {
                                 is DataState.Error -> {
+                                    Log.d(TAG, "Error: " + result.message)
                                     _state.value = SignUpState.Error(result.message)
                                 }
                                 is DataState.Loading -> {
+                                    Log.d(TAG, "Loading: " + result.message)
                                     _state.value = SignUpState.Loading
                                 }
                                 is DataState.Success -> {
+                                    Log.d(TAG, "Success: " + result.data)
                                     _state.value = SignUpState.Success(result.data)
                                 }
                             }

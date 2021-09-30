@@ -14,7 +14,7 @@ private val DarkColorPalette = darkColors(
 
     surface = Color.Black,
     onSurface = Color.White,
-    secondaryVariant = editText
+    secondaryVariant = Color.White
 
 )
 

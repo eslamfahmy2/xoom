@@ -8,33 +8,33 @@ data class UserDto(
 
     @Expose
     @SerializedName(value = "Status", alternate = ["status"])
-    val status: String,
+    val status: String?,
 
     @Expose
     @SerializedName(value = "Msg", alternate = ["msg"])
-    val msg: String,
+    val msg: String?,
 
     @Expose
     @SerializedName(value = "User_id", alternate = ["user_id"])
-    val user_id: String,
+    val user_id: String?,
 
     @Expose
     @SerializedName(value = "Firstname", alternate = ["firstname"])
-    val firstname: String,
+    val firstname: String?,
 
     @Expose
     @SerializedName(value = "Lastname", alternate = ["lastname"])
-    val lastname: String,
+    val lastname: String?,
 
     @Expose
     @SerializedName(value = "Email", alternate = ["email"])
-    val email: String,
+    val email: String?,
 
     @Expose
     @SerializedName(value = "Phone", alternate = ["phone"])
-    val phone: String,
+    val phone: String?,
 
     @Expose
     @SerializedName(value = "Access_token", alternate = ["access_token"])
-    val access_token: String,
+    val access_token: String?,
 )

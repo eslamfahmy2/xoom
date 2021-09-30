@@ -8,12 +8,12 @@ class UserDtoMapper : DomainMapper<UserDto, User> {
 
     override fun mapToDomainModel(model: UserDto): User {
         return User(
-            user_id = model.user_id,
-            firstname = model.firstname,
-            lastname = model.lastname,
-            phone = model.phone,
-            email = model.email,
-            token = model.access_token
+            user_id = model.user_id!!,
+            firstname = model.firstname!!,
+            lastname = model.lastname!!,
+            phone = model.phone!!,
+            email = model.email!!,
+            token = model.access_token!!
         )
     }
 

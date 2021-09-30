@@ -19,12 +19,14 @@ class AuthRepoImpl @Inject constructor(
         email: String,
         phone: String,
     ): UserDto {
-        return apiInterface.register(
+        val res = apiInterface.register(
             firstname = firstname,
             lastname = lastname,
             email = email,
             phone = phone
         )
+
+        return res
     }
 
 }

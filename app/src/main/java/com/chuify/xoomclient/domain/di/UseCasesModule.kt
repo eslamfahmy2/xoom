@@ -1,6 +1,7 @@
 package com.chuify.xoomclient.domain.di
 
 
+import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.domain.mapper.UserDtoMapper
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.usecase.auth.AuthInteraction
@@ -28,7 +29,8 @@ object UseCasesModule {
     fun provideSingUpUseCase(
         repository: AuthRepo,
         mapperModule: UserDtoMapper,
-    ) = SignUpUseCase(repo = repository, mapper = mapperModule)
+        prefs: SharedPrefs,
+    ) = SignUpUseCase(repo = repository, mapper = mapperModule, sharedPreferences = prefs)
 
     @Singleton
     @Provides
