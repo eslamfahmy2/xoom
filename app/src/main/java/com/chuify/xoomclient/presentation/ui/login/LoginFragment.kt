@@ -1,10 +1,9 @@
-package com.chuify.xoomclient.presentation.ui.signup
+package com.chuify.xoomclient.presentation.ui.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,19 +18,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.chuify.xoomclient.presentation.components.AppBar
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.ui.BaseApplication
-import com.chuify.xoomclient.presentation.ui.signup.component.SignupScreen
+import com.chuify.xoomclient.presentation.ui.login.component.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class SignUpFragment : Fragment() {
+class LoginFragment : Fragment() {
 
-    private val viewModel: SignUpViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels()
 
     @Inject
     lateinit var application: BaseApplication
@@ -57,55 +56,45 @@ class SignUpFragment : Fragment() {
                         viewModel.state
                     }
 
-                    val firstName by remember {
-                        viewModel.firstName
+                    val phone by remember {
+                        viewModel.phone
                     }
 
-                    val lastName by remember {
-                        viewModel.lastName
-                    }
-
-                    val email by remember {
-                        viewModel.email
-                    }
 
                     Scaffold(
                         topBar = {
                             AppBar(
-                                title = "Signup",
+                                title = "Signing",
                                 onToggleTheme = {
                                     application.toggleTheme()
                                 }
                             )
                         },
                         bottomBar = {
-                            if (state is SignUpState.Error) {
+                            if (state is LoginState.Error) {
                                 val show = mutableStateOf(true)
                                 if (show.value) {
                                     Snackbar(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clickable {
-                                                show.value = false
-                                            },
+                                        modifier = Modifier.fillMaxWidth(),
+                                        action = {
+                                            show.value = false
+                                        }
                                     ) {
-                                        Text(text = (state as SignUpState.Error).message.toString())
+                                        Text(text = (state as LoginState.Error).message.toString())
                                     }
                                 }
                             }
                         }
                     ) {
 
-                        SignupScreen(
-                            firstName = firstName,
-                            lastName = lastName,
-                            email = email,
+                        LoginScreen(
+                            phone = phone,
                             coroutineScope = coroutineScope,
                             userIntent = viewModel.userIntent,
                             navController = findNavController()
                         )
 
-                        if (state is SignUpState.Loading) {
+                        if (state is LoginState.Loading) {
                             Box(Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center
                             ) {

@@ -1,6 +1,7 @@
 package com.chuify.xoomclient.presentation.ui.signup.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
@@ -16,6 +17,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
+import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.ui.signup.SignUpIntent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
@@ -23,12 +27,13 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun SignUpIdleScreen(
+fun SignupScreen(
     firstName: String,
     lastName: String,
     email: String,
     coroutineScope: CoroutineScope,
     userIntent: Channel<SignUpIntent>,
+    navController: NavController,
 
     ) {
 
@@ -207,7 +212,7 @@ fun SignUpIdleScreen(
             Text(
                 modifier = Modifier
                     .wrapContentSize()
-                    .padding(start = 8.dp),
+                    .padding(8.dp),
                 text = "Do you have account?",
                 color = MaterialTheme.colors.onSurface,
                 fontSize = 16.sp
@@ -216,7 +221,14 @@ fun SignUpIdleScreen(
             Text(
                 modifier = Modifier
                     .wrapContentSize()
-                    .padding(start = 8.dp),
+                    .padding(8.dp)
+                    .clickable {
+                        val bundle = bundleOf()
+                        navController.navigate(
+                            R.id.action_signUpFragment_to_loginFragment,
+                            bundle
+                        )
+                    },
                 text = "Login",
                 color = MaterialTheme.colors.primary,
                 fontSize = 16.sp

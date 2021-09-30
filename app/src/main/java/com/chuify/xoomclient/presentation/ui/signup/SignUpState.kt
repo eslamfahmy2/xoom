@@ -1,6 +1,7 @@
 package com.chuify.xoomclient.presentation.ui.signup
 
 import com.chuify.xoomclient.domain.model.User
+import com.chuify.xoomclient.presentation.ui.login.LoginState
 
 
 sealed class SignUpState {
