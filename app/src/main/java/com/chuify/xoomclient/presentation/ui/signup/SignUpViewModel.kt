@@ -23,7 +23,7 @@ class SignUpViewModel @Inject constructor(
 
     val userIntent = Channel<SignUpIntent>(Channel.UNLIMITED)
 
-    private val _firstName: MutableState<String> = mutableStateOf("")
+    private val _firstName: MutableState<String> = mutableStateOf("eslam")
     val firstName get() = _firstName
 
     private val _lastName: MutableState<String> = mutableStateOf("fahmy")
@@ -32,7 +32,7 @@ class SignUpViewModel @Inject constructor(
     private val _email: MutableState<String> = mutableStateOf("eslam@fa.com")
     val email get() = _email
 
-    private val _phone: MutableState<String> = mutableStateOf("+2011123312461")
+    private val _phone: MutableState<String> = mutableStateOf("1234567891234")
     val phone get() = _phone
 
     private val _state: MutableState<SignUpState> = mutableStateOf(SignUpState.Idl)

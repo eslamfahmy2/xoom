@@ -83,6 +83,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     //Constraint Layout
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
+    //CCP
+    implementation 'com.sinaukoding:cccp:1.0.3'
+
 
 
     //Testing

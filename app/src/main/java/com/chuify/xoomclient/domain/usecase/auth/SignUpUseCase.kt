@@ -26,7 +26,7 @@ class SignUpUseCase @Inject constructor(
         try {
             emit(DataState.Loading())
             if (!Validator.isValidName(firstname)) {
-
+                throw Exception("first name not valid")
             }
             if (!Validator.isValidName(lastname)) {
                 throw Exception("last name not valid")

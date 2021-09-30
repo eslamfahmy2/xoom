@@ -1,15 +1,18 @@
 package com.chuify.xoomclient.domain.usecase.auth
 
+import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.domain.mapper.UserDtoMapper
 import com.chuify.xoomclient.domain.model.User
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.utils.DataState
+import com.chuify.xoomclient.domain.utils.Validator
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class SignInUseCase @Inject constructor(
     private val repo: AuthRepo,
     private val mapper: UserDtoMapper,
+    private val sharedPreferences: SharedPrefs,
 ) {
 
     suspend operator fun invoke(
@@ -17,10 +20,14 @@ class SignInUseCase @Inject constructor(
     ) = flow<DataState<User>> {
         try {
             emit(DataState.Loading())
+            if (!Validator.isValidPhone(phone)) {
+                throw Exception("phone not valid")
+            }
             val response = repo.login(
                 phone = phone
             )
             val data = mapper.mapToDomainModel(response)
+            sharedPreferences.saveUser(response)
             emit(DataState.Success(data))
         } catch (e: Exception) {
             emit(DataState.Error(e.message))

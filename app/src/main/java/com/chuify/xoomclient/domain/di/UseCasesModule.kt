@@ -22,7 +22,8 @@ object UseCasesModule {
     fun provideSingInUseCase(
         repository: AuthRepo,
         mapperModule: UserDtoMapper,
-    ) = SignInUseCase(repo = repository, mapper = mapperModule)
+        prefs: SharedPrefs,
+    ) = SignInUseCase(repo = repository, mapper = mapperModule, sharedPreferences = prefs)
 
     @Singleton
     @Provides

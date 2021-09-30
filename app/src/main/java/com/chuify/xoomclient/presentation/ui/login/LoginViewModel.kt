@@ -23,7 +23,7 @@ class LoginViewModel @Inject constructor(
 
     val userIntent = Channel<LoginIntent>(Channel.UNLIMITED)
 
-    private val _phone: MutableState<String> = mutableStateOf("+2011123312461")
+    private val _phone: MutableState<String> = mutableStateOf("1234567891234")
     val phone get() = _phone
 
     private val _state: MutableState<LoginState> = mutableStateOf(LoginState.Idl)
@@ -32,7 +32,6 @@ class LoginViewModel @Inject constructor(
 
     init {
         handleIntent()
-
     }
 
     private fun handleIntent() {
@@ -60,7 +59,6 @@ class LoginViewModel @Inject constructor(
                             }
                         }
                     }
-
                     is LoginIntent.PhoneChange -> {
                         _phone.value = intent.data
                     }
