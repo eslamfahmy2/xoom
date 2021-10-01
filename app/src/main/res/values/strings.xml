@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Xoom Gas Client</string>
+
+
+    <string name="verify_your_mobile_number">Verify your mobile number</string>
+    <string name="enter_the_verification_code_sent_to">Enter the verification code sent to</string>
+
 </resources>

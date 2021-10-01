@@ -33,11 +33,9 @@ class SignInUseCase @Inject constructor(
                     emit(DataState.Error(response.message))
                 }
                 is ResponseState.Success -> {
-
                     val data = mapper.mapToDomainModel(response.data)
                     sharedPreferences.saveUser(response.data)
                     emit(DataState.Success(data))
-
                 }
             }
 

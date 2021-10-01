@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.login
+package com.chuify.xoomclient.presentation.ui.verify
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,20 +20,21 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.components.AppBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.ui.BaseApplication
-import com.chuify.xoomclient.presentation.ui.login.component.LoginScreen
+import com.chuify.xoomclient.presentation.ui.verify.component.VerifyScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class VerifyFragment : Fragment() {
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: VerifyViewModel by viewModels()
 
     @Inject
     lateinit var application: BaseApplication
@@ -45,6 +46,7 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+
         return ComposeView(requireContext()).apply {
             setContent {
 
@@ -54,7 +56,7 @@ class LoginFragment : Fragment() {
 
                     val coroutineScope = rememberCoroutineScope()
 
-
+                    val activity = requireActivity()
 
                     val state by remember {
                         viewModel.state
@@ -69,7 +71,7 @@ class LoginFragment : Fragment() {
                     Scaffold(
                         topBar = {
                             AppBar(
-                                title = "Signing",
+                                title = "Sign up",
                                 onToggleTheme = {
                                     application.toggleTheme()
                                 }
@@ -89,16 +91,16 @@ class LoginFragment : Fragment() {
                         }
                     ) {
 
-                        LoginScreen(
+                        VerifyScreen(
                             phone = phone,
                             coroutineScope = coroutineScope,
                             userIntent = viewModel.userIntent,
-                            navController = findNavController()
+                            navController = findNavController() ,
+                            activity = activity
                         )
-
                         when (state) {
-                            is LoginState.Error -> {
-                                (state as LoginState.Error).message?.let {
+                            is VerifyState.Error -> {
+                                (state as VerifyState.Error).message?.let {
                                     coroutineScope.launch {
                                         scaffoldState.snackbarHostState.showSnackbar(
                                             message = it,
@@ -107,10 +109,10 @@ class LoginFragment : Fragment() {
                                     }
                                 }
                             }
-                            LoginState.Idl -> {
+                            VerifyState.Idl -> {
 
                             }
-                            LoginState.Loading -> {
+                            VerifyState.Loading -> {
                                 Box(Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -119,7 +121,15 @@ class LoginFragment : Fragment() {
                                     )
                                 }
                             }
-                            is LoginState.Success -> {
+                            is VerifyState.Success -> {
+
+                                findNavController().navigate(
+                                    R.id.action_verifyFragment_to_OTPFragment,
+                                    Bundle()
+                                )
+                                coroutineScope.launch {
+                                    viewModel.userIntent.send(VerifyIntent.Idl)
+                                }
 
                             }
                         }

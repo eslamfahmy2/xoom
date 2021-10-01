@@ -1,20 +1,30 @@
 package com.chuify.xoomclient.presentation.ui
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 @HiltAndroidApp
 class BaseApplication : Application() {
 
-    private val isDark = mutableStateOf(false)
+    @Inject
+    lateinit var sharedPreferences: SharedPrefs
 
-    fun toggleTheme() {
-        Log.d(TAG, "toggleTheme: ")
-        this.isDark.value = !this.isDark.value
+    private val isDarkTheme by lazy {
+        mutableStateOf(sharedPreferences.isDark())
     }
 
-    fun isDark(): Boolean = this.isDark.value
+    override fun onCreate() {
+        super.onCreate()
+        isDarkTheme.value = sharedPreferences.isDark()
+    }
+
+    fun toggleTheme() {
+        this.isDarkTheme.value = !this.isDarkTheme.value
+        sharedPreferences.saveTheme(isDark = isDark())
+    }
+
+    fun isDark(): Boolean = this.isDarkTheme.value
 }

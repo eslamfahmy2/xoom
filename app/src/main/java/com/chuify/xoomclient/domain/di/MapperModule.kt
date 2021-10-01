@@ -4,6 +4,7 @@ import com.chuify.xoomclient.data.remote.data_source.AuthRepoImpl
 import com.chuify.xoomclient.data.remote.network.ApiInterface
 import com.chuify.xoomclient.domain.mapper.UserDtoMapper
 import com.chuify.xoomclient.domain.repository.AuthRepo
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,8 +23,9 @@ class MapperModule {
     @Provides
     fun provideRepository(
         api: ApiInterface,
+        auth: FirebaseAuth,
     ): AuthRepo {
-        return AuthRepoImpl(api)
+        return AuthRepoImpl(api, auth)
     }
 
 }

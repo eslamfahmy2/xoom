@@ -1,0 +1,175 @@
+{
+  "project_info": {
+    "project_number": "958735187527",
+    "firebase_url": "https://xoomgas-73f74.firebaseio.com",
+    "project_id": "xoomgas-73f74",
+    "storage_bucket": "xoomgas-73f74.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958735187527:android:123a40ff04ae6be8ed7b62",
+        "android_client_info": {
+          "package_name": "com.chuify.xoomclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "958735187527-jvfgnvo5uflotruau5nca35mdol4et4n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlImPKiLObyODXWUQ7tAQDUb4pF3rkKkY"
+        },
+        {
+          "current_key": "AIzaSyAhZV87RiOBP1lHo0Puq6JxHZ24sEX_4fc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "958735187527-jvfgnvo5uflotruau5nca35mdol4et4n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "958735187527-063gomhoqac2t620gapv2s8434b03tsc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pbdev.xoom.user"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958735187527:android:5a9b8474b697aae5ed7b62",
+        "android_client_info": {
+          "package_name": "com.xoom.rider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "958735187527-jvfgnvo5uflotruau5nca35mdol4et4n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlImPKiLObyODXWUQ7tAQDUb4pF3rkKkY"
+        },
+        {
+          "current_key": "AIzaSyAhZV87RiOBP1lHo0Puq6JxHZ24sEX_4fc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "958735187527-jvfgnvo5uflotruau5nca35mdol4et4n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "958735187527-063gomhoqac2t620gapv2s8434b03tsc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pbdev.xoom.user"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958735187527:android:00082c65a5667b00ed7b62",
+        "android_client_info": {
+          "package_name": "com.xoom.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "958735187527-b6r25iqrbagtsv1oequjubl96f164fn5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xoom.user",
+            "certificate_hash": "229a660fabb3d6edb0ef5a0ac604b73d6df5830c"
+          }
+        },
+        {
+          "client_id": "958735187527-jvfgnvo5uflotruau5nca35mdol4et4n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlImPKiLObyODXWUQ7tAQDUb4pF3rkKkY"
+        },
+        {
+          "current_key": "AIzaSyAhZV87RiOBP1lHo0Puq6JxHZ24sEX_4fc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "958735187527-jvfgnvo5uflotruau5nca35mdol4et4n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "958735187527-063gomhoqac2t620gapv2s8434b03tsc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pbdev.xoom.user"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958735187527:android:17dcc08b7761389aed7b62",
+        "android_client_info": {
+          "package_name": "com.xoom.vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "958735187527-jvfgnvo5uflotruau5nca35mdol4et4n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlImPKiLObyODXWUQ7tAQDUb4pF3rkKkY"
+        },
+        {
+          "current_key": "AIzaSyAhZV87RiOBP1lHo0Puq6JxHZ24sEX_4fc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "958735187527-jvfgnvo5uflotruau5nca35mdol4et4n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "958735187527-063gomhoqac2t620gapv2s8434b03tsc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pbdev.xoom.user"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,6 +5,7 @@ import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.domain.mapper.UserDtoMapper
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.usecase.auth.AuthInteraction
+import com.chuify.xoomclient.domain.usecase.auth.AuthenticatePhoneUseCase
 import com.chuify.xoomclient.domain.usecase.auth.SignInUseCase
 import com.chuify.xoomclient.domain.usecase.auth.SignUpUseCase
 import dagger.Module
@@ -32,6 +33,14 @@ object UseCasesModule {
         mapperModule: UserDtoMapper,
         prefs: SharedPrefs,
     ) = SignUpUseCase(repo = repository, mapper = mapperModule, sharedPreferences = prefs)
+
+
+    @Singleton
+    @Provides
+    fun providePhoneVerificationUseCase(
+        repository: AuthRepo,
+    ) = AuthenticatePhoneUseCase(repo = repository)
+
 
     @Singleton
     @Provides

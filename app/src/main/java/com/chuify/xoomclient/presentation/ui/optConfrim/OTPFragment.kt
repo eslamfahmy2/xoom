@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.login
+package com.chuify.xoomclient.presentation.ui.optConfrim
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,20 +20,21 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.components.AppBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.ui.BaseApplication
-import com.chuify.xoomclient.presentation.ui.login.component.LoginScreen
+import com.chuify.xoomclient.presentation.ui.optConfrim.component.OTPScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class OTPFragment : Fragment() {
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: OTPViewModel by viewModels()
 
     @Inject
     lateinit var application: BaseApplication
@@ -55,7 +56,6 @@ class LoginFragment : Fragment() {
                     val coroutineScope = rememberCoroutineScope()
 
 
-
                     val state by remember {
                         viewModel.state
                     }
@@ -69,7 +69,7 @@ class LoginFragment : Fragment() {
                     Scaffold(
                         topBar = {
                             AppBar(
-                                title = "Signing",
+                                title = "Sign up",
                                 onToggleTheme = {
                                     application.toggleTheme()
                                 }
@@ -89,16 +89,15 @@ class LoginFragment : Fragment() {
                         }
                     ) {
 
-                        LoginScreen(
+                        OTPScreen(
                             phone = phone,
                             coroutineScope = coroutineScope,
                             userIntent = viewModel.userIntent,
                             navController = findNavController()
                         )
-
                         when (state) {
-                            is LoginState.Error -> {
-                                (state as LoginState.Error).message?.let {
+                            is OTPState.Error -> {
+                                (state as OTPState.Error).message?.let {
                                     coroutineScope.launch {
                                         scaffoldState.snackbarHostState.showSnackbar(
                                             message = it,
@@ -107,10 +106,10 @@ class LoginFragment : Fragment() {
                                     }
                                 }
                             }
-                            LoginState.Idl -> {
+                            OTPState.Idl -> {
 
                             }
-                            LoginState.Loading -> {
+                            OTPState.Loading -> {
                                 Box(Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -119,7 +118,16 @@ class LoginFragment : Fragment() {
                                     )
                                 }
                             }
-                            is LoginState.Success -> {
+                            is OTPState.Success -> {
+
+                                findNavController().navigate(
+                                    R.id.action_OTPFragment_to_signUpFragment,
+                                    Bundle()
+                                )
+
+                                coroutineScope.launch {
+                                    viewModel.userIntent.send(OTPIntent.Idl)
+                                }
 
                             }
                         }

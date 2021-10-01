@@ -13,6 +13,7 @@ class SharedPrefs @Inject constructor(
 
     companion object {
         private const val PREF = "MyAppPrefName"
+        const val IS_DARK = "IS_DARK"
 
         const val USER_FIRST_NAME = "USER_FIRST_NAME"
         const val USER_LAST_NAME = "USER_LAST_NAME"
@@ -25,6 +26,11 @@ class SharedPrefs @Inject constructor(
     private val sharedPref: SharedPreferences =
         context.getSharedPreferences(PREF, Context.MODE_PRIVATE)
 
+    fun saveTheme(isDark: Boolean) {
+        put(IS_DARK, isDark)
+    }
+
+    fun isDark() = get(IS_DARK, Boolean::class.java)
 
     fun saveToken(token: String) {
         put(USER_TOKEN, token)
