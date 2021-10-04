@@ -1,6 +1,5 @@
 package com.chuify.xoomclient.domain.usecase.auth
 
-import android.util.Log
 import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.domain.mapper.UserDtoMapper
 import com.chuify.xoomclient.domain.model.User
@@ -8,7 +7,6 @@ import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
 import com.chuify.xoomclient.domain.utils.Validator
-import com.chuify.xoomclient.presentation.ui.signup.TAG
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -24,7 +22,7 @@ class SignInUseCase @Inject constructor(
         try {
             emit(DataState.Loading())
             if (!Validator.isValidPhone(phone)) {
-                //  throw Exception("phone not valid")
+                throw Exception("phone not valid")
             }
             val response = repo.login(
                 phone = phone
@@ -40,7 +38,6 @@ class SignInUseCase @Inject constructor(
                         sharedPreferences.saveUser(response.data)
                         emit(DataState.Success(data))
                     } else {
-                        Log.d(TAG, "invoke: isNullOrEmpty " + response.data)
                         emit(DataState.Error(response.data.msg))
                     }
                 }

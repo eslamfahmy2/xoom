@@ -5,4 +5,7 @@
     <string name="verify_your_mobile_number">Verify your mobile number</string>
     <string name="enter_the_verification_code_sent_to">Enter the verification code sent to</string>
 
+    <string name="get_your_gas_delivered">Get Your Gas Delivered</string>
+    <string name="log_in_or_sign_up_to_place_your_order">Log in or sign Up to place your order</string>
+    <string name="con">Continue</string>
 </resources>

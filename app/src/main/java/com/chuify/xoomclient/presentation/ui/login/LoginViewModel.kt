@@ -23,12 +23,11 @@ class LoginViewModel @Inject constructor(
 
     val userIntent = Channel<LoginIntent>(Channel.UNLIMITED)
 
-    private val _phone: MutableState<String> = mutableStateOf("12345678912345")
+    private val _phone: MutableState<String> = mutableStateOf("+254703894372")
     val phone get() = _phone
 
     private val _state: MutableState<LoginState> = mutableStateOf(LoginState.Idl)
     val state get() = _state
-
 
     init {
         handleIntent()
@@ -38,8 +37,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             userIntent.consumeAsFlow().collect { intent ->
                 when (intent) {
-                    LoginIntent.SignIn -> TODO()
-                    LoginIntent.SignUp -> {
+                    LoginIntent.SignIn -> {
                         useCase(
                             phone = _phone.value
                         ).collect { result ->

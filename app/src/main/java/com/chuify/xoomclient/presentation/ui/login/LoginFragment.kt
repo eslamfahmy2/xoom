@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.chuify.xoomclient.presentation.components.AppBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
@@ -67,7 +66,7 @@ class LoginFragment : Fragment() {
                     Scaffold(
                         topBar = {
                             AppBar(
-                                title = "Signing",
+                                title = "",
                                 onToggleTheme = {
                                     application.toggleTheme()
                                 }
@@ -89,9 +88,16 @@ class LoginFragment : Fragment() {
 
                         LoginScreen(
                             phone = phone,
-                            coroutineScope = coroutineScope,
-                            userIntent = viewModel.userIntent,
-                            navController = findNavController()
+                            onLogin = {
+                                coroutineScope.launch {
+                                    viewModel.userIntent.send(LoginIntent.SignIn)
+                                }
+                            },
+                            onValueChanged = {
+                                coroutineScope.launch {
+                                    viewModel.userIntent.send(LoginIntent.PhoneChange(it))
+                                }
+                            }
                         )
 
                         when (state) {
