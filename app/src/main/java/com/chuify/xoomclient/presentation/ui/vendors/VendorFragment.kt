@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.login
+package com.chuify.xoomclient.presentation.ui.vendors
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,9 +35,9 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class VendorFragment : Fragment() {
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: VendorViewModel by viewModels()
 
     @Inject
     lateinit var application: BaseApplication
@@ -95,19 +95,19 @@ class LoginFragment : Fragment() {
                             phone = phone,
                             onLogin = {
                                 coroutineScope.launch {
-                                    viewModel.userIntent.send(LoginIntent.SignIn)
+                                    viewModel.userIntent.send(VendorIntent.SignIn)
                                 }
                             },
                             onValueChanged = {
                                 coroutineScope.launch {
-                                    viewModel.userIntent.send(LoginIntent.PhoneChange(it))
+                                    viewModel.userIntent.send(VendorIntent.PhoneChange(it))
                                 }
                             }
                         )
 
                         when (state) {
-                            is LoginState.Error -> {
-                                (state as LoginState.Error).message?.let {
+                            is VendorState.Error -> {
+                                (state as VendorState.Error).message?.let {
                                     coroutineScope.launch {
                                         scaffoldState.snackbarHostState.showSnackbar(
                                             message = it,
@@ -116,10 +116,10 @@ class LoginFragment : Fragment() {
                                     }
                                 }
                             }
-                            LoginState.Idl -> {
+                            VendorState.Idl -> {
 
                             }
-                            LoginState.Loading -> {
+                            VendorState.Loading -> {
                                 Dialog(
                                     onDismissRequest = { },
                                     DialogProperties(dismissOnBackPress = false,
@@ -128,7 +128,7 @@ class LoginFragment : Fragment() {
                                     Box(
                                         contentAlignment = Alignment.Center,
                                         modifier = Modifier
-                                            .size(100.dp)
+                                            .size(200.dp)
                                             .background(
                                                 color = Color.White,
                                                 shape = RoundedCornerShape(8.dp))
@@ -137,7 +137,7 @@ class LoginFragment : Fragment() {
                                     }
                                 }
                             }
-                            is LoginState.Success -> {
+                            is VendorState.Success -> {
 
                             }
                         }

@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -21,21 +22,24 @@ class AuthRepoImpl @Inject constructor(
     private val auth: FirebaseAuth,
 ) : AuthRepo {
 
-    override suspend fun login(phone: String): ResponseState<UserDto> {
-
+    override suspend fun login(phone: String) = try {
         val response = apiInterface.login(phone = phone)
-
         if (response.isSuccessful) {
             response.body()?.let {
-                return ResponseState.Success(it)
-            } ?: return ResponseState.Error()
+                ResponseState.Success(it)
+            } ?: ResponseState.Error("api : boy is empty")
         } else {
-            return ResponseState.Error(response.errorBody().toString())
+            ResponseState.Error(response.errorBody()?.string())
         }
+    } catch (e: Exception) {
+        ResponseState.Error(e.message)
     }
 
 
-    override suspend fun performPhoneAuth(phoneNumber: String ,  activity: Activity): PhoneAuthResult =
+    override suspend fun performPhoneAuth(
+        phoneNumber: String,
+        activity: Activity,
+    ): PhoneAuthResult =
         suspendCoroutine { cont ->
             val callback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 override fun onVerificationCompleted(credential: PhoneAuthCredential) {
@@ -52,7 +56,6 @@ class AuthRepoImpl @Inject constructor(
                     verificationId: String,
                     token: PhoneAuthProvider.ForceResendingToken,
                 ) {
-
                     cont.resume(
                         PhoneAuthResult.CodeSent(verificationId, token)
                     )
@@ -74,8 +77,7 @@ class AuthRepoImpl @Inject constructor(
         lastname: String,
         email: String,
         phone: String,
-    ): ResponseState<UserDto> {
-
+    ): ResponseState<UserDto> = try {
         val response = apiInterface.register(
             firstname = String(),
             lastname = lastname,
@@ -84,11 +86,16 @@ class AuthRepoImpl @Inject constructor(
         )
         if (response.isSuccessful) {
             response.body()?.let {
-                return ResponseState.Success(it)
-            } ?: return ResponseState.Error()
+                ResponseState.Success(it)
+            } ?: ResponseState.Error("api : body is empty")
         } else {
-            return ResponseState.Error(response.errorBody().toString())
+            val jObjError = JSONObject(response.errorBody()!!.toString())
+            val message = jObjError.getString("error")
+            ResponseState.Error(message)
         }
+
+    } catch (e: Exception) {
+        ResponseState.Error(e.message)
     }
 
 

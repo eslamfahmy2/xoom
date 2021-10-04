@@ -25,10 +25,14 @@
         </activity>
 
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.AuthenticationActivity"
             android:launchMode="singleTop"
             android:theme="@style/Theme.XoomGasClient" />
 
+        <activity
+            android:name=".presentation.MainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.XoomGasClient" />
 
     </application>
 
