@@ -3,11 +3,13 @@ package com.chuify.xoomclient.domain.di
 
 import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.domain.mapper.UserDtoMapper
+import com.chuify.xoomclient.domain.mapper.VendorDtoMapper
 import com.chuify.xoomclient.domain.repository.AuthRepo
-import com.chuify.xoomclient.domain.usecase.auth.AuthInteraction
+import com.chuify.xoomclient.domain.repository.VendorRepo
 import com.chuify.xoomclient.domain.usecase.auth.AuthenticatePhoneUseCase
 import com.chuify.xoomclient.domain.usecase.auth.SignInUseCase
 import com.chuify.xoomclient.domain.usecase.auth.SignUpUseCase
+import com.chuify.xoomclient.domain.usecase.vendor.ListVendorsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,13 +43,11 @@ object UseCasesModule {
         repository: AuthRepo,
     ) = AuthenticatePhoneUseCase(repo = repository)
 
-
     @Singleton
     @Provides
-    fun provideAuthInteractions(
-        signUpUseCase: SignUpUseCase,
-        signInUseCase: SignInUseCase,
-    ) = AuthInteraction(signIn = signInUseCase, signUp = signUpUseCase)
-
+    fun provideVendorsListUseCase(
+        repository: VendorRepo,
+        mapperModule: VendorDtoMapper,
+    ) = ListVendorsUseCase(repo = repository, mapper = mapperModule)
 
 }

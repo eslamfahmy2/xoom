@@ -3,6 +3,7 @@ package com.chuify.xoomclient.domain.di
 import com.chuify.xoomclient.data.remote.data_source.AuthRepoImpl
 import com.chuify.xoomclient.data.remote.network.ApiInterface
 import com.chuify.xoomclient.domain.mapper.UserDtoMapper
+import com.chuify.xoomclient.domain.mapper.VendorDtoMapper
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
@@ -17,15 +18,11 @@ class MapperModule {
 
     @Singleton
     @Provides
-    fun provideRecipeMapper() = UserDtoMapper()
+    fun provideUserMapper() = UserDtoMapper()
 
     @Singleton
     @Provides
-    fun provideRepository(
-        api: ApiInterface,
-        auth: FirebaseAuth,
-    ): AuthRepo {
-        return AuthRepoImpl(api, auth)
-    }
+    fun provideVendorMapper() = VendorDtoMapper()
+
 
 }
