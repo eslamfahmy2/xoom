@@ -26,7 +26,6 @@ class AuthenticatePhoneUseCase @Inject constructor(
                 activity = activity
             )
 
-
             when (response) {
                 is PhoneAuthResult.CodeSent -> {
                     emit(DataState.Success(response.verificationId))

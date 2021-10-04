@@ -2,6 +2,8 @@ package com.chuify.xoomclient.data.remote.network
 
 import com.chuify.xoomclient.data.remote.dto.UserDto
 import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -19,6 +21,11 @@ interface ApiInterface {
         @Query("email") email: String,
         @Query("phone") phone: String,
     ): Response<UserDto>
+
+    //----------------------------------------------------------------------------------------------------
+    @Headers("authorized: true")
+    @GET("vendors")
+    suspend fun vendors(): Response<UserDto>
 
 
 }

@@ -5,7 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chuify.xoomclient.domain.usecase.auth.AuthInteraction
+import com.chuify.xoomclient.domain.usecase.auth.SignInUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,12 +18,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val useCase: AuthInteraction,
+    private val useCase: SignInUseCase,
 ) : ViewModel() {
 
     val userIntent = Channel<LoginIntent>(Channel.UNLIMITED)
 
-    private val _phone: MutableState<String> = mutableStateOf("1234567891234")
+    private val _phone: MutableState<String> = mutableStateOf("12345678912345")
     val phone get() = _phone
 
     private val _state: MutableState<LoginState> = mutableStateOf(LoginState.Idl)
@@ -40,7 +40,7 @@ class LoginViewModel @Inject constructor(
                 when (intent) {
                     LoginIntent.SignIn -> TODO()
                     LoginIntent.SignUp -> {
-                        useCase.signIn(
+                        useCase(
                             phone = _phone.value
                         ).collect { result ->
                             when (result) {

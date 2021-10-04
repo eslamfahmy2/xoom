@@ -11,7 +11,7 @@ data class UserDto(
     val status: String?,
 
     @Expose
-    @SerializedName(value = "Msg", alternate = ["msg"])
+    @SerializedName(value = "Msg", alternate = ["msg", "message", "Message"])
     val msg: String?,
 
     @Expose

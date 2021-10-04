@@ -4,15 +4,20 @@ import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import okhttp3.Interceptor
 import okhttp3.Response
 
+
 class RequestInterceptor constructor(private val pref: SharedPrefs) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        /*
-        val token = pref.getToken()
-        val newRequest = chain.request().newBuilder()
-            .addHeader("Authorization", "Token 9c8b06d329136da358c2d00e76946b0111ce2c48")
-            .build()
-        */
-        val newRequest = chain.request().newBuilder().build()
-        return chain.proceed(newRequest)
+        val request = chain.request();
+        val authorized = request.headers["authorized"]
+        return if (!authorized.isNullOrEmpty()) {
+            val token = pref.getToken()
+            val newRequest = chain.request().newBuilder()
+                .addHeader("Authorization", token)
+                .build()
+            chain.proceed(newRequest)
+        } else {
+            val newRequest = chain.request().newBuilder().build()
+            chain.proceed(newRequest)
+        }
     }
 }

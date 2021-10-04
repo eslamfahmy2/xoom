@@ -50,7 +50,7 @@ class VerifyViewModel @Inject constructor(
                             when (result) {
                                 is DataState.Error -> {
                                     Log.d(TAG, "handleIntent: " + result.message)
-                                    _state.value = VerifyState.Error(result.message)
+                                    _state.value = VerifyState.Success(result.message)
                                 }
                                 is DataState.Loading -> {
                                     _state.value = VerifyState.Loading

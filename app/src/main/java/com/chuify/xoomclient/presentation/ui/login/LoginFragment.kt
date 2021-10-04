@@ -54,8 +54,6 @@ class LoginFragment : Fragment() {
 
                     val coroutineScope = rememberCoroutineScope()
 
-
-
                     val state by remember {
                         viewModel.state
                     }
