@@ -1,5 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.chuify.xoomclient.presentation.MainActivity
 import com.chuify.xoomclient.presentation.components.AppBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
@@ -138,7 +140,7 @@ class LoginFragment : Fragment() {
                                 }
                             }
                             is LoginState.Success -> {
-
+                                startActivity(Intent(activity, MainActivity::class.java))
                             }
                         }
 

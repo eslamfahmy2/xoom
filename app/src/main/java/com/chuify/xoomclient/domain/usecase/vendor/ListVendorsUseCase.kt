@@ -14,15 +14,14 @@ class ListVendorsUseCase @Inject constructor(
 
     ) {
 
-    suspend operator fun invoke(
-    ) = flow<DataState<List<Vendor>>> {
+    suspend operator fun invoke() = flow<DataState<List<Vendor>>> {
         try {
             when (val response = repo.listVendors()) {
                 is ResponseState.Error -> {
                     emit(DataState.Error(response.message))
                 }
                 is ResponseState.Success -> {
-                    val result = mapper.toDomainList(response.data.vendors)
+                    val result = mapper.toDomainList(response.data.vendors ?: listOf())
                     emit(DataState.Success(result))
                 }
             }

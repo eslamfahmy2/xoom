@@ -11,8 +11,17 @@ class VendorRepoImpl @Inject constructor(
     private val apiInterface: ApiInterface,
 ) : VendorRepo {
 
-    override suspend fun listVendors(): ResponseState<VendorListDto> {
-        return apiInterface.listVendors()
+    override suspend fun listVendors(): ResponseState<VendorListDto> = try {
+        val response = apiInterface.listVendors()
+        if (response.isSuccessful) {
+            response.body()?.let {
+                ResponseState.Success(it)
+            } ?: ResponseState.Error("api : boy is empty")
+        } else {
+            ResponseState.Error(response.errorBody()?.string())
+        }
+    } catch (e: Exception) {
+        ResponseState.Error(e.message)
     }
 
     override suspend fun listAccessories(): ResponseState<Accessory> {

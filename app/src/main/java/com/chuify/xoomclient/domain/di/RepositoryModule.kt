@@ -6,9 +6,14 @@ import com.chuify.xoomclient.data.remote.network.ApiInterface
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.repository.VendorRepo
 import com.google.firebase.auth.FirebaseAuth
+import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+@Module
+@InstallIn(SingletonComponent::class)
 object RepositoryModule {
 
 

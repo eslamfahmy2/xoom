@@ -5,7 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chuify.xoomclient.domain.usecase.auth.AuthInteraction
+import com.chuify.xoomclient.domain.usecase.auth.SignUpUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -18,7 +18,7 @@ const val TAG = "SignUpViewModel"
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val useCase: AuthInteraction,
+    private val useCase: SignUpUseCase,
 ) : ViewModel() {
 
     val userIntent = Channel<SignUpIntent>(Channel.UNLIMITED)
@@ -50,7 +50,7 @@ class SignUpViewModel @Inject constructor(
                 when (intent) {
                     SignUpIntent.SignIn -> TODO()
                     SignUpIntent.SignUp -> {
-                        useCase.signUp(
+                        useCase(
                             firstname = _firstName.value,
                             lastname = _lastName.value,
                             email = _email.value,

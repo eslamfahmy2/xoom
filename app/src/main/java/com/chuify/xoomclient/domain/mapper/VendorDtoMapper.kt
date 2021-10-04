@@ -20,7 +20,10 @@ class VendorDtoMapper : DomainMapper<VendorDto, Vendor> {
     }
 
     override fun mapFromDomainModel(domainModel: Vendor): VendorDto {
-        TODO("Not yet implemented")
+        return VendorDto(vendor_id = domainModel.id,
+            vendor_name = domainModel.name,
+            image = domainModel.image
+        )
     }
 
 

@@ -12,7 +12,7 @@ class RequestInterceptor constructor(private val pref: SharedPrefs) : Intercepto
         return if (!authorized.isNullOrEmpty()) {
             val token = pref.getToken()
             val newRequest = chain.request().newBuilder()
-                .addHeader("Authorization", token)
+                .addHeader("Authorization", "Bearer $token")
                 .build()
             chain.proceed(newRequest)
         } else {

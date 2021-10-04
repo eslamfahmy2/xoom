@@ -14,20 +14,21 @@ data class VendorListDto(
     val msg: String?,
 
     @Expose
-    @SerializedName(value = "Vendors", alternate = ["vendors"])
-    val vendors: List<VendorDto>,
-)
+    @SerializedName(value = "vendors", alternate = ["Vendors"])
+    val vendors: List<VendorDto>?,
+
+    )
 
 data class VendorDto(
     @Expose
-    @SerializedName(value = "Vendor_id", alternate = ["vendor_id"])
+    @SerializedName(value = "vendor_id", alternate = ["Vendor_id"])
     val vendor_id: String?,
 
     @Expose
-    @SerializedName(value = "Vendor_name", alternate = ["vendor_name"])
+    @SerializedName(value = "vendor_name", alternate = ["Vendor_name"])
     val vendor_name: String?,
 
     @Expose
-    @SerializedName(value = "Image", alternate = ["image"])
+    @SerializedName(value = "image", alternate = ["Image"])
     val image: String?,
 )
