@@ -58,7 +58,7 @@ class VendorFragment : Fragment() {
                     Scaffold(
                         topBar = {
                             AppBar(
-                                title = "",
+                                title = "Vendors",
                                 onToggleTheme = {
                                     application.toggleTheme()
                                 }
@@ -93,13 +93,18 @@ class VendorFragment : Fragment() {
                                 VendorLoadingScreen()
                             }
                             is VendorState.Success -> {
-                                VendorScreen(data = (state as VendorState.Success).data)
+                                VendorScreen(
+                                    data = (state as VendorState.Success).data,
+                                    searchText = (state as VendorState.Success).searchText,
+                                    onTextChange = {
+                                        coroutineScope.launch {
+                                            viewModel.userIntent.send(VendorIntent.Filter(it))
+                                        }
+                                    }
+                                )
                             }
                         }
-
-
                     }
-
                 }
             }
             lifecycleScope.launch {

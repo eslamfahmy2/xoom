@@ -8,4 +8,19 @@
     <string name="get_your_gas_delivered">Get Your Gas Delivered</string>
     <string name="log_in_or_sign_up_to_place_your_order">Log in or sign Up to place your order</string>
     <string name="con">Continue</string>
+
+    <string name="icon">icon</string>
+    <string name="current_location">Current location</string>
+    <string name="search_on_xoom">Search on Xoom</string>
+    <string name="gas">Gas</string>
+    <string name="accessories">Accessories</string>
+    <string name="home">Home</string>
+    <string name="orders">Orders</string>
+    <string name="notifications">Notifications</string>
+    <string name="profile">Profile</string>
+    <string name="order">Order</string>
+    <string name="ordered">ordered</string>
+    <string name="delivery_date">Delivery Date</string>
+    <string name="from_kes_1_500">From KES: 1,500</string>
+
 </resources>
