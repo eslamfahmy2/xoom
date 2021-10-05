@@ -1,8 +1,9 @@
 package com.chuify.xoomclient.data.remote.network
 
+import com.chuify.xoomclient.data.remote.dto.AccessoryListDto
+import com.chuify.xoomclient.data.remote.dto.ProductListDto
 import com.chuify.xoomclient.data.remote.dto.UserDto
 import com.chuify.xoomclient.data.remote.dto.VendorListDto
-import com.chuify.xoomclient.domain.model.Accessory
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -29,12 +30,12 @@ interface ApiInterface {
     //----------------------------------------------------------------------------------------------------
     @Headers("authorized:true")
     @GET("accessories")
-    suspend fun listAccessories(): Response<Accessory>
+    suspend fun listAccessories(): Response<AccessoryListDto>
 
     //----------------------------------------------------------------------------------------------------
     @Headers("authorized:true")
     @GET("vendors/{vendor_id}/products")
-    suspend fun listProducts(@Path("vendor_id") vendorId: String): Response<Accessory>
+    suspend fun listProducts(@Path("vendor_id") vendorId: String): Response<ProductListDto>
 
     //----------------------------------------------------------------------------------------------------
 

@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.vendors.component
+package com.chuify.xoomclient.presentation.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun VendorLoadingScreen() {
+fun LoadingListScreen() {
     Column(modifier = Modifier.fillMaxSize()) {
         for (i in 0..3) {
             ShimmerAnimation()

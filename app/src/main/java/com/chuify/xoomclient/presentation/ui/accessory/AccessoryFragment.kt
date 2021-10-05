@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.vendors
+package com.chuify.xoomclient.presentation.ui.accessory
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,16 +19,16 @@ import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.ui.BaseApplication
-import com.chuify.xoomclient.presentation.ui.vendors.component.VendorScreen
+import com.chuify.xoomclient.presentation.ui.accessory.component.AccessoryScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class VendorFragment : Fragment() {
+class AccessoryFragment : Fragment() {
 
-    private val viewModel: VendorViewModel by viewModels()
+    private val viewModel: AccessoryViewModel by viewModels()
 
     @Inject
     lateinit var application: BaseApplication
@@ -79,8 +79,8 @@ class VendorFragment : Fragment() {
                     ) {
 
                         when (state) {
-                            is VendorState.Error -> {
-                                (state as VendorState.Error).message?.let {
+                            is AccessoryState.Error -> {
+                                (state as AccessoryState.Error).message?.let {
                                     coroutineScope.launch {
                                         scaffoldState.snackbarHostState.showSnackbar(
                                             message = it,
@@ -89,26 +89,25 @@ class VendorFragment : Fragment() {
                                     }
                                 }
                             }
-                            VendorState.Loading -> {
+                            AccessoryState.Loading -> {
                                 LoadingListScreen()
                             }
-                            is VendorState.Success -> {
-                                VendorScreen(
-                                    data = (state as VendorState.Success).data,
-                                    searchText = (state as VendorState.Success).searchText,
-                                    onTextChange = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(VendorIntent.Filter(it))
-                                        }
+                            is AccessoryState.Success -> {
+                                AccessoryScreen(
+                                    data = (state as AccessoryState.Success).data,
+                                    searchText = (state as AccessoryState.Success).searchText
+                                ) {
+                                    coroutineScope.launch {
+                                        viewModel.userIntent.send(AccessoryIntent.Filter(it))
                                     }
-                                )
+                                }
                             }
                         }
                     }
                 }
             }
             lifecycleScope.launch {
-                viewModel.userIntent.send(VendorIntent.LoadVendors)
+                viewModel.userIntent.send(AccessoryIntent.LoadVendors)
             }
         }
     }
