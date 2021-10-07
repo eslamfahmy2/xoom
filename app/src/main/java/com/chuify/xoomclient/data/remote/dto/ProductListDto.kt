@@ -32,4 +32,17 @@ data class ProductDto(
     @Expose
     @SerializedName(value = "image", alternate = ["Image"])
     val image: String?,
-)
+
+    @Expose
+    @SerializedName(value = "product_size", alternate = ["Product_size"])
+    val product_size: String?,
+
+    @Expose
+    @SerializedName(value = "refill_new", alternate = ["Refill_new"])
+    val refill_new: String?,
+
+    @Expose
+    @SerializedName(value = "selling_price", alternate = ["Selling_price"])
+    val selling_price: String?,
+
+    )

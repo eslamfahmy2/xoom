@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.data.remote.data_source
+package com.chuify.xoomclient.data.remote.source
 
 import com.chuify.xoomclient.data.remote.dto.AccessoryListDto
 import com.chuify.xoomclient.data.remote.dto.ProductListDto

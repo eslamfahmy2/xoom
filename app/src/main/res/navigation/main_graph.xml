@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_graph.xml"
     app:startDestination="@id/vendorFragment">
-
     <fragment
         android:id="@+id/vendorFragment"
         android:name="com.chuify.xoomclient.presentation.ui.vendors.VendorFragment"
-        android:label="VendorFragment" />
+        android:label="VendorFragment" >
+        <action
+            android:id="@+id/action_vendorFragment_to_productFragment"
+            app:destination="@id/productFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productFragment"
+        android:name="com.chuify.xoomclient.presentation.ui.product.ProductFragment"
+        android:label="ProductFragment" />
 </navigation>

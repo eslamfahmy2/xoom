@@ -18,6 +18,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -61,6 +62,7 @@ object UseCasesModule {
         mapperModule: AccessoryDtoMapper,
     ) = ListAccessoriesUseCase(repo = repository, mapper = mapperModule)
 
+    @Named("PRODUCT")
     @Singleton
     @Provides
     fun provideProductListUseCase(

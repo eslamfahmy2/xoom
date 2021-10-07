@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.data.remote.data_source
+package com.chuify.xoomclient.data.remote.source
 
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider

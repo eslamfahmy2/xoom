@@ -1,7 +1,7 @@
 package com.chuify.xoomclient.domain.repository
 
 import android.app.Activity
-import com.chuify.xoomclient.data.remote.data_source.PhoneAuthResult
+import com.chuify.xoomclient.data.remote.source.PhoneAuthResult
 import com.chuify.xoomclient.data.remote.dto.UserDto
 import com.chuify.xoomclient.domain.utils.ResponseState
 

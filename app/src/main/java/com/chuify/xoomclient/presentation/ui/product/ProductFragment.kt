@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.vendors
+package com.chuify.xoomclient.presentation.ui.product
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,15 +14,13 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
-import com.chuify.xoomclient.R
+import com.chuify.xoomclient.domain.model.Vendor
 import com.chuify.xoomclient.presentation.components.AppBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.ui.BaseApplication
-import com.chuify.xoomclient.presentation.ui.vendors.component.VendorScreen
+import com.chuify.xoomclient.presentation.ui.product.component.ProductScreen
 import com.chuify.xoomclient.presentation.utils.TRANS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -30,9 +28,9 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class VendorFragment : Fragment() {
+class ProductFragment : Fragment() {
 
-    private val viewModel: VendorViewModel by viewModels()
+    private val viewModel: ProductViewModel by viewModels()
 
     @Inject
     lateinit var application: BaseApplication
@@ -44,8 +42,12 @@ class VendorFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+
+        val vendor = arguments?.getSerializable(TRANS) as Vendor
+
         return ComposeView(requireContext()).apply {
             setContent {
+
 
                 XoomGasClientTheme(
                     darkTheme = application.isDark()
@@ -62,7 +64,7 @@ class VendorFragment : Fragment() {
                     Scaffold(
                         topBar = {
                             AppBar(
-                                title = "Vendors",
+                                title = vendor.name,
                                 onToggleTheme = {
                                     application.toggleTheme()
                                 }
@@ -83,8 +85,8 @@ class VendorFragment : Fragment() {
                     ) {
 
                         when (state) {
-                            is VendorState.Error -> {
-                                (state as VendorState.Error).message?.let {
+                            is ProductState.Error -> {
+                                (state as ProductState.Error).message?.let {
                                     coroutineScope.launch {
                                         scaffoldState.snackbarHostState.showSnackbar(
                                             message = it,
@@ -93,37 +95,20 @@ class VendorFragment : Fragment() {
                                     }
                                 }
                             }
-                            VendorState.Loading -> {
+                            ProductState.Loading -> {
                                 LoadingListScreen(
-                                    count = 3 ,
-                                    height = 250.dp
+                                    count = 5,
+                                    height = 100.dp
                                 )
                             }
-                            is VendorState.Success -> {
-                                VendorScreen(
-                                    data = (state as VendorState.Success).data,
-                                    onItemClicked = {
-                                        val bundle = Bundle()
-                                        bundle.putSerializable(TRANS, it)
-                                        findNavController().navigate(
-                                            R.id.action_vendorFragment_to_productFragment,
-                                            bundle
-                                        )
-                                    },
-                                    searchText = (state as VendorState.Success).searchText,
-                                    onTextChange = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(VendorIntent.Filter(it))
-                                        }
-                                    }
+                            is ProductState.Success -> {
+                                ProductScreen(
+                                    data = (state as ProductState.Success).data
                                 )
                             }
                         }
                     }
                 }
-            }
-            lifecycleScope.launch {
-                viewModel.userIntent.send(VendorIntent.LoadVendors)
             }
         }
     }

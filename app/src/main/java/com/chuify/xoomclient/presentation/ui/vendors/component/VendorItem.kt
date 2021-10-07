@@ -24,7 +24,7 @@ import com.chuify.xoomclient.domain.model.Vendor
 @Composable
 fun VendorItem(
     vendor: Vendor,
-    onItemClick: () -> Unit,
+    onItemClick: (Vendor) -> Unit,
 ) {
 
     Card(
@@ -33,7 +33,7 @@ fun VendorItem(
             .height(250.dp)
             .padding(8.dp),
         elevation = 15.dp,
-        onClick = { onItemClick() }
+        onClick = { onItemClick(vendor) }
     ) {
         Box() {
 

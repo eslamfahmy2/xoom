@@ -9,20 +9,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoadingListScreen() {
+fun LoadingListScreen(count: Int, height: Dp) {
     Column(modifier = Modifier.fillMaxSize()) {
-        for (i in 0..3) {
-            ShimmerAnimation()
+        for (i in 0..count) {
+            ShimmerAnimation(height)
         }
     }
 }
 
 @Composable
-fun ShimmerAnimation(
-) {
+fun ShimmerAnimation(height: Dp) {
 
     /*
     Create InfiniteTransition
@@ -70,7 +70,7 @@ fun ShimmerAnimation(
         end = Offset(translateAnim, translateAnim)
     )
 
-    ShimmerItem(brush = brush)
+    ShimmerItem(brush = brush, height = height)
 
 }
 
@@ -78,6 +78,7 @@ fun ShimmerAnimation(
 @Composable
 fun ShimmerItem(
     brush: Brush,
+    height: Dp,
 ) = /*
       Column composable shaped like a rectangle,
       set the [background]'s [brush] with the
@@ -85,7 +86,9 @@ fun ShimmerItem(
       which will get animated.
       Add few more Composable to test
     */
-    Column(modifier = Modifier.padding(8.dp)) {
+    Column(modifier = Modifier
+        .padding(8.dp)
+        .height(height)) {
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()

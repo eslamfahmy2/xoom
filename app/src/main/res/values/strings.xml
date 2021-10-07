@@ -22,5 +22,6 @@
     <string name="ordered">ordered</string>
     <string name="delivery_date">Delivery Date</string>
     <string name="from_kes_1_500">From KES: 1,500</string>
+    <string name="currency">KES.</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.data.remote.data_source
+package com.chuify.xoomclient.data.remote.source
 
 import android.app.Activity
 import com.chuify.xoomclient.data.remote.dto.UserDto

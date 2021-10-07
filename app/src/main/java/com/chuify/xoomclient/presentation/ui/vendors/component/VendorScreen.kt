@@ -24,6 +24,7 @@ import com.chuify.xoomclient.domain.model.Vendor
 @Composable
 fun VendorScreen(
     data: List<Vendor>,
+    onItemClicked: (Vendor) -> Unit,
     searchText: String,
     onTextChange: (String) -> Unit,
 ) {
@@ -52,8 +53,8 @@ fun VendorScreen(
         )
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(data) {
-                VendorItem(vendor = it , onItemClick = {})
+            items(data) { it ->
+                VendorItem(vendor = it, onItemClick = { onItemClicked(it) })
             }
         }
 

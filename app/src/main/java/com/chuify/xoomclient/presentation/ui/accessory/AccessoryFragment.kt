@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -90,7 +91,10 @@ class AccessoryFragment : Fragment() {
                                 }
                             }
                             AccessoryState.Loading -> {
-                                LoadingListScreen()
+                                LoadingListScreen(
+                                    count = 3,
+                                    height = 250.dp
+                                )
                             }
                             is AccessoryState.Success -> {
                                 AccessoryScreen(

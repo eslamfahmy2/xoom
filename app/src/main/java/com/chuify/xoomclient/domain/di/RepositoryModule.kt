@@ -1,7 +1,7 @@
 package com.chuify.xoomclient.domain.di
 
-import com.chuify.xoomclient.data.remote.data_source.AuthRepoImpl
-import com.chuify.xoomclient.data.remote.data_source.VendorRepoImpl
+import com.chuify.xoomclient.data.remote.source.AuthRepoImpl
+import com.chuify.xoomclient.data.remote.source.VendorRepoImpl
 import com.chuify.xoomclient.data.remote.network.ApiInterface
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.repository.VendorRepo
