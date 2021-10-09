@@ -34,6 +34,9 @@ class ProductViewModel @Inject constructor(
 
     init {
         handleIntent()
+        viewModelScope.launch {
+            loadProducts()
+        }
     }
 
     private fun handleIntent() {
@@ -45,7 +48,6 @@ class ProductViewModel @Inject constructor(
                         loadProducts()
                     }
                     is ProductIntent.IncreaseCartItem -> {
-
 
                     }
                 }

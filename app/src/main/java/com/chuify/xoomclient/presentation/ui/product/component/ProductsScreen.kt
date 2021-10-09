@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.accessory.component
+package com.chuify.xoomclient.presentation.ui.product.component
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
@@ -8,17 +8,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.unit.dp
+import com.chuify.xoomclient.domain.model.Vendor
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
-import com.chuify.xoomclient.presentation.ui.accessory.AccessoryIntent
-import com.chuify.xoomclient.presentation.ui.accessory.AccessoryState
-import com.chuify.xoomclient.presentation.ui.accessory.AccessoryViewModel
+import com.chuify.xoomclient.presentation.ui.product.ProductState
+import com.chuify.xoomclient.presentation.ui.product.ProductViewModel
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
-fun AccessoryScreen(viewModel: AccessoryViewModel) {
-
+fun ProductsScreen(vendor: Vendor, viewModel: ProductViewModel) {
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -34,16 +33,14 @@ fun AccessoryScreen(viewModel: AccessoryViewModel) {
         bottomBar = {
             DefaultSnackBar(
                 snackHostState = scaffoldState.snackbarHostState,
-                onDismiss = {
-                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                },
+                onDismiss = { scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() },
             )
         }
     ) {
 
         when (state) {
-            is AccessoryState.Error -> {
-                (state as AccessoryState.Error).message?.let {
+            is ProductState.Error -> {
+                (state as ProductState.Error).message?.let {
                     coroutineScope.launch {
                         scaffoldState.snackbarHostState.showSnackbar(
                             message = it,
@@ -52,23 +49,27 @@ fun AccessoryScreen(viewModel: AccessoryViewModel) {
                     }
                 }
             }
-            AccessoryState.Loading -> {
+            ProductState.Loading -> {
                 LoadingListScreen(
-                    count = 3,
-                    height = 250.dp
+                    count = 5,
+                    height = 100.dp
                 )
             }
-            is AccessoryState.Success -> {
-                AccessoryData(
-                    data = (state as AccessoryState.Success).data,
-                    searchText = (state as AccessoryState.Success).searchText
-                ) {
-                    coroutineScope.launch {
-                        viewModel.userIntent.send(AccessoryIntent.Filter(it))
+            is ProductState.Success -> {
+
+                ProductDataScreen(
+                    data = (state as ProductState.Success).data,
+                    onIncrease = {
+                        viewModel.insert(it)
+                    },
+                    onDecrease = {
+                        viewModel.decreaseOrRemove(it)
                     }
-                }
+                )
+
             }
         }
+
     }
 
 

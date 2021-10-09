@@ -34,6 +34,9 @@ class AccessoryViewModel @Inject constructor(
 
     init {
         handleIntent()
+        viewModelScope.launch {
+            loadAccessories()
+        }
     }
 
     private fun handleIntent() {
@@ -41,23 +44,7 @@ class AccessoryViewModel @Inject constructor(
             userIntent.consumeAsFlow().collect { intent ->
                 when (intent) {
                     AccessoryIntent.LoadVendors -> {
-                        useCase().collect { dataState ->
-                            when (dataState) {
-                                is DataState.Error -> {
-                                    Log.d(TAG, "Error: " + dataState.message)
-                                    _state.value = AccessoryState.Error(dataState.message)
-                                }
-                                is DataState.Loading -> {
-                                    _state.value = AccessoryState.Loading
-                                }
-                                is DataState.Success -> {
-                                    _vendors.value = dataState.data ?: listOf()
-                                    _state.value = AccessoryState.Success(
-                                        data = dataState.data ?: listOf(),
-                                        searchText = _searchText.value)
-                                }
-                            }
-                        }
+                        loadAccessories()
                     }
                     is AccessoryIntent.Filter -> {
                         _searchText.value = intent.searchText
@@ -73,6 +60,28 @@ class AccessoryViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private suspend fun loadAccessories() {
+
+        useCase().collect { dataState ->
+            when (dataState) {
+                is DataState.Error -> {
+                    Log.d(TAG, "Error: " + dataState.message)
+                    _state.value = AccessoryState.Error(dataState.message)
+                }
+                is DataState.Loading -> {
+                    _state.value = AccessoryState.Loading
+                }
+                is DataState.Success -> {
+                    _vendors.value = dataState.data ?: listOf()
+                    _state.value = AccessoryState.Success(
+                        data = dataState.data ?: listOf(),
+                        searchText = _searchText.value)
+                }
+            }
+        }
+
     }
 
 }

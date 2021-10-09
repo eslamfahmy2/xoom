@@ -1,7 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.product
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +21,7 @@ import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.ui.BaseApplication
-import com.chuify.xoomclient.presentation.ui.product.component.ProductScreen
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+import com.chuify.xoomclient.presentation.ui.product.component.ProductDataScreen
 import com.chuify.xoomclient.presentation.utils.TRANS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -102,11 +100,11 @@ class ProductFragment : Fragment() {
                             }
                             is ProductState.Success -> {
 
-                                ProductScreen(
+                                ProductDataScreen(
                                     data = (state as ProductState.Success).data,
                                     onIncrease = {
                                         viewModel.insert(it)
-                                    } ,
+                                    },
                                     onDecrease = {
                                         viewModel.decreaseOrRemove(it)
                                     }
@@ -119,7 +117,7 @@ class ProductFragment : Fragment() {
                 }
 
                 lifecycleScope.launch {
-                  viewModel.userIntent.send(ProductIntent.InitLoad)
+                    viewModel.userIntent.send(ProductIntent.InitLoad)
                 }
             }
         }

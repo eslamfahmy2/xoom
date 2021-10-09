@@ -1,64 +1,87 @@
 package com.chuify.xoomclient.presentation.ui.vendors.component
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.chuify.xoomclient.R
-import com.chuify.xoomclient.domain.model.Vendor
+import androidx.navigation.NavHostController
+import com.chuify.xoomclient.presentation.components.AppBar
+import com.chuify.xoomclient.presentation.components.DefaultSnackBar
+import com.chuify.xoomclient.presentation.components.LoadingListScreen
+import com.chuify.xoomclient.presentation.navigation.Screen
+import com.chuify.xoomclient.presentation.ui.vendors.VendorIntent
+import com.chuify.xoomclient.presentation.ui.vendors.VendorState
+import com.chuify.xoomclient.presentation.ui.vendors.VendorViewModel
+import kotlinx.coroutines.launch
 
-
+@ExperimentalMaterialApi
 @Composable
-fun VendorScreen(
-    data: List<Vendor>,
-    onItemClicked: (Vendor) -> Unit,
-    searchText: String,
-    onTextChange: (String) -> Unit,
-) {
+fun VendorScreenUI(viewModel: VendorViewModel, navHostController: NavHostController) {
 
-    Column {
+    val coroutineScope = rememberCoroutineScope()
 
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            value = searchText,
-            onValueChange = { onTextChange(it) },
-            label = {
-                Text(text = stringResource(R.string.search_on_xoom))
-            },
-            keyboardOptions = KeyboardOptions(
-                autoCorrect = false,
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            ),
-            textStyle = TextStyle(
-                color = MaterialTheme.colors.secondaryVariant,
-                fontSize = 16.sp
+    val state by remember { viewModel.state }
+
+    val scaffoldState = rememberScaffoldState()
+
+    Scaffold(
+        topBar = {
+            AppBar(
+                title = "Vendors",
+                onToggleTheme = { // application.toggleTheme()
+                }
             )
+        },
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            scaffoldState.snackbarHostState
+        },
+        bottomBar = {
+            DefaultSnackBar(
+                snackHostState = scaffoldState.snackbarHostState,
+                onDismiss = {
+                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                },
+            )
+        }
+    ) {
 
-        )
-
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(data) { it ->
-                VendorItem(vendor = it, onItemClick = { onItemClicked(it) })
+        when (state) {
+            is VendorState.Error -> {
+                (state as VendorState.Error).message?.let {
+                    coroutineScope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = "Dismiss",
+                        )
+                    }
+                }
+            }
+            VendorState.Loading -> {
+                LoadingListScreen(
+                    count = 3,
+                    height = 250.dp
+                )
+            }
+            is VendorState.Success -> {
+                VendorScreen(
+                    data = (state as VendorState.Success).data,
+                    onItemClicked = {
+                        navHostController.navigate(Screen.VendorDetails.route)
+                    },
+                    searchText = (state as VendorState.Success).searchText,
+                    onTextChange = {
+                        coroutineScope.launch {
+                            viewModel.userIntent.send(VendorIntent.Filter(it))
+                        }
+                    }
+                )
             }
         }
-
     }
-
 
 }

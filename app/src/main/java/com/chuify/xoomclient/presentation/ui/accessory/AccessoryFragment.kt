@@ -20,7 +20,7 @@ import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.ui.BaseApplication
-import com.chuify.xoomclient.presentation.ui.accessory.component.AccessoryScreen
+import com.chuify.xoomclient.presentation.ui.accessory.component.AccessoryData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -97,7 +97,7 @@ class AccessoryFragment : Fragment() {
                                 )
                             }
                             is AccessoryState.Success -> {
-                                AccessoryScreen(
+                                AccessoryData(
                                     data = (state as AccessoryState.Success).data,
                                     searchText = (state as AccessoryState.Success).searchText
                                 ) {

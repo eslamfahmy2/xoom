@@ -34,45 +34,60 @@ class VendorViewModel @Inject constructor(
 
     init {
         handleIntent()
+        viewModelScope.launch {
+            loadVendors()
+        }
     }
 
     private fun handleIntent() {
         viewModelScope.launch {
+
             userIntent.consumeAsFlow().collect { intent ->
                 when (intent) {
                     VendorIntent.LoadVendors -> {
-                        useCase().collect { dataState ->
-                            when (dataState) {
-                                is DataState.Error -> {
-                                    Log.d(TAG, "Error: " + dataState.message)
-                                    _state.value = VendorState.Error(dataState.message)
-                                }
-                                is DataState.Loading -> {
-                                    _state.value = VendorState.Loading
-                                }
-                                is DataState.Success -> {
-                                    _vendors.value = dataState.data ?: listOf()
-                                    _state.value = VendorState.Success(
-                                        data = dataState.data ?: listOf(),
-                                        searchText = _searchText.value)
-                                }
-                            }
-                        }
+                        loadVendors()
                     }
                     is VendorIntent.Filter -> {
-                        _searchText.value = intent.searchText
-                        val list = _vendors.value.filter {
-                            it.name.lowercase().contains(_searchText.value.lowercase())
-                        }
-                        _state.value =
-                            VendorState.Success(
-                                data = list,
-                                searchText = _searchText.value
-                            )
+                        filter(intent.searchText)
                     }
                 }
             }
         }
+    }
+
+    private suspend fun loadVendors() {
+        useCase().collect { dataState ->
+            when (dataState) {
+                is DataState.Error -> {
+                    Log.d(TAG, "Error: " + dataState.message)
+                    _state.value = VendorState.Error(dataState.message)
+                }
+                is DataState.Loading -> {
+                    _state.value = VendorState.Loading
+                }
+                is DataState.Success -> {
+                    _vendors.value = dataState.data ?: listOf()
+                    _state.value = VendorState.Success(
+                        data = dataState.data ?: listOf(),
+                        searchText = _searchText.value)
+                }
+            }
+        }
+    }
+
+    private fun filter(searchText: String) {
+
+        _searchText.value = searchText
+
+        val list = _vendors.value.filter {
+            it.name.lowercase().contains(_searchText.value.lowercase())
+        }
+
+        _state.value =
+            VendorState.Success(
+                data = list,
+                searchText = _searchText.value
+            )
     }
 
 }

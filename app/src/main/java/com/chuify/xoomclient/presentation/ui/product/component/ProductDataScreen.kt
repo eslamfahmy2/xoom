@@ -12,7 +12,7 @@ import com.chuify.xoomclient.domain.model.Product
 
 @ExperimentalMaterialApi
 @Composable
-fun ProductScreen(
+fun ProductDataScreen(
     data: List<Product>,
     onIncrease: (Product) -> Unit,
     onDecrease: (Product) -> Unit,
