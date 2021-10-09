@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Vendor
-import com.chuify.xoomclient.domain.usecase.vendor.ListVendorsUseCase
+import com.chuify.xoomclient.domain.usecase.home.ListVendorsUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel

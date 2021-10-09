@@ -1,27 +1,27 @@
-package com.chuify.xoomclient.domain.usecase.vendor
+package com.chuify.xoomclient.domain.usecase.home
 
-import com.chuify.xoomclient.domain.mapper.ProductDtoMapper
-import com.chuify.xoomclient.domain.model.Product
+import com.chuify.xoomclient.domain.mapper.VendorDtoMapper
+import com.chuify.xoomclient.domain.model.Vendor
 import com.chuify.xoomclient.domain.repository.VendorRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class ListProductsUseCase @Inject constructor(
+class ListVendorsUseCase @Inject constructor(
     private val repo: VendorRepo,
-    private val mapper: ProductDtoMapper,
+    private val mapper: VendorDtoMapper,
 
     ) {
 
-    suspend operator fun invoke(vendorID: String) = flow<DataState<List<Product>>> {
+    suspend operator fun invoke() = flow<DataState<List<Vendor>>> {
         try {
-            when (val response = repo.listProducts(vendorID)) {
+            when (val response = repo.listVendors()) {
                 is ResponseState.Error -> {
                     emit(DataState.Error(response.message))
                 }
                 is ResponseState.Success -> {
-                    val result = mapper.toDomainList(response.data.products ?: listOf())
+                    val result = mapper.toDomainList(response.data.vendors ?: listOf())
                     emit(DataState.Success(result))
                 }
             }

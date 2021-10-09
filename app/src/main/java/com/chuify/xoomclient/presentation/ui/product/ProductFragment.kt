@@ -1,6 +1,7 @@
 package com.chuify.xoomclient.presentation.ui.product
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.chuify.xoomclient.domain.model.Vendor
 import com.chuify.xoomclient.presentation.components.AppBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
@@ -21,6 +23,7 @@ import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.ui.BaseApplication
 import com.chuify.xoomclient.presentation.ui.product.component.ProductScreen
+import com.chuify.xoomclient.presentation.ui.signup.TAG
 import com.chuify.xoomclient.presentation.utils.TRANS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -71,15 +74,11 @@ class ProductFragment : Fragment() {
                             )
                         },
                         scaffoldState = scaffoldState,
-                        snackbarHost = {
-                            scaffoldState.snackbarHostState
-                        },
+                        snackbarHost = { scaffoldState.snackbarHostState },
                         bottomBar = {
                             DefaultSnackBar(
                                 snackHostState = scaffoldState.snackbarHostState,
-                                onDismiss = {
-                                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                                },
+                                onDismiss = { scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() },
                             )
                         }
                     ) {
@@ -102,12 +101,25 @@ class ProductFragment : Fragment() {
                                 )
                             }
                             is ProductState.Success -> {
+
                                 ProductScreen(
-                                    data = (state as ProductState.Success).data
+                                    data = (state as ProductState.Success).data,
+                                    onIncrease = {
+                                        viewModel.insert(it)
+                                    } ,
+                                    onDecrease = {
+                                        viewModel.decreaseOrRemove(it)
+                                    }
                                 )
+
                             }
                         }
+
                     }
+                }
+
+                lifecycleScope.launch {
+                  viewModel.userIntent.send(ProductIntent.InitLoad)
                 }
             }
         }

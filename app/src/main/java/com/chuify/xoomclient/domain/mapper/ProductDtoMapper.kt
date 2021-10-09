@@ -11,10 +11,9 @@ class ProductDtoMapper : DomainMapper<ProductDto, Product> {
             id = model.product_id!!,
             name = model.product_name!!,
             image = model.image!!,
-            price = model.selling_price!!,
+            price = model.selling_price!!.toDouble(),
             refill = model.refill_new!!,
-            size = model.product_size!!
-
+            size = model.product_size!!,
         )
     }
 
@@ -29,7 +28,7 @@ class ProductDtoMapper : DomainMapper<ProductDto, Product> {
             image = domainModel.image,
             product_size = domainModel.size,
             refill_new = domainModel.refill,
-            selling_price = domainModel.price
+            selling_price = domainModel.price.toString()
         )
     }
 

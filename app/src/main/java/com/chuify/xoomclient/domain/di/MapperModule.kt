@@ -1,9 +1,6 @@
 package com.chuify.xoomclient.domain.di
 
-import com.chuify.xoomclient.domain.mapper.AccessoryDtoMapper
-import com.chuify.xoomclient.domain.mapper.ProductDtoMapper
-import com.chuify.xoomclient.domain.mapper.UserDtoMapper
-import com.chuify.xoomclient.domain.mapper.VendorDtoMapper
+import com.chuify.xoomclient.domain.mapper.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,6 +26,10 @@ object MapperModule {
     @Singleton
     @Provides
     fun provideProductMapper() = ProductDtoMapper()
+
+    @Singleton
+    @Provides
+    fun provideOrderMapper() = OrderEntityMapper()
 
 
 }

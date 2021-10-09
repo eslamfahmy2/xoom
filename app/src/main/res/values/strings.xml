@@ -24,4 +24,7 @@
     <string name="from_kes_1_500">From KES: 1,500</string>
     <string name="currency">KES.</string>
 
+    <string name="total">Total</string>
+    <string name="checkout">Checkout</string>
+
 </resources>

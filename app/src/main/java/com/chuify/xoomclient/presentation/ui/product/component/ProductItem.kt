@@ -8,8 +8,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,12 +26,9 @@ import com.chuify.xoomclient.domain.model.Product
 @Composable
 fun ProductItem(
     product: Product,
-    onItemClick: (Product) -> Unit,
+    increaseCartItem: (Product) -> Unit,
+    decreaseCartItem: (Product) -> Unit,
 ) {
-
-    val quantity = remember {
-        mutableStateOf(1)
-    }
 
     Card(
         modifier = Modifier
@@ -88,9 +83,9 @@ fun ProductItem(
                     color = MaterialTheme.colors.onSurface,
                 )
 
-                if (quantity.value > 0) {
+                if (product.quantity > 0) {
 
-                    Row(modifier = Modifier.padding(4.dp)) {
+                    Row(modifier = Modifier.padding(8.dp)) {
 
                         Button(
                             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
@@ -102,9 +97,7 @@ fun ProductItem(
                                     color = Color.Gray,
                                 ),
                             onClick = {
-                                if (quantity.value > 0) {
-                                    quantity.value--
-                                }
+                                decreaseCartItem(product)
                             },
 
                             ) {
@@ -114,11 +107,13 @@ fun ProductItem(
                             )
                         }
 
-                        Text(modifier = Modifier.padding(4.dp), text = quantity.value.toString())
+                        Text(modifier = Modifier.padding(4.dp), text = product.quantity.toString())
 
                         Button(
                             modifier = Modifier.size(28.dp, 28.dp),
-                            onClick = { quantity.value++ }) {
+                            onClick = {
+                                increaseCartItem(product)
+                            }) {
                             Icon(
                                 Icons.Filled.Add, contentDescription = null,
                                 modifier = Modifier.size(28.dp, 28.dp),
@@ -126,14 +121,16 @@ fun ProductItem(
                         }
                     }
                 } else {
-                    Button(
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .size(28.dp, 28.dp),
-                        onClick = { quantity.value++ }) {
-                        Text(text = "+")
-                    }
 
+                    Box(modifier = Modifier.padding(8.dp)) {
+                        Button(
+                            modifier = Modifier.size(28.dp, 28.dp),
+                            onClick = {
+                                increaseCartItem(product)
+                            }) {
+                            Text(text = "+")
+                        }
+                    }
                 }
 
             }
@@ -159,7 +156,7 @@ fun ProductItem(
                     .wrapContentSize()
                     .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
                     Text(
-                        text = product.price,
+                        text = product.price.toString(),
                         color = MaterialTheme.colors.primary,
                         fontWeight = FontWeight.Bold
                     )
