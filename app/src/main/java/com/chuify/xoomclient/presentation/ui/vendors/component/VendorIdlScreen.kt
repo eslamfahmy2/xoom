@@ -1,14 +1,19 @@
 package com.chuify.xoomclient.presentation.ui.vendors.component
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,21 +27,27 @@ import com.chuify.xoomclient.domain.model.Vendor
 
 
 @Composable
-fun VendorScreen(
+fun VendorIdlScreen(
     data: List<Vendor>,
     onItemClicked: (Vendor) -> Unit,
     searchText: String,
     onTextChange: (String) -> Unit,
 ) {
 
-    Column {
-
+    Column(modifier = Modifier.padding(start = 8.dp , end = 8.dp ,
+    bottom = 8.dp) ) {
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(start = 8.dp, end = 8.dp,
+                    bottom = 8.dp)
+            ,
             value = searchText,
-            onValueChange = { onTextChange(it) },
+            onValueChange = { onTextChange(it) } ,
+            leadingIcon = {
+                Icon(Icons.Filled.Search, contentDescription = "Localized description")
+            }
+            ,
             label = {
                 Text(text = stringResource(R.string.search_on_xoom))
             },
@@ -51,7 +62,7 @@ fun VendorScreen(
             )
 
         )
-
+        Spacer(modifier = Modifier.padding(top = 8.dp))
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(data) { it ->
                 VendorItem(vendor = it, onItemClick = { onItemClicked(it) })

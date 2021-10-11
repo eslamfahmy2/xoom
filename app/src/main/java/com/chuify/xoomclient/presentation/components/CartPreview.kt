@@ -16,13 +16,14 @@ import com.chuify.xoomclient.R
 @ExperimentalMaterialApi
 @Composable
 fun CartPreview(
+    modifier: Modifier,
     quantity: String,
     price: String,
     onClick: () -> Unit,
 ) {
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp),
         elevation = 15.dp,
@@ -38,7 +39,7 @@ fun CartPreview(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start) {
                 Text(
-                    text = "100",
+                    text = price,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(2.dp)
                 )
@@ -56,7 +57,7 @@ fun CartPreview(
                 horizontalArrangement = Arrangement.Start
             ) {
                 Text(
-                    text = "100",
+                    text = quantity,
                     fontWeight = FontWeight.Bold,
                 )
                 Text(

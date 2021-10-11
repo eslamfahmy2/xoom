@@ -9,21 +9,12 @@ import javax.inject.Inject
 @HiltAndroidApp
 class BaseApplication : Application() {
 
-    @Inject
-    lateinit var sharedPreferences: SharedPrefs
-
     private val isDarkTheme by lazy {
-        mutableStateOf(sharedPreferences.isDark())
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        isDarkTheme.value = sharedPreferences.isDark()
+        mutableStateOf(false)
     }
 
     fun toggleTheme() {
         this.isDarkTheme.value = !this.isDarkTheme.value
-        sharedPreferences.saveTheme(isDark = isDark())
     }
 
     fun isDark(): Boolean = this.isDarkTheme.value

@@ -10,15 +10,15 @@ data class OrderEntity(
     @PrimaryKey
     val id: String,
 
-    val name: String,
+    val name: String = "",
 
-    val price: Double,
+    val price: Double = 0.0,
 
-    val basePrice: Double,
+    val basePrice: Double = 0.0,
 
-    val quantity: Int,
+    val quantity: Int =0,
 
-    val time: String,
+    val time: String ="",
 
-    val image: String,
+    val image: String ="",
 )

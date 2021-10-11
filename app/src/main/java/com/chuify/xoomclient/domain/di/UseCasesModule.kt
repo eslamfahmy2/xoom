@@ -101,7 +101,7 @@ object UseCasesModule {
     @Provides
     fun provideListOrderUseCase(
         repository: CartRepo,
-    ) = ListOrdersUs(repo = repository)
+    ) = CartPreviewUC(repo = repository)
 
     @Singleton
     @Provides

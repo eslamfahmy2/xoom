@@ -19,13 +19,15 @@ class InsertOrUpdateProductUseCase @Inject constructor(
             val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
             val time = df.format(Calendar.getInstance().time)
 
+            val price = (model.quantity + 1) * model.price
+
             val orderDto = OrderEntity(
-                price = model.price,
                 image = model.image,
                 name = model.name,
                 id = model.id,
                 basePrice = model.price,
                 quantity = model.quantity + 1,
+                price = price,
                 time = time
             )
             repo.insert(orderDto)

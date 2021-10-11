@@ -16,26 +16,33 @@ class DeleteOrUpdateProductUseCase @Inject constructor(
         try {
             emit(DataState.Loading())
 
-            val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-            val time = df.format(Calendar.getInstance().time)
-
-            val orderDto = OrderEntity(
-                price = model.price,
-                image = model.image,
-                name = model.name,
-                id = model.id,
-                basePrice = model.price,
-                quantity = model.quantity - 1,
-                time = time
-            )
-
             if (model.quantity > 1) {
+
+                val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+                val time = df.format(Calendar.getInstance().time)
+
+                val price = (model.quantity - 1) * model.price
+
+                val orderDto = OrderEntity(
+                    price = price,
+                    image = model.image,
+                    name = model.name,
+                    id = model.id,
+                    basePrice = model.price,
+                    quantity = model.quantity - 1,
+                    time = time
+                )
+
                 repo.insert(orderDto)
                 emit(DataState.Success())
             } else {
+                val orderDto = OrderEntity(id = model.id)
                 repo.delete(orderDto)
                 emit(DataState.Success())
             }
+
+
+
         } catch (e: Exception) {
             emit(DataState.Error(e.message))
         }

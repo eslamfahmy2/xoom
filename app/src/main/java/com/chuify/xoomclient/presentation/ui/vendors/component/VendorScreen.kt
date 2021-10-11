@@ -7,12 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.components.AppBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.navigation.Screen
+import com.chuify.xoomclient.presentation.ui.BaseApplication
 import com.chuify.xoomclient.presentation.ui.vendors.VendorIntent
 import com.chuify.xoomclient.presentation.ui.vendors.VendorState
 import com.chuify.xoomclient.presentation.ui.vendors.VendorViewModel
@@ -20,7 +24,7 @@ import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
-fun VendorScreenUI(viewModel: VendorViewModel, navHostController: NavHostController) {
+fun VendorScreen(viewModel: VendorViewModel = hiltViewModel(), navHostController: NavHostController , application : BaseApplication) {
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -31,8 +35,9 @@ fun VendorScreenUI(viewModel: VendorViewModel, navHostController: NavHostControl
     Scaffold(
         topBar = {
             AppBar(
-                title = "Vendors",
-                onToggleTheme = { // application.toggleTheme()
+                title = stringResource(R.string.home),
+                onToggleTheme = {
+                    application.toggleTheme()
                 }
             )
         },
@@ -68,7 +73,7 @@ fun VendorScreenUI(viewModel: VendorViewModel, navHostController: NavHostControl
                 )
             }
             is VendorState.Success -> {
-                VendorScreen(
+                VendorIdlScreen(
                     data = (state as VendorState.Success).data,
                     onItemClicked = {
                         navHostController.navigate(Screen.VendorDetails.route)

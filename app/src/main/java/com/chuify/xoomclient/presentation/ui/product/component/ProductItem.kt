@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,7 +17,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberImagePainter
 import com.chuify.xoomclient.R
@@ -101,10 +101,9 @@ fun ProductItem(
                             },
 
                             ) {
-                            Text(
-                                text = "-",
-                                fontSize = 16.sp
-                            )
+                            Icon(Icons.Filled.AddShoppingCart,
+                                contentDescription = "Localized description")
+
                         }
 
                         Text(modifier = Modifier.padding(4.dp), text = product.quantity.toString())

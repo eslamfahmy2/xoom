@@ -1,12 +1,14 @@
 package com.chuify.xoomclient.domain.usecase.cart
 
+import android.util.Log
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
+import com.chuify.xoomclient.presentation.ui.signup.TAG
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class ListOrdersUs @Inject constructor(
+class CartPreviewUC @Inject constructor(
     private val repo: CartRepo,
 ) {
     suspend operator fun invoke() = flow<DataState<CartPreview>> {
@@ -18,8 +20,13 @@ class ListOrdersUs @Inject constructor(
                 } else {
                     val totalPrice = it.sumOf { item -> item.price }
                     val quantity = it.sumOf { item -> item.quantity }
-                    emit(DataState.Success(CartPreview(totalPrice = totalPrice,
-                        totalQuantity = quantity)))
+                    Log.d(TAG, "invoke: $it")
+                    Log.d(TAG, "totalPrice: $totalPrice")
+                    Log.d(TAG, "quantity: $quantity")
+                    emit(DataState.Success(
+                        CartPreview(
+                            totalPrice = totalPrice,
+                            totalQuantity = quantity)))
                 }
             }
 
