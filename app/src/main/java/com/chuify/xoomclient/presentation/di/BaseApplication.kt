@@ -2,7 +2,7 @@ package com.chuify.xoomclient.presentation.di
 
 
 import android.content.Context
-import com.chuify.xoomclient.presentation.ui.BaseApplication
+import com.chuify.xoomclient.presentation.application.BaseApplication
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

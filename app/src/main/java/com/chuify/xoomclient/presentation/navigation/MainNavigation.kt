@@ -1,16 +1,17 @@
 package com.chuify.xoomclient.presentation.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.chuify.xoomclient.domain.model.Vendor
-import com.chuify.xoomclient.presentation.ui.BaseApplication
 import com.chuify.xoomclient.presentation.ui.cart.CartScreen
+import com.chuify.xoomclient.presentation.ui.checkout.CheckoutScreen
+import com.chuify.xoomclient.presentation.ui.main.MainScreen
+import com.chuify.xoomclient.presentation.ui.payment.PaymentScreen
+import com.chuify.xoomclient.presentation.ui.picklocation.PickLocationScreen
 import com.chuify.xoomclient.presentation.ui.vendorDetails.VendorDetailsScreen
 import com.chuify.xoomclient.presentation.ui.vendors.component.VendorScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -19,22 +20,25 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.gson.Gson
 
+@ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
-fun MainNavigation(applicationContext: BaseApplication) {
+fun MainNavigation() {
 
     val navHostController = rememberAnimatedNavController()
 
-    AnimatedNavHost(navController = navHostController, startDestination = Screens.Vendors.route) {
+    AnimatedNavHost(navController = navHostController, startDestination = Screens.Main.route) {
+
+        composable(route = Screens.Main.fullRoute()) {
+            MainScreen(navHostController = navHostController)
+        }
 
         composable(
             route = Screens.Vendors.route,
         ) {
-            VendorScreen(
-                navHostController = navHostController,
-                application = applicationContext)
+            VendorScreen(navHostController = navHostController)
         }
 
         composable(
@@ -42,17 +46,8 @@ fun MainNavigation(applicationContext: BaseApplication) {
             arguments = listOf(navArgument(Screens.VendorDetails.vendorArg) {
                 type = NavType.StringType
             }),
-            enterTransition = { _, _ ->
-                slideInVertically(initialOffsetY = { 5000 }, animationSpec = tween(500))
-            },
-            exitTransition = { _, _ ->
-                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
-            },
-            popExitTransition = { _, _ ->
-                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
-            }
 
-        ) { backStackEntry ->
+            ) { backStackEntry ->
             backStackEntry.arguments?.getString(Screens.VendorDetails.vendorArg)?.let {
                 Gson().fromJson(it, Vendor::class.java)?.let { vendor ->
                     VendorDetailsScreen(
@@ -66,18 +61,15 @@ fun MainNavigation(applicationContext: BaseApplication) {
 
         composable(
             route = Screens.Cart.fullRoute(),
-            enterTransition = { _, _ ->
-                slideInVertically(initialOffsetY = { 5000 }, animationSpec = tween(500))
-            },
-            exitTransition = { _, _ ->
-                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
-            },
-            popExitTransition = { _, _ ->
-                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
-            }
-
         ) {
             CartScreen(navHostController = navHostController)
+        }
+
+        composable(
+            route = Screens.Checkout.fullRoute(),
+
+            ) {
+            CheckoutScreen(navHostController = navHostController)
         }
 
         composable(
@@ -88,10 +80,18 @@ fun MainNavigation(applicationContext: BaseApplication) {
 
         ) { backStackEntry ->
             backStackEntry.arguments?.getString(Screens.AccessoryDetails.accessoryArg)?.let {
-
             }
 
         }
+
+        composable(route = Screens.PaymentMethod.fullRoute()) {
+            PaymentScreen(navHostController = navHostController)
+        }
+
+        composable(route = Screens.PickLocation.fullRoute()) {
+            PickLocationScreen(navHostController = navHostController)
+        }
+
     }
 
 }

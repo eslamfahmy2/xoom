@@ -19,7 +19,7 @@ class VendorDtoMapper : DomainMapper<VendorDto, Vendor> {
         return initial.map { mapToDomainModel(it) }
     }
 
-    override fun mapFromDomainModel(domainModel: Vendor): VendorDto {
+    fun mapFromDomainModel(domainModel: Vendor): VendorDto {
         return VendorDto(vendor_id = domainModel.id,
             vendor_name = domainModel.name,
             image = domainModel.image

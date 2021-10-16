@@ -1,13 +1,13 @@
 package com.chuify.xoomclient.domain.di
 
-import com.chuify.xoomclient.data.local.dao.OrderDao
+import com.chuify.xoomclient.data.local.dao.CartDao
 import com.chuify.xoomclient.data.local.source.CartRepoImpl
 import com.chuify.xoomclient.data.remote.network.ApiInterface
 import com.chuify.xoomclient.data.remote.source.AuthRepoImpl
+import com.chuify.xoomclient.data.remote.source.LocationRepoImpl
+import com.chuify.xoomclient.data.remote.source.OrderRepoImpl
 import com.chuify.xoomclient.data.remote.source.VendorRepoImpl
-import com.chuify.xoomclient.domain.repository.AuthRepo
-import com.chuify.xoomclient.domain.repository.CartRepo
-import com.chuify.xoomclient.domain.repository.VendorRepo
+import com.chuify.xoomclient.domain.repository.*
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -39,9 +39,25 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideOrderRepository(
-        api: OrderDao,
+    fun provideCartRepository(
+        api: CartDao,
     ): CartRepo {
         return CartRepoImpl(api)
+    }
+
+    @Singleton
+    @Provides
+    fun provideLocationRepository(
+        api: ApiInterface,
+    ): LocationRepo {
+        return LocationRepoImpl(api)
+    }
+
+    @Singleton
+    @Provides
+    fun provideOrderRepository(
+        api: ApiInterface,
+    ): OrderRepo {
+        return OrderRepoImpl(api)
     }
 }

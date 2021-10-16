@@ -25,7 +25,7 @@ import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.components.HomeBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
-import com.chuify.xoomclient.presentation.ui.BaseApplication
+import com.chuify.xoomclient.presentation.application.BaseApplication
 import com.chuify.xoomclient.presentation.ui.verify.component.VerifyScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

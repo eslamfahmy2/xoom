@@ -5,7 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chuify.xoomclient.domain.model.Order
+import com.chuify.xoomclient.domain.model.Cart
 import com.chuify.xoomclient.domain.usecase.cart.DeleteOrderUs
 import com.chuify.xoomclient.domain.usecase.cart.GetCartItemsUseCase
 import com.chuify.xoomclient.domain.usecase.cart.OrderITemAction
@@ -84,7 +84,7 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    private suspend fun increase(order: Order, action: OrderITemAction) =
+    private suspend fun increase(order: Cart, action: OrderITemAction) =
         viewModelScope.launch(Dispatchers.IO) {
 
             updateOrderUs(order, action).collect { dataState ->
@@ -105,7 +105,7 @@ class CartViewModel @Inject constructor(
 
         }
 
-    private suspend fun decrease(order: Order, action: OrderITemAction) =
+    private suspend fun decrease(order: Cart, action: OrderITemAction) =
         viewModelScope.launch(Dispatchers.IO) {
 
             updateOrderUs(order, action).collect { dataState ->
@@ -127,7 +127,7 @@ class CartViewModel @Inject constructor(
         }
 
 
-    private suspend fun delete(order: Order) = viewModelScope.launch(Dispatchers.IO) {
+    private suspend fun delete(order: Cart) = viewModelScope.launch(Dispatchers.IO) {
 
         deleteOrderUs(order).collect { dataState ->
             when (dataState) {

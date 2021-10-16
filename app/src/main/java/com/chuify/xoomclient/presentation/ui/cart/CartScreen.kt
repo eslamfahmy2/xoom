@@ -26,6 +26,7 @@ import com.chuify.xoomclient.presentation.components.CartPreview
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.components.SecondaryBar
+import com.chuify.xoomclient.presentation.navigation.Screens
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 
@@ -132,7 +133,7 @@ fun CartScreen(
                                 modifier = Modifier.align(Alignment.BottomCenter),
                                 quantity = cartPreview.totalQuantity.toString(),
                                 price = cartPreview.totalPrice.toString()) {
-
+                                navHostController.navigate(Screens.Checkout.route)
                             }
 
 

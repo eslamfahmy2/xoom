@@ -17,7 +17,6 @@ import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.HomeBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.navigation.Screens
-import com.chuify.xoomclient.presentation.ui.BaseApplication
 import com.chuify.xoomclient.presentation.ui.vendors.VendorIntent
 import com.chuify.xoomclient.presentation.ui.vendors.VendorState
 import com.chuify.xoomclient.presentation.ui.vendors.VendorViewModel
@@ -30,7 +29,6 @@ import kotlinx.coroutines.launch
 fun VendorScreen(
     viewModel: VendorViewModel = hiltViewModel(),
     navHostController: NavHostController,
-    application: BaseApplication,
 ) {
 
     val coroutineScope = rememberCoroutineScope()

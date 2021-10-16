@@ -111,7 +111,7 @@ object UseCasesModule {
     @Provides
     fun provideCartItemsUseCase(
         repository: CartRepo,
-        orderEntityMapper: OrderEntityMapper,
+        orderEntityMapper: CartEntityMapper,
     ) = GetCartItemsUseCase(repo = repository, orderEntityMapper = orderEntityMapper)
 
 
@@ -131,7 +131,7 @@ object UseCasesModule {
     @Provides
     fun provideUpdateOrderUseCase(
         repository: CartRepo,
-        orderEntityMapper: OrderEntityMapper,
+        orderEntityMapper: CartEntityMapper,
     ) = UpdateOrderUs(repo = repository, orderEntityMapper = orderEntityMapper)
 
 
@@ -139,7 +139,7 @@ object UseCasesModule {
     @Provides
     fun provideDeleteOrderUseCase(
         repository: CartRepo,
-        orderEntityMapper: OrderEntityMapper,
+        orderEntityMapper: CartEntityMapper,
     ) = DeleteOrderUs(repo = repository, orderEntityMapper = orderEntityMapper)
 
 

@@ -1,6 +1,6 @@
 package com.chuify.xoomclient.domain.usecase.cart
 
-import com.chuify.xoomclient.data.local.entity.OrderEntity
+import com.chuify.xoomclient.data.local.entity.CartEntity
 import com.chuify.xoomclient.domain.model.Product
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
@@ -23,7 +23,7 @@ class DeleteOrUpdateProductUseCase @Inject constructor(
 
                 val price = (model.quantity - 1) * model.price
 
-                val orderDto = OrderEntity(
+                val orderDto = CartEntity(
                     price = price,
                     image = model.image,
                     name = model.name,
@@ -36,7 +36,7 @@ class DeleteOrUpdateProductUseCase @Inject constructor(
                 repo.insert(orderDto)
                 emit(DataState.Success())
             } else {
-                val orderDto = OrderEntity(id = model.id)
+                val orderDto = CartEntity(id = model.id)
                 repo.delete(orderDto)
                 emit(DataState.Success())
             }

@@ -3,6 +3,7 @@ package com.chuify.xoomclient.data.remote.dto
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+
 data class AccessoryListDto(
 
     @Expose

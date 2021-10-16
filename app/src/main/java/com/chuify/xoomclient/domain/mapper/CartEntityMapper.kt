@@ -1,13 +1,13 @@
 package com.chuify.xoomclient.domain.mapper
 
-import com.chuify.xoomclient.data.local.entity.OrderEntity
-import com.chuify.xoomclient.domain.model.Order
+import com.chuify.xoomclient.data.local.entity.CartEntity
+import com.chuify.xoomclient.domain.model.Cart
 
 
-class OrderEntityMapper : DomainMapper<OrderEntity, Order> {
+class CartEntityMapper : DomainMapper<CartEntity, Cart> {
 
-    override fun mapToDomainModel(model: OrderEntity): Order {
-        return Order(
+    override fun mapToDomainModel(model: CartEntity): Cart {
+        return Cart(
             price = model.price,
             image = model.image,
             name = model.name,
@@ -18,12 +18,12 @@ class OrderEntityMapper : DomainMapper<OrderEntity, Order> {
         )
     }
 
-    fun toDomainList(initial: List<OrderEntity>): List<Order> {
+    fun toDomainList(initial: List<CartEntity>): List<Cart> {
         return initial.map { mapToDomainModel(it) }
     }
 
-    override fun mapFromDomainModel(domainModel: Order): OrderEntity {
-        return OrderEntity(
+    fun mapFromDomainModel(domainModel: Cart): CartEntity {
+        return CartEntity(
             price = domainModel.price,
             image = domainModel.image,
             name = domainModel.name,

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "Order")
-data class OrderEntity(
+data class CartEntity(
 
     @PrimaryKey
     val id: String,

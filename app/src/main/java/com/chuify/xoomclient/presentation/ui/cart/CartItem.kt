@@ -21,28 +21,28 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberImagePainter
 import com.chuify.xoomclient.R
-import com.chuify.xoomclient.domain.model.Order
+import com.chuify.xoomclient.domain.model.Cart
 
 
 @Composable
 fun CartItem(
-    order: Order,
-    increaseCartItem: (Order) -> Unit,
-    decreaseCartItem: (Order) -> Unit,
-    delete: (Order) -> Unit,
+    order: Cart,
+    increaseCartItem: (Cart) -> Unit,
+    decreaseCartItem: (Cart) -> Unit,
+    deletable: Boolean = false,
+    delete: (Cart) -> Unit,
 ) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(6.dp),
+            .padding(8.dp),
         elevation = 4.dp
     ) {
         ConstraintLayout(modifier = Modifier
             .fillMaxSize()
-            .padding(
-                top = 8.dp, bottom = 8.dp
-            )) {
+            .padding(16.dp)
+        ) {
 
             val guideline = createGuidelineFromStart(0.3f)
             val guideline2 = createGuidelineFromStart(0.7f)
@@ -58,17 +58,19 @@ fun CartItem(
                 horizontalArrangement = Arrangement.Center
             ) {
 
+                if (deletable) {
 
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            delete(order)
-                        }
-                        .padding(16.dp),
-                    tint = Color.Red
-                )
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                delete(order)
+                            }
+                            .padding(16.dp),
+                        tint = Color.Red
+                    )
+                }
 
 
                 Image(
@@ -138,6 +140,7 @@ fun CartItem(
 
             Column(
                 modifier = Modifier
+                    .fillMaxHeight()
                     .constrainAs(third) {
                         end.linkTo(parent.end)
                     },
@@ -161,8 +164,9 @@ fun CartItem(
                     Text(
                         text = order.price.toString(),
                         color = MaterialTheme.colors.primary,
+                        modifier = Modifier.padding(2.dp)
 
-                        )
+                    )
                     Text(
 
                         text = stringResource(R.string.currency),

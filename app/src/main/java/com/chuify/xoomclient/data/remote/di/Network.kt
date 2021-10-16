@@ -3,7 +3,8 @@ package com.chuify.xoomclient.data.remote.di
 
 import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.data.remote.network.ApiInterface
-import com.chuify.xoomclient.data.remote.network.RequestInterceptor
+import com.chuify.xoomclient.data.remote.network.RequestAuthenticationInterceptor
+import com.chuify.xoomclient.data.remote.network.RequestUserIdInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +36,8 @@ object Network {
     @Singleton
     @Provides
     fun provideOkHttp(
-        requestInterceptor: RequestInterceptor,
+        requestInterceptor: RequestAuthenticationInterceptor,
+        requestUserIdInterceptor: RequestUserIdInterceptor,
         logger: HttpLoggingInterceptor,
     ): OkHttpClient {
 
@@ -45,6 +47,7 @@ object Network {
             readTimeout(60, TimeUnit.SECONDS)
             writeTimeout(60, TimeUnit.SECONDS)
             addInterceptor(requestInterceptor)
+            addInterceptor(requestUserIdInterceptor)
             addInterceptor(logger)
         }.build()
     }
@@ -57,8 +60,14 @@ object Network {
 
     @Singleton
     @Provides
-    fun provideRequestInterceptor(prefs: SharedPrefs): RequestInterceptor {
-        return RequestInterceptor(prefs)
+    fun provideRequestAuthenticationInterceptor(prefs: SharedPrefs): RequestAuthenticationInterceptor {
+        return RequestAuthenticationInterceptor(prefs)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRequestUserIdInterceptor(prefs: SharedPrefs): RequestUserIdInterceptor {
+        return RequestUserIdInterceptor(prefs)
     }
 
     @Singleton

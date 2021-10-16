@@ -36,8 +36,31 @@ sealed class Screens(val route: String) {
         fun fullRoute(): String {
             return route
         }
-
-
     }
 
+    object Checkout : Screens("checkout") {
+
+        fun fullRoute(): String {
+            return route
+        }
+    }
+
+    object PaymentMethod : Screens("payment_method") {
+        fun fullRoute(): String {
+            return route
+        }
+    }
+
+    object PickLocation : Screens("pick_location") {
+        fun fullRoute(): String {
+            return route
+        }
+    }
+
+
+    object Main : Screens("main") {
+        fun fullRoute(): String {
+            return route
+        }
+    }
 }

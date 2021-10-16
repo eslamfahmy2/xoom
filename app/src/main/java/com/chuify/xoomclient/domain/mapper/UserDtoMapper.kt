@@ -17,7 +17,7 @@ class UserDtoMapper : DomainMapper<UserDto, User> {
         )
     }
 
-    override fun mapFromDomainModel(domainModel: User): UserDto {
+    fun mapFromDomainModel(domainModel: User): UserDto {
         return UserDto(
             user_id = domainModel.userId,
             firstname = domainModel.firstname,

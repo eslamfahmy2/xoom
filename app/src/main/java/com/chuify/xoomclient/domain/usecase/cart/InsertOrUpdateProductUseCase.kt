@@ -1,6 +1,6 @@
 package com.chuify.xoomclient.domain.usecase.cart
 
-import com.chuify.xoomclient.data.local.entity.OrderEntity
+import com.chuify.xoomclient.data.local.entity.CartEntity
 import com.chuify.xoomclient.domain.model.Product
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
@@ -21,7 +21,7 @@ class InsertOrUpdateProductUseCase @Inject constructor(
 
             val price = (model.quantity + 1) * model.price
 
-            val orderDto = OrderEntity(
+            val orderDto = CartEntity(
                 image = model.image,
                 name = model.name,
                 id = model.id,

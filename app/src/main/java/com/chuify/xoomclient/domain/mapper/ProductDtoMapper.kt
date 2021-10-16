@@ -21,7 +21,7 @@ class ProductDtoMapper : DomainMapper<ProductDto, Product> {
         return initial.map { mapToDomainModel(it) }
     }
 
-    override fun mapFromDomainModel(domainModel: Product): ProductDto {
+    fun mapFromDomainModel(domainModel: Product): ProductDto {
         return ProductDto(
             product_id = domainModel.id,
             product_name = domainModel.name,

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -30,13 +31,16 @@ import com.chuify.xoomclient.presentation.MainActivity
 import com.chuify.xoomclient.presentation.components.HomeBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
-import com.chuify.xoomclient.presentation.ui.BaseApplication
+import com.chuify.xoomclient.presentation.application.BaseApplication
 import com.chuify.xoomclient.presentation.ui.login.component.LoginScreen
+import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+@ExperimentalPagerApi
+@ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @AndroidEntryPoint
 class LoginFragment : Fragment() {

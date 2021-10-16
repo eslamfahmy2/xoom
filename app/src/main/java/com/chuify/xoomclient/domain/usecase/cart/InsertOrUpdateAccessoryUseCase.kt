@@ -1,6 +1,6 @@
 package com.chuify.xoomclient.domain.usecase.cart
 
-import com.chuify.xoomclient.data.local.entity.OrderEntity
+import com.chuify.xoomclient.data.local.entity.CartEntity
 import com.chuify.xoomclient.domain.model.Accessory
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
@@ -25,7 +25,7 @@ class InsertOrUpdateAccessoryUseCase @Inject constructor(
             } ?: run {
                 val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
                 val time = df.format(Calendar.getInstance().time)
-                val orderDto = OrderEntity(
+                val orderDto = CartEntity(
                     image = model.image,
                     name = model.name,
                     id = model.id,

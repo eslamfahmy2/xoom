@@ -29,7 +29,14 @@ object MapperModule {
 
     @Singleton
     @Provides
-    fun provideOrderMapper() = OrderEntityMapper()
+    fun providePreOrderMapper() = CartEntityMapper()
 
+    @Singleton
+    @Provides
+    fun provideLocationMapper() = LocationDtoMapper()
+
+    @Singleton
+    @Provides
+    fun provideOrderMapper() = OrderDtoMapper()
 
 }

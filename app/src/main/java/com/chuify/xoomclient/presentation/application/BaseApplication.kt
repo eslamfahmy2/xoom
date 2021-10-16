@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui
+package com.chuify.xoomclient.presentation.application
 
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf

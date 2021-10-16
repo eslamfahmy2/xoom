@@ -1,8 +1,8 @@
 package com.chuify.xoomclient.domain.usecase.cart
 
-import com.chuify.xoomclient.domain.mapper.OrderEntityMapper
+import com.chuify.xoomclient.domain.mapper.CartEntityMapper
 import com.chuify.xoomclient.domain.model.CartPreview
-import com.chuify.xoomclient.domain.model.Order
+import com.chuify.xoomclient.domain.model.Cart
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import kotlinx.coroutines.flow.collect
@@ -11,9 +11,9 @@ import javax.inject.Inject
 
 class GetCartItemsUseCase @Inject constructor(
     private val repo: CartRepo,
-    private val orderEntityMapper: OrderEntityMapper,
+    private val orderEntityMapper: CartEntityMapper,
 ) {
-    suspend operator fun invoke() = flow<DataState<Pair<List<Order>, CartPreview>>> {
+    suspend operator fun invoke() = flow<DataState<Pair<List<Cart>, CartPreview>>> {
         try {
             emit(DataState.Loading())
             repo.getAll().collect { it ->

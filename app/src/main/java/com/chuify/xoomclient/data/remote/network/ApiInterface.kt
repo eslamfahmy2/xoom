@@ -1,9 +1,6 @@
 package com.chuify.xoomclient.data.remote.network
 
-import com.chuify.xoomclient.data.remote.dto.AccessoryListDto
-import com.chuify.xoomclient.data.remote.dto.ProductListDto
-import com.chuify.xoomclient.data.remote.dto.UserDto
-import com.chuify.xoomclient.data.remote.dto.VendorListDto
+import com.chuify.xoomclient.data.remote.dto.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -38,6 +35,40 @@ interface ApiInterface {
     suspend fun listProducts(@Path("vendor_id") vendorId: String): Response<ProductListDto>
 
     //----------------------------------------------------------------------------------------------------
+
+    @Headers("authorized:true", "userid:true")
+    @GET("address/user_id")
+    suspend fun listLocations(): Response<LocationListDto>
+
+    //----------------------------------------------------------------------------------------------------
+
+    @Headers("authorized:true", "userid:true")
+    @GET("orders/user_id/pendingorders")
+    suspend fun listPendingOrders(): Response<OrderListDto>
+
+    //----------------------------------------------------------------------------------------------------
+    @Headers("authorized:true", "userid:true")
+    @GET("orders/user_id/completedorders")
+    suspend fun listCompletedOrders(): Response<OrderListDto>
+
+    //----------------------------------------------------------------------------------------------------
+    @Headers("authorized:true", "userid:true")
+    @POST("orders/user_id")
+    suspend fun saveOrder(@Body body: String): Response<StatusDto>
+
+    //----------------------------------------------------------------------------------------------------
+    @Headers("authorized:true")
+    @GET("orders/{order_id}/rider")
+    suspend fun trackOrder(@Path("order_id") order_id: String): Response<TrackDto>
+
+    //----------------------------------------------------------------------------------------------------
+    @FormUrlEncoded
+    @Headers("authorized:true", "userid:true")
+    @POST("orders/user_id/cancel")
+    suspend fun cancelOrder(
+        @Field("order_id") order_id: String,
+        @Field("reason") reason: String,
+    ): Response<StatusDto>
 
 
 }

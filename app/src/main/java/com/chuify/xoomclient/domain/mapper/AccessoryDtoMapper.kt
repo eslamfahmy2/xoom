@@ -20,7 +20,7 @@ class AccessoryDtoMapper : DomainMapper<AccessoryDto, Accessory> {
         return initial.map { mapToDomainModel(it) }
     }
 
-    override fun mapFromDomainModel(domainModel: Accessory): AccessoryDto {
+    fun mapFromDomainModel(domainModel: Accessory): AccessoryDto {
         return AccessoryDto(
             product_id = domainModel.id,
             product_name = domainModel.name,

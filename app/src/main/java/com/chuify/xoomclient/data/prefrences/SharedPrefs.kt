@@ -3,7 +3,7 @@ package com.chuify.xoomclient.data.prefrences
 import android.content.Context
 import android.content.SharedPreferences
 import com.chuify.xoomclient.data.remote.dto.UserDto
-import com.chuify.xoomclient.presentation.ui.BaseApplication
+import com.chuify.xoomclient.presentation.application.BaseApplication
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
@@ -51,6 +51,10 @@ class SharedPrefs @Inject constructor(
         return get(USER_TOKEN, String::class.java)
     }
 
+    fun getUserID(): String {
+        return get(USER_ID, String::class.java)
+    }
+
     private fun <T> get(key: String, clazz: Class<T>): T =
         when (clazz) {
             String::class.java -> sharedPref.getString(key, "")
@@ -87,4 +91,6 @@ class SharedPrefs @Inject constructor(
             remove(USER_ID)
         }.apply()
     }
+
+
 }

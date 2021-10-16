@@ -24,7 +24,7 @@ import androidx.navigation.findNavController
 import com.chuify.xoomclient.presentation.components.HomeBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
-import com.chuify.xoomclient.presentation.ui.BaseApplication
+import com.chuify.xoomclient.presentation.application.BaseApplication
 import com.chuify.xoomclient.presentation.ui.signup.component.SignupScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
