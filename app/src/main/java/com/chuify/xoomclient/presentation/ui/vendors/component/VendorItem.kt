@@ -61,6 +61,7 @@ fun VendorItem(
             Row(modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically ,
             horizontalArrangement = Arrangement.SpaceBetween) {
+
                 Text(
                     modifier = Modifier
                         .wrapContentSize()

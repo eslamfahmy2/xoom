@@ -33,8 +33,8 @@ fun ProductItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        elevation = 15.dp
+            .padding(10.dp),
+        elevation = 4.dp
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
 
@@ -44,7 +44,7 @@ fun ProductItem(
 
             Image(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(10.dp))
+                    .clip(RoundedCornerShape(25.dp))
                     .padding(8.dp)
                     .size(80.dp, 80.dp)
                     .constrainAs(image) {
@@ -71,7 +71,7 @@ fun ProductItem(
                         .align(Alignment.Start),
                     text = product.name,
                     color = MaterialTheme.colors.onSurface,
-                    fontWeight = FontWeight.Bold
+
                 )
 
                 Text(
@@ -149,7 +149,7 @@ fun ProductItem(
                         .align(Alignment.Start),
                     text = product.size,
                     color = MaterialTheme.colors.onSurface,
-                    fontWeight = FontWeight.Bold
+
                 )
                 Row(modifier = Modifier
                     .wrapContentSize()
@@ -157,12 +157,12 @@ fun ProductItem(
                     Text(
                         text = product.price.toString(),
                         color = MaterialTheme.colors.primary,
-                        fontWeight = FontWeight.Bold
+
                     )
                     Text(
                         text = stringResource(R.string.currency),
                         color = MaterialTheme.colors.primary,
-                        fontWeight = FontWeight.Bold
+
                     )
 
                 }

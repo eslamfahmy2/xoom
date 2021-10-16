@@ -3,6 +3,7 @@ package com.chuify.xoomclient.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.navigation.compose.rememberNavController
 import com.chuify.xoomclient.presentation.navigation.MainNavigation
@@ -18,14 +19,14 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
 
+    @ExperimentalAnimationApi
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val applicationContext = BaseApplication()
         setContent {
             XoomGasClientTheme(darkTheme = applicationContext.isDark()) {
-                val navHostController = rememberNavController()
-                MainNavigation(navController = navHostController , applicationContext)
+                MainNavigation(applicationContext)
             }
         }
 

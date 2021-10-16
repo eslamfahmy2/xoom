@@ -33,4 +33,10 @@ class CartRepoImpl @Inject constructor(
     override suspend fun getCartItemsCount(): Flow<Int> {
         return dp.getCartItemsCount()
     }
+
+    override suspend fun getById(id: String): Flow<OrderEntity?> {
+        return dp.getById(id)
+    }
+
+
 }

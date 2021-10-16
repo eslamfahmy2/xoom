@@ -1,79 +1,135 @@
 package com.chuify.xoomclient.presentation.ui.accessory.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.domain.model.Accessory
-import com.chuify.xoomclient.domain.model.Vendor
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AccessoryItem(
-    vendor: Accessory,
-    onItemClick: () -> Unit,
+    accessory: Accessory,
+    increaseCartItem: (Accessory) -> Unit,
+    decreaseCartItem: (Accessory) -> Unit,
 ) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(250.dp)
-            .padding(8.dp),
-        elevation = 15.dp,
-        onClick = { onItemClick() }
+            .padding(10.dp),
+        elevation = 5.dp
     ) {
-        Box() {
+        Column() {
 
             Image(
-                painter = rememberImagePainter(vendor.image),
+                painter = rememberImagePainter(accessory.image),
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .height(250.dp)
+                    .fillMaxWidth(),
                 contentScale = ContentScale.Crop
             )
 
-            Text(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .padding(12.dp)
-                    .align(Alignment.BottomStart),
-                text = vendor.name,
-                color = MaterialTheme.colors.onSurface,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween) {
 
-            Text(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .padding(12.dp)
-                    .background(
-                        color = MaterialTheme.colors.primary,
-                        shape = RoundedCornerShape(5.dp)
-                    )
-                    .padding(
-                        start = 24.dp,
-                        end = 24.dp,
-                        top = 8.dp,
-                        bottom = 8.dp
-                    )
-                    .align(Alignment.BottomEnd),
-                text = stringResource(R.string.from_kes_1_500),
-                fontSize = 17.sp
-            )
+                Column(
+                    modifier = Modifier,
+                ) {
+
+                    Text(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(8.dp)
+                            .align(Alignment.Start),
+                        text = accessory.name,
+                        color = MaterialTheme.colors.onSurface,
+
+                        )
+
+                    Row(modifier = Modifier
+                        .wrapContentSize()
+                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
+                        Text(
+                            text = accessory.price.toString(),
+                            color = MaterialTheme.colors.primary,
+
+                            )
+                        Text(
+                            text = stringResource(R.string.currency),
+                            color = MaterialTheme.colors.primary,
+
+                            )
+
+                    }
+
+
+                }
+
+                if (accessory.quantity > 0) {
+
+                    Row(modifier = Modifier.padding(8.dp)) {
+
+                        Button(
+                            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                            modifier = Modifier
+                                .size(30.dp, 30.dp)
+                                .border(
+                                    width = 1.dp,
+                                    shape = RoundedCornerShape(5.dp),
+                                    color = Color.Gray,
+                                ),
+                            onClick = {
+                                decreaseCartItem(accessory)
+                            },
+
+                            ) {
+                            Icon(Icons.Filled.AddShoppingCart,
+                                contentDescription = "Localized description")
+
+                        }
+
+                        Text(modifier = Modifier.padding(4.dp),
+                            text = accessory.quantity.toString())
+
+                        Button(
+                            modifier = Modifier.size(28.dp, 28.dp),
+                            onClick = {
+                                increaseCartItem(accessory)
+                            }) {
+                            Icon(
+                                Icons.Filled.Add, contentDescription = null,
+                                modifier = Modifier.size(28.dp, 28.dp),
+                            )
+                        }
+                    }
+                } else {
+                    Box(modifier = Modifier.padding(8.dp)) {
+                        Button(
+                            modifier = Modifier.size(28.dp, 28.dp),
+                            onClick = {
+                                increaseCartItem(accessory)
+                            }) {
+                            Text(text = "+")
+                        }
+                    }
+                }
+
+
+            }
 
         }
 

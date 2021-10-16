@@ -8,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.unit.dp
-import com.chuify.xoomclient.domain.model.Vendor
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.ui.product.ProductState
@@ -17,7 +16,7 @@ import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
-fun ProductsScreen(vendor: Vendor, viewModel: ProductViewModel) {
+fun ProductsScreen(id: String, viewModel: ProductViewModel) {
 
     val coroutineScope = rememberCoroutineScope()
 

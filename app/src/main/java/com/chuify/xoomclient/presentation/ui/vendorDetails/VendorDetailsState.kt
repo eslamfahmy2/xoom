@@ -1,6 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.vendorDetails
 
-import com.chuify.xoomclient.domain.usecase.cart.CartPreview
+import com.chuify.xoomclient.domain.model.CartPreview
 
 
 sealed class VendorDetailsState {

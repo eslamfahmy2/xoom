@@ -25,4 +25,7 @@ interface OrderDao {
     @Query("SELECT SUM(quantity) FROM `Order`")
     fun getCartItemsCount(): Flow<Int>
 
+    @Query("SELECT * FROM `Order` WHERE id=:ID")
+    fun getById(ID: String): Flow<OrderEntity>
+
 }

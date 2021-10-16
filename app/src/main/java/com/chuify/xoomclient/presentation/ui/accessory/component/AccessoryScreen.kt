@@ -61,12 +61,17 @@ fun AccessoryScreen(viewModel: AccessoryViewModel) {
             is AccessoryState.Success -> {
                 AccessoryData(
                     data = (state as AccessoryState.Success).data,
-                    searchText = (state as AccessoryState.Success).searchText
-                ) {
-                    coroutineScope.launch {
-                        viewModel.userIntent.send(AccessoryIntent.Filter(it))
+                    onIncrease = {
+                        coroutineScope.launch {
+                            viewModel.userIntent.send(AccessoryIntent.IncreaseAccessoryCart(it))
+                        }
+                    },
+                    onDecrease = {
+                        coroutineScope.launch {
+                            viewModel.userIntent.send(AccessoryIntent.DecreaseAccessoryCart(it))
+                        }
                     }
-                }
+                )
             }
         }
     }

@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Accessory
+import com.chuify.xoomclient.domain.usecase.cart.DeleteOrUpdateAccessoryUseCase
+import com.chuify.xoomclient.domain.usecase.cart.InsertOrUpdateAccessoryUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListAccessoriesUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
@@ -19,7 +21,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccessoryViewModel @Inject constructor(
-    private val useCase: ListAccessoriesUseCase,
+    private val listAccessoriesUseCase: ListAccessoriesUseCase,
+    private val insertOrUpdateAccessoryUseCase: InsertOrUpdateAccessoryUseCase,
+    private val deleteOrUpdateAccessoryUseCase: DeleteOrUpdateAccessoryUseCase,
 ) : ViewModel() {
 
     val userIntent = Channel<AccessoryIntent>(Channel.UNLIMITED)
@@ -29,7 +33,7 @@ class AccessoryViewModel @Inject constructor(
 
     private val _searchText: MutableState<String> = mutableStateOf(String())
 
-    private val _vendors: MutableState<List<Accessory>> = mutableStateOf(listOf())
+    private val _accessoryList: MutableState<List<Accessory>> = mutableStateOf(listOf())
 
 
     init {
@@ -47,24 +51,31 @@ class AccessoryViewModel @Inject constructor(
                         loadAccessories()
                     }
                     is AccessoryIntent.Filter -> {
-                        _searchText.value = intent.searchText
-                        val list = _vendors.value.filter {
-                            it.name.lowercase().contains(_searchText.value.lowercase())
-                        }
-                        _state.value =
-                            AccessoryState.Success(
-                                data = list,
-                                searchText = _searchText.value
-                            )
+                        filter(intent.searchText)
+                    }
+                    is AccessoryIntent.DecreaseAccessoryCart -> {
+                        decreaseOrRemove(intent.accessory)
+                    }
+                    is AccessoryIntent.IncreaseAccessoryCart -> {
+                        insert(intent.accessory)
                     }
                 }
             }
         }
     }
 
-    private suspend fun loadAccessories() {
+    private fun filter(searchText: String) {
 
-        useCase().collect { dataState ->
+        _searchText.value = searchText
+        val list = _accessoryList.value.filter {
+            it.name.lowercase().contains(_searchText.value.lowercase())
+        }
+        _state.value = AccessoryState.Success(data = list)
+    }
+
+
+    private suspend fun loadAccessories() {
+        listAccessoriesUseCase().collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
@@ -74,14 +85,53 @@ class AccessoryViewModel @Inject constructor(
                     _state.value = AccessoryState.Loading
                 }
                 is DataState.Success -> {
-                    _vendors.value = dataState.data ?: listOf()
+                    _accessoryList.value = dataState.data ?: listOf()
                     _state.value = AccessoryState.Success(
-                        data = dataState.data ?: listOf(),
-                        searchText = _searchText.value)
+                        data = dataState.data ?: listOf())
+                }
+            }
+        }
+    }
+
+    private suspend fun insert(accessory: Accessory) {
+
+        insertOrUpdateAccessoryUseCase(accessory).collect { dataState ->
+            when (dataState) {
+                is DataState.Error -> {
+                    Log.d(TAG, "Error: " + dataState.message)
+                    _state.value = AccessoryState.Error(dataState.message)
+                }
+                is DataState.Loading -> {
+                }
+                is DataState.Success -> {
+                    Log.d(TAG, "Success: $dataState")
                 }
             }
         }
 
+
     }
+
+    private suspend fun decreaseOrRemove(accessory: Accessory) {
+
+
+        Log.d(TAG, "handleIntent: ")
+        deleteOrUpdateAccessoryUseCase(accessory).collect { dataState ->
+            when (dataState) {
+                is DataState.Error -> {
+                    Log.d(TAG, "Error: " + dataState.message)
+                    _state.value = AccessoryState.Error(dataState.message)
+                }
+                is DataState.Loading -> {
+                }
+                is DataState.Success -> {
+                    Log.d(TAG, "Success: $dataState")
+                }
+            }
+        }
+
+
+    }
+
 
 }

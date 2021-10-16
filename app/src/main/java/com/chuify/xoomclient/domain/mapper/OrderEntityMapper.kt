@@ -2,7 +2,6 @@ package com.chuify.xoomclient.domain.mapper
 
 import com.chuify.xoomclient.data.local.entity.OrderEntity
 import com.chuify.xoomclient.domain.model.Order
-import com.chuify.xoomclient.domain.model.Product
 
 
 class OrderEntityMapper : DomainMapper<OrderEntity, Order> {
@@ -34,8 +33,6 @@ class OrderEntityMapper : DomainMapper<OrderEntity, Order> {
             time = domainModel.time
         )
     }
-
-
 
 
 }

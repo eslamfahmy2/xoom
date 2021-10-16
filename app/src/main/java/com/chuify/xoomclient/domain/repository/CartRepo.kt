@@ -16,4 +16,6 @@ interface CartRepo {
     suspend fun getAll(): Flow<List<OrderEntity>>
 
     suspend fun getCartItemsCount(): Flow<Int>
+
+    suspend fun getById(id: String): Flow<OrderEntity?>
 }

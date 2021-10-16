@@ -32,4 +32,8 @@ data class AccessoryDto(
     @Expose
     @SerializedName(value = "image", alternate = ["Image"])
     val image: String?,
+
+    @Expose
+    @SerializedName(value = "selling_price", alternate = ["Selling_price"])
+    val selling_price: String?,
 )

@@ -3,6 +3,7 @@ package com.chuify.xoomclient.presentation.components
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -93,7 +94,7 @@ fun ShimmerItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .size(250.dp)
-                .background(brush = brush)
+                .background(brush = brush , shape = RoundedCornerShape(8.dp))
         )
         Spacer(
             modifier = Modifier

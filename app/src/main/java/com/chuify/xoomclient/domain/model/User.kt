@@ -2,7 +2,7 @@ package com.chuify.xoomclient.domain.model
 
 data class User(
 
-    val user_id: String,
+    val userId: String,
 
     val firstname: String,
 

@@ -1,6 +1,7 @@
 package com.chuify.xoomclient.domain.usecase.cart
 
 import android.util.Log
+import com.chuify.xoomclient.domain.model.CartPreview
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
@@ -36,7 +37,3 @@ class CartPreviewUC @Inject constructor(
     }
 }
 
-data class CartPreview(
-    val totalQuantity: Int = 0,
-    val totalPrice: Double = 0.0,
-)

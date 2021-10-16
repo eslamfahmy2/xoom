@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
@@ -20,7 +21,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.chuify.xoomclient.presentation.components.AppBar
+import com.chuify.xoomclient.presentation.components.HomeBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.ui.BaseApplication
@@ -30,6 +31,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+@ExperimentalAnimationApi
 @AndroidEntryPoint
 class SignUpFragment : Fragment() {
 
@@ -74,11 +76,12 @@ class SignUpFragment : Fragment() {
 
                     Scaffold(
                         topBar = {
-                            AppBar(
+                            HomeBar(
                                 title = "Signup",
-                                onToggleTheme = {
+                                action = {
                                     application.toggleTheme()
-                                }
+                                },
+                                cartCount = 1
                             )
                         },
                         scaffoldState = scaffoldState,

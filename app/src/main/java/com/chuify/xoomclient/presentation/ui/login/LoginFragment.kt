@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -26,7 +27,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.chuify.xoomclient.presentation.MainActivity
-import com.chuify.xoomclient.presentation.components.AppBar
+import com.chuify.xoomclient.presentation.components.HomeBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.ui.BaseApplication
@@ -36,6 +37,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+@ExperimentalAnimationApi
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
@@ -72,11 +74,12 @@ class LoginFragment : Fragment() {
 
                     Scaffold(
                         topBar = {
-                            AppBar(
+                            HomeBar(
                                 title = "",
-                                onToggleTheme = {
+                                action = {
                                     application.toggleTheme()
-                                }
+                                },
+                                cartCount = 1
                             )
                         },
                         scaffoldState = scaffoldState,

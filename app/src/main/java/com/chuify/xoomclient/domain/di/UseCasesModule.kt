@@ -2,20 +2,18 @@ package com.chuify.xoomclient.domain.di
 
 
 import com.chuify.xoomclient.data.prefrences.SharedPrefs
-import com.chuify.xoomclient.domain.mapper.AccessoryDtoMapper
-import com.chuify.xoomclient.domain.mapper.ProductDtoMapper
-import com.chuify.xoomclient.domain.mapper.UserDtoMapper
-import com.chuify.xoomclient.domain.mapper.VendorDtoMapper
+import com.chuify.xoomclient.domain.mapper.*
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.repository.VendorRepo
 import com.chuify.xoomclient.domain.usecase.auth.AuthenticatePhoneUseCase
 import com.chuify.xoomclient.domain.usecase.auth.SignInUseCase
 import com.chuify.xoomclient.domain.usecase.auth.SignUpUseCase
+import com.chuify.xoomclient.domain.usecase.cart.*
+import com.chuify.xoomclient.domain.usecase.home.GetAccessoryDetailsUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListAccessoriesUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListProductsUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListVendorsUseCase
-import com.chuify.xoomclient.domain.usecase.cart.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -60,8 +58,9 @@ object UseCasesModule {
     @Provides
     fun provideAccessoryListUseCase(
         repository: VendorRepo,
+        cartRepo: CartRepo,
         mapperModule: AccessoryDtoMapper,
-    ) = ListAccessoriesUseCase(repo = repository, mapper = mapperModule)
+    ) = ListAccessoriesUseCase(repo = repository, mapper = mapperModule, cartRepo = cartRepo)
 
     @Singleton
     @Provides
@@ -75,27 +74,52 @@ object UseCasesModule {
 
     @Singleton
     @Provides
-    fun provideCartItemsUseCase(
+    fun provideInsertOrderUseCase(
         repository: CartRepo,
-    ) = CartItemsCountUs(repo = repository)
+    ) = InsertOrUpdateProductUseCase(repo = repository)
+
 
     @Singleton
     @Provides
-    fun provideDeleteOrderUseCase(
+    fun provideDeleteOrUpdateUseCase(
         repository: CartRepo,
     ) = DeleteOrUpdateProductUseCase(repo = repository)
+
+
+    @Singleton
+    @Provides
+    fun provideInsertAccessoryUseCase(
+        repository: CartRepo,
+    ) = InsertOrUpdateAccessoryUseCase(repo = repository)
+
+
+    @Singleton
+    @Provides
+    fun provideDeleteAccessoryUseCase(
+        repository: CartRepo,
+    ) = DeleteOrUpdateAccessoryUseCase(repo = repository)
+
+
+    @Singleton
+    @Provides
+    fun provideGetAccessoryDetailsUseCase(
+        repository: CartRepo,
+    ) = GetAccessoryDetailsUseCase(cartRepo = repository)
+
+
+    @Singleton
+    @Provides
+    fun provideCartItemsUseCase(
+        repository: CartRepo,
+        orderEntityMapper: OrderEntityMapper,
+    ) = GetCartItemsUseCase(repo = repository, orderEntityMapper = orderEntityMapper)
+
 
     @Singleton
     @Provides
     fun provideEraseOrdersUseCase(
         repository: CartRepo,
     ) = EraseOrderUs(repo = repository)
-
-    @Singleton
-    @Provides
-    fun provideInsertOrderUseCase(
-        repository: CartRepo,
-    ) = InsertOrUpdateProductUseCase(repo = repository)
 
     @Singleton
     @Provides
@@ -107,6 +131,16 @@ object UseCasesModule {
     @Provides
     fun provideUpdateOrderUseCase(
         repository: CartRepo,
-    ) = UpdateOrderUs(repo = repository)
+        orderEntityMapper: OrderEntityMapper,
+    ) = UpdateOrderUs(repo = repository, orderEntityMapper = orderEntityMapper)
+
+
+    @Singleton
+    @Provides
+    fun provideDeleteOrderUseCase(
+        repository: CartRepo,
+        orderEntityMapper: OrderEntityMapper,
+    ) = DeleteOrderUs(repo = repository, orderEntityMapper = orderEntityMapper)
+
 
 }

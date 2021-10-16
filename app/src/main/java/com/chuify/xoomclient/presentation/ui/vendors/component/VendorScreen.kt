@@ -1,5 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.vendors.component
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -12,19 +13,25 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
-import com.chuify.xoomclient.presentation.components.AppBar
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
+import com.chuify.xoomclient.presentation.components.HomeBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
-import com.chuify.xoomclient.presentation.navigation.Screen
+import com.chuify.xoomclient.presentation.navigation.Screens
 import com.chuify.xoomclient.presentation.ui.BaseApplication
 import com.chuify.xoomclient.presentation.ui.vendors.VendorIntent
 import com.chuify.xoomclient.presentation.ui.vendors.VendorState
 import com.chuify.xoomclient.presentation.ui.vendors.VendorViewModel
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
-fun VendorScreen(viewModel: VendorViewModel = hiltViewModel(), navHostController: NavHostController , application : BaseApplication) {
+fun VendorScreen(
+    viewModel: VendorViewModel = hiltViewModel(),
+    navHostController: NavHostController,
+    application: BaseApplication,
+) {
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -34,11 +41,12 @@ fun VendorScreen(viewModel: VendorViewModel = hiltViewModel(), navHostController
 
     Scaffold(
         topBar = {
-            AppBar(
+            HomeBar(
                 title = stringResource(R.string.home),
-                onToggleTheme = {
-                    application.toggleTheme()
-                }
+                action = {
+                    navHostController.navigate(Screens.Cart.route)
+                },
+                cartCount = 0
             )
         },
         scaffoldState = scaffoldState,
@@ -54,6 +62,7 @@ fun VendorScreen(viewModel: VendorViewModel = hiltViewModel(), navHostController
             )
         }
     ) {
+
 
         when (state) {
             is VendorState.Error -> {
@@ -75,18 +84,30 @@ fun VendorScreen(viewModel: VendorViewModel = hiltViewModel(), navHostController
             is VendorState.Success -> {
                 VendorIdlScreen(
                     data = (state as VendorState.Success).data,
+                    accessories = viewModel.accessories.value,
                     onItemClicked = {
-                        navHostController.navigate(Screen.VendorDetails.route)
+                        Gson().toJson(it.copy(image = String()))?.let { json ->
+                            navHostController.navigate(Screens.VendorDetails.routeWithArgs(json))
+                        }
                     },
                     searchText = (state as VendorState.Success).searchText,
                     onTextChange = {
                         coroutineScope.launch {
                             viewModel.userIntent.send(VendorIntent.Filter(it))
                         }
+                    },
+                    onAccessoryClicked = { accessory ->
+
+                        Gson().toJson(accessory.toString())?.let { json ->
+                            navHostController.navigate(Screens.AccessoryDetails.routeWithArgs(json))
+
+                        }
                     }
                 )
             }
         }
+
+
     }
 
 }

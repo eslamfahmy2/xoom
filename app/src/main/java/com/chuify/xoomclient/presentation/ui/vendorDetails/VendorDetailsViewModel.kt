@@ -5,7 +5,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chuify.xoomclient.domain.usecase.cart.CartPreview
 import com.chuify.xoomclient.domain.usecase.cart.CartPreviewUC
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
@@ -60,7 +59,10 @@ class VendorDetailsViewModel @Inject constructor(
                     _state.value = VendorDetailsState.Loading
                 }
                 is DataState.Success -> {
-                    _state.value = VendorDetailsState.Success(data = dataState.data ?: CartPreview())
+                    dataState.data?.let {
+                        _state.value = VendorDetailsState.Success(data = it)
+                    }
+
                 }
             }
         }

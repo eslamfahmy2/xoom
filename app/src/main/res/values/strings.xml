@@ -26,5 +26,6 @@
 
     <string name="total">Total</string>
     <string name="checkout">Checkout</string>
+    <string name="shoping_cart">Shopping cart</string>
 
 </resources>
