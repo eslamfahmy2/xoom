@@ -1,121 +1,192 @@
 package com.chuify.xoomclient.presentation.ui.order.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberImagePainter
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.domain.model.Order
+import com.chuify.xoomclient.presentation.theme.myGreen
+import com.chuify.xoomclient.presentation.theme.myRed
+
+enum class OrderStatus(val status: String) {
+    ORDER_STATUS_SUBMITTED("1"),
+    ORDER_STATUS_PROCESSING("2"),
+    ORDER_STATUS_DELIVERING("3"),
+    ORDER_STATUS_COMPLETED("4"),
+    ORDER_STATUS_CANCELLED("5"),
+}
 
 @Composable
 fun CompleteOrderItem(
     order: Order,
-    onTrack: (Order) -> Unit,
-    onCancel: (Order) -> Unit,
+    onReorder: (Order) -> Unit,
 ) {
+
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
+            .padding(8.dp)
+            .fillMaxWidth(),
         elevation = 4.dp
     ) {
         Column {
-            ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-
-                val guideline = createGuidelineFromStart(0.3f)
-                val guideline2 = createGuidelineFromStart(0.7f)
-                val (image, content, third) = createRefs()
+            Row(horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)) {
 
                 Image(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(25.dp))
                         .padding(8.dp)
                         .size(80.dp, 80.dp)
-                        .constrainAs(image) {
-                            start.linkTo(parent.start)
-                            end.linkTo(guideline)
-                            top.linkTo(parent.top)
-                        },
+                        .clip(RoundedCornerShape(10)),
                     painter = rememberImagePainter(order.image),
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )
 
-                Column(
-                    modifier = Modifier.constrainAs(content) {
-                        start.linkTo(guideline)
-                        end.linkTo(guideline2)
-                    },
-                ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically) {
 
-                    Text(
+
+                    Column(
                         modifier = Modifier
-                            .wrapContentSize()
-                            .padding(8.dp)
-                            .align(Alignment.Start),
-                        text = order.name,
-                        color = MaterialTheme.colors.onSurface,
+                            .padding(start = 8.dp),
+                    ) {
 
-                        )
-
-                    Text(
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
-                            .align(Alignment.Start),
-                        text = order.refill,
-                        color = MaterialTheme.colors.onSurface,
-                    )
-
-                    Text(text = order.status)
-
-                }
-
-                Column(
-                    modifier = Modifier
-                        .constrainAs(third) {
-                            start.linkTo(guideline2)
-                            end.linkTo(parent.end)
-                        },
-                ) {
-
-                    Text(
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(8.dp)
-                            .align(Alignment.Start),
-                        text = order.size,
-                        color = MaterialTheme.colors.onSurface,
-
-                        )
-                    Row(modifier = Modifier
-                        .wrapContentSize()
-                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
                         Text(
-                            text = order.price.toString(),
-                            color = MaterialTheme.colors.primary,
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(8.dp)
+                                .align(Alignment.Start),
+                            text = order.name,
+                            color = MaterialTheme.colors.onSurface,
 
                             )
+
                         Text(
-                            text = stringResource(R.string.currency),
-                            color = MaterialTheme.colors.primary,
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                .align(Alignment.Start),
+                            text = order.refill,
+                            color = MaterialTheme.colors.onSurface,
+                        )
+
+                        when (order.status) {
+                            OrderStatus.ORDER_STATUS_SUBMITTED.status -> {
+
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                        .align(Alignment.Start),
+                                    text = stringResource(id = R.string.submitted),
+                                    color = myGreen,
+                                )
+
+                            }
+
+                            OrderStatus.ORDER_STATUS_PROCESSING.status -> {
+
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                        .align(Alignment.Start),
+                                    text = stringResource(id = R.string.accepted),
+                                    color = myGreen,
+                                )
+
+                            }
+
+                            OrderStatus.ORDER_STATUS_DELIVERING.status -> {
+
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                        .align(Alignment.Start),
+                                    text = stringResource(id = R.string.on_transit),
+                                    color = myGreen,
+                                )
+
+                            }
+                            OrderStatus.ORDER_STATUS_COMPLETED.status -> {
+
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                        .align(Alignment.Start),
+                                    text = stringResource(id = R.string.completed),
+                                    color = myGreen,
+                                )
+
+                            }
+                            OrderStatus.ORDER_STATUS_CANCELLED.status -> {
+
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                        .align(Alignment.Start),
+                                    text = stringResource(id = R.string.cancelled),
+                                    color = myRed,
+                                )
+
+
+                            }
+
+                        }
+
+
+                    }
+
+                    Column(
+                        modifier = Modifier,
+                    ) {
+
+                        Text(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(8.dp)
+                                .align(Alignment.End),
+                            text = order.size + "x",
+                            color = MaterialTheme.colors.onSurface,
 
                             )
+                        Row(modifier = Modifier
+                            .wrapContentSize()
+                            .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
+                            Text(
+                                text = order.price,
+                                color = MaterialTheme.colors.primary,
+                                modifier = Modifier.padding(end = 4.dp)
+                            )
+                            Text(
+                                text = stringResource(R.string.currency),
+                                color = MaterialTheme.colors.primary,
+
+                                )
+
+                        }
+
 
                     }
 
@@ -124,24 +195,24 @@ fun CompleteOrderItem(
 
             }
 
-            Row(modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                OutlinedTextField(
-                    modifier = Modifier.padding(16.dp),
-                    value = "Text",
-                    onValueChange = {},
-                    leadingIcon = { (Icons.Filled.Search) },
-                )
-
-                OutlinedTextField(
-                    modifier = Modifier.padding(16.dp),
-                    value = "Text",
-                    onValueChange = {},
-                    leadingIcon = { (Icons.Filled.Search) },
-                )
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(
+                        width = 1.dp,
+                        shape = RoundedCornerShape(bottomStartPercent = 20, bottomEndPercent = 20),
+                        color = Color.Gray
+                    ),
+                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                onClick = { onReorder(order) }) {
+                Image(
+                    modifier = Modifier.padding(4.dp),
+                    painter = painterResource(id = R.drawable.ic_reorder),
+                    contentDescription = null)
+                Text(modifier = Modifier.padding(4.dp),
+                    text = stringResource(id = R.string.reorder))
             }
+
         }
 
 
@@ -158,107 +229,208 @@ fun PendingOrderItem(
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
+            .padding(8.dp)
+            .fillMaxWidth(),
         elevation = 4.dp
     ) {
         Column {
-            ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-
-                val guideline = createGuidelineFromStart(0.3f)
-                val guideline2 = createGuidelineFromStart(0.7f)
-                val (image, content, third) = createRefs()
+            Row(horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)) {
 
                 Image(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(25.dp))
                         .padding(8.dp)
                         .size(80.dp, 80.dp)
-                        .constrainAs(image) {
-                            start.linkTo(parent.start)
-                            end.linkTo(guideline)
-                            top.linkTo(parent.top)
-                        },
+                        .clip(RoundedCornerShape(10)),
                     painter = rememberImagePainter(order.image),
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )
 
-                Column(
-                    modifier = Modifier.constrainAs(content) {
-                        start.linkTo(guideline)
-                        end.linkTo(guideline2)
-                    },
-                ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically) {
 
-                    Text(
+
+                    Column(
                         modifier = Modifier
-                            .wrapContentSize()
-                            .padding(8.dp)
-                            .align(Alignment.Start),
-                        text = order.name,
-                        color = MaterialTheme.colors.onSurface,
+                            .padding(start = 8.dp),
+                    ) {
 
-                        )
-
-                    Text(
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
-                            .align(Alignment.Start),
-                        text = order.refill,
-                        color = MaterialTheme.colors.onSurface,
-                    )
-
-                    Text(text = order.status)
-
-                }
-
-                Column(
-                    modifier = Modifier
-                        .constrainAs(third) {
-                            start.linkTo(guideline2)
-                            end.linkTo(parent.end)
-                        },
-                ) {
-
-                    Text(
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(8.dp)
-                            .align(Alignment.Start),
-                        text = order.size,
-                        color = MaterialTheme.colors.onSurface,
-
-                        )
-                    Row(modifier = Modifier
-                        .wrapContentSize()
-                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
                         Text(
-                            text = order.price.toString(),
-                            color = MaterialTheme.colors.primary,
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(8.dp)
+                                .align(Alignment.Start),
+                            text = order.name,
+                            color = MaterialTheme.colors.onSurface,
 
                             )
-                        Text(
-                            text = stringResource(R.string.currency),
-                            color = MaterialTheme.colors.primary,
 
-                            )
+                        Text(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                .align(Alignment.Start),
+                            text = order.refill,
+                            color = MaterialTheme.colors.onSurface,
+                        )
+
+                        when (order.status) {
+                            OrderStatus.ORDER_STATUS_SUBMITTED.status -> {
+
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                        .align(Alignment.Start),
+                                    text = stringResource(id = R.string.submitted),
+                                    color = myGreen,
+                                )
+
+                            }
+
+                            OrderStatus.ORDER_STATUS_PROCESSING.status -> {
+
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                        .align(Alignment.Start),
+                                    text = stringResource(id = R.string.accepted),
+                                    color = myGreen,
+                                )
+
+                            }
+
+                            OrderStatus.ORDER_STATUS_DELIVERING.status -> {
+
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                        .align(Alignment.Start),
+                                    text = stringResource(id = R.string.on_transit),
+                                    color = myGreen,
+                                )
+
+                            }
+                            OrderStatus.ORDER_STATUS_COMPLETED.status -> {
+
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                        .align(Alignment.Start),
+                                    text = stringResource(id = R.string.completed),
+                                    color = myGreen,
+                                )
+
+                            }
+                            OrderStatus.ORDER_STATUS_CANCELLED.status -> {
+
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                        .align(Alignment.Start),
+                                    text = stringResource(id = R.string.cancelled),
+                                    color = myRed,
+                                )
+
+
+                            }
+
+                        }
+
 
                     }
 
+                    Column(
+                        modifier = Modifier,
+                    ) {
+
+                        Text(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(8.dp)
+                                .align(Alignment.End),
+                            text = order.size + "x",
+                            color = MaterialTheme.colors.onSurface,
+
+                            )
+                        Row(modifier = Modifier
+                            .wrapContentSize()
+                            .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
+                            Text(
+                                text = order.price,
+                                color = MaterialTheme.colors.primary,
+                                modifier = Modifier.padding(end = 4.dp)
+                            )
+                            Text(
+                                text = stringResource(R.string.currency),
+                                color = MaterialTheme.colors.primary,
+
+                                )
+
+                        }
+
+
+                    }
 
                 }
 
             }
 
+            Row(modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .border(
+                            width = 1.dp,
+                            shape = RoundedCornerShape(bottomStartPercent = 20),
+                            color = Color.Gray
+                        ),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                    onClick = { onCancel(order) }) {
+                    Image(
+                        modifier = Modifier.padding(4.dp),
+                        painter = painterResource(id = R.drawable.ic_cancel),
+                        contentDescription = null)
+                    Text(modifier = Modifier.padding(4.dp),
+                        text = stringResource(id = R.string.cancel))
+                }
 
-            OutlinedTextField(
-                modifier = Modifier.padding(16.dp),
-                value = "Reorder",
-                onValueChange = {},
-                leadingIcon = { (Icons.Filled.Search) },
-            )
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            width = 1.dp,
+                            shape = RoundedCornerShape(bottomEndPercent = 20),
+                            color = Color.Gray
+                        ),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                    onClick = { onTrack(order) }) {
+
+                    Image(
+                        modifier = Modifier.padding(4.dp),
+                        painter = painterResource(id = R.drawable.ic_track_cude),
+                        contentDescription = null)
+
+                    Text(modifier = Modifier.padding(4.dp),
+                        text = stringResource(id = R.string.track_order),
+                        maxLines = 1,
+                        color = MaterialTheme.colors.primary)
+                }
+
+            }
 
         }
 

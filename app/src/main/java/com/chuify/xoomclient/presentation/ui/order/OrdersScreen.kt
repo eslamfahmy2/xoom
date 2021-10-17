@@ -2,13 +2,13 @@ package com.chuify.xoomclient.presentation.ui.order
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -19,12 +19,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
-import com.chuify.xoomclient.presentation.components.SecondaryBar
+import com.chuify.xoomclient.presentation.components.SolidBar
 import com.chuify.xoomclient.presentation.ui.order.complet.CompletedOrdersScreen
 import com.chuify.xoomclient.presentation.ui.order.pending.PendingOrdersScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -36,13 +37,10 @@ fun OrdersScreen(
 
     val scaffoldState = rememberScaffoldState()
 
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        topBar = {
-            SecondaryBar() {
-                navHostController.popBackStack()
-            }
-        },
+        topBar = { SolidBar() },
         scaffoldState = scaffoldState,
         snackbarHost = {
             scaffoldState.snackbarHostState
@@ -75,8 +73,25 @@ fun OrdersScreen(
 
                 val pagerState = rememberPagerState()
 
+                val titles = listOf("Ongoing", "Completed")
 
-                Box {
+                Column {
+
+                    TabRow(selectedTabIndex = pagerState.currentPage) {
+                        titles.forEachIndexed { index, title ->
+                            Tab(
+                                text = { Text(title) },
+                                selected = pagerState.currentPage == index,
+                                onClick = {
+                                    coroutineScope.launch {
+                                        pagerState.animateScrollToPage(index)
+                                    }
+                                }
+                            )
+                        }
+                    }
+
+
                     HorizontalPager(
                         state = pagerState,
                         count = 2) {

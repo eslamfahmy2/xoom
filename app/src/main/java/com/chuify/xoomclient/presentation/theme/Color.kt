@@ -8,3 +8,6 @@ val editText = Color(0xFF707070)
 val backgroundDark = Color(0xFF121212)
 val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
+
+val myGreen = Color(0xFF00B94E)
+val myRed = Color(0xFFd64653)

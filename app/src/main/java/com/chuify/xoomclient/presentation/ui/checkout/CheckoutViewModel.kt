@@ -5,9 +5,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.chuify.xoomclient.domain.model.Cart
 import com.chuify.xoomclient.domain.model.Location
 import com.chuify.xoomclient.domain.model.Payments
-import com.chuify.xoomclient.domain.model.Cart
 import com.chuify.xoomclient.domain.usecase.cart.DeleteOrderUs
 import com.chuify.xoomclient.domain.usecase.cart.GetCartItemsUseCase
 import com.chuify.xoomclient.domain.usecase.cart.OrderITemAction
@@ -46,9 +46,6 @@ class CheckoutViewModel @Inject constructor(
 
     init {
         handleIntent()
-        viewModelScope.launch {
-            loadOrders()
-        }
     }
 
     private fun handleIntent() {

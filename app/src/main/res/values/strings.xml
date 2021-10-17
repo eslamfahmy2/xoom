@@ -36,6 +36,15 @@
     <string name="confirm_order">Confrim order</string>
     <string name="payment_method">Payment Method</string>
     <string name="next">Next</string>
+    <string name="cancel">Cancel</string>
+    <string name="track_order">Track order</string>
+    <string name="reorder">Reorder</string>
+
+    <string name="submitted">Submitted</string>
+    <string name="accepted">Accepted</string>
+    <string name="on_transit">On transit</string>
+    <string name="completed">Completed</string>
+    <string name="cancelled">Cancelled</string> <!--gray-->
 
 
 </resources>

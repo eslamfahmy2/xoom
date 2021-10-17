@@ -13,7 +13,6 @@ import androidx.navigation.NavHostController
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.ui.order.component.CompleteOrderItem
-import com.chuify.xoomclient.presentation.ui.vendors.VendorState
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 
@@ -72,7 +71,7 @@ fun CompletedOrdersScreen(
                 val data = (state as CompletedOrdersState.Success).orders
                 LazyColumn() {
                     items(data) {
-                        CompleteOrderItem(order = it, onTrack = {}, onCancel = {})
+                        CompleteOrderItem(order = it, onReorder = {})
                     }
                 }
             }
