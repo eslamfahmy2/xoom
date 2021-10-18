@@ -96,9 +96,8 @@ fun VendorScreen(
                     },
                     onAccessoryClicked = { accessory ->
 
-                        Gson().toJson(accessory.toString())?.let { json ->
+                        Gson().toJson(accessory.name.toString())?.let { json ->
                             navHostController.navigate(Screens.AccessoryDetails.routeWithArgs(json))
-
                         }
                     }
                 )
