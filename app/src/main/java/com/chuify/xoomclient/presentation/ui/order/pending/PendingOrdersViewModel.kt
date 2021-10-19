@@ -5,6 +5,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.chuify.xoomclient.domain.model.Order
+import com.chuify.xoomclient.domain.usecase.order.CancelUseCase
 import com.chuify.xoomclient.domain.usecase.order.GetPendingOrderListUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PendingOrdersViewModel @Inject constructor(
     private val getPendingOrderListUseCase: GetPendingOrderListUseCase,
+    private val cancelUseCase: CancelUseCase,
 ) : ViewModel() {
 
     val userIntent = Channel<PendingOrdersIntent>(Channel.UNLIMITED)
@@ -40,11 +43,35 @@ class PendingOrdersViewModel @Inject constructor(
                     PendingOrdersIntent.LoadPendingOrders -> {
                         loadPendingOrders()
                     }
+                    is PendingOrdersIntent.Cancel -> {
+                        cancelOrder(intent.order)
+                    }
+                    is PendingOrdersIntent.Track -> {
+
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun cancelOrder(order: Order) = viewModelScope.launch(Dispatchers.IO) {
+        cancelUseCase.invoke(order).collect { dataState ->
+            when (dataState) {
+                is DataState.Error -> {
+                    Log.d(TAG, "Error: " + dataState.message)
+                    _state.value = PendingOrdersState.Error(dataState.message)
+                }
+                is DataState.Loading -> {
+                    _state.value = PendingOrdersState.Loading
+                }
+                is DataState.Success -> {
+                    _state.value = PendingOrdersState.Error("Success")
 
                 }
             }
         }
     }
+
 
     private suspend fun loadPendingOrders() = viewModelScope.launch(Dispatchers.IO) {
         getPendingOrderListUseCase().collect { dataState ->

@@ -20,16 +20,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
-import com.chuify.xoomclient.presentation.components.LoadingListScreen
-
 import com.chuify.xoomclient.presentation.components.SecondaryBar
 import com.chuify.xoomclient.presentation.ui.checkout.CheckoutIntent
 import com.chuify.xoomclient.presentation.ui.checkout.CheckoutViewModel
-import com.chuify.xoomclient.presentation.ui.vendors.VendorState
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 
@@ -40,17 +36,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun PickLocationScreen(
     navHostController: NavHostController,
-    checkoutViewModel: CheckoutViewModel = hiltViewModel(),
-    selectLocationViewModel: PickLocationViewModel = hiltViewModel(),
+    viewModel: CheckoutViewModel,
 ) {
 
     val scaffoldState = rememberScaffoldState()
 
     val coroutineScope = rememberCoroutineScope()
-
-    val state by remember {
-        selectLocationViewModel.state
-    }
 
 
     Scaffold(
@@ -81,54 +72,38 @@ fun PickLocationScreen(
             elevation = 20.dp
         )
         {
-
-            when (state) {
-                is PickLocationState.Error -> {
-                    (state as VendorState.Error).message?.let {
-                        coroutineScope.launch {
-                            scaffoldState.snackbarHostState.showSnackbar(
-                                message = it,
-                                actionLabel = "Dismiss",
-                            )
-                        }
-                    }
-                }
-                PickLocationState.Loading -> {
-                    LoadingListScreen(
-                        count = 3,
-                        height = 250.dp
-                    )
-                }
-                is PickLocationState.Success -> {
-
-                    val locations = (state as PickLocationState.Success).locations
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
-
-                        item {
-
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = stringResource(id = R.string.delivery_address),
-                                style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
-                            )
-                        }
-
-                        items(locations) {
-                            LocationItemPicker(it) {
-                                coroutineScope.launch {
-                                    checkoutViewModel.userIntent.send(CheckoutIntent.OnLocationSelect(
-                                        it))
-                                    navHostController.popBackStack()
-                                }
-                            }
-                        }
-
-
-                    }
-
-                }
+            val locations by remember {
+                viewModel.location
             }
 
+
+            LazyColumn(modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)) {
+
+                item {
+
+                    Text(
+                        modifier = Modifier.padding(16.dp),
+                        text = stringResource(id = R.string.delivery_address),
+                        style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                    )
+                }
+
+                items(locations) {
+                    LocationItemPicker(it) {
+                        coroutineScope.launch {
+                            it.id?.let { id ->
+                                viewModel.userIntent.send(CheckoutIntent.OnLocationSelect(id))
+                                navHostController.popBackStack()
+                            }
+
+                        }
+                    }
+                }
+
+
+            }
 
         }
 

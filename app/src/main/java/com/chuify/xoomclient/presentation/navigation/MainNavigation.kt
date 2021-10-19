@@ -4,11 +4,13 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.chuify.xoomclient.domain.model.Vendor
 import com.chuify.xoomclient.presentation.ui.cart.CartScreen
 import com.chuify.xoomclient.presentation.ui.checkout.CheckoutScreen
+import com.chuify.xoomclient.presentation.ui.checkout.CheckoutViewModel
 import com.chuify.xoomclient.presentation.ui.main.MainScreen
 import com.chuify.xoomclient.presentation.ui.payment.PaymentScreen
 import com.chuify.xoomclient.presentation.ui.picklocation.PickLocationScreen
@@ -25,7 +27,7 @@ import com.google.gson.Gson
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
-fun MainNavigation() {
+fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
 
     val navHostController = rememberAnimatedNavController()
 
@@ -69,8 +71,17 @@ fun MainNavigation() {
             route = Screens.Checkout.fullRoute(),
 
             ) {
-            CheckoutScreen(navHostController = navHostController)
+            CheckoutScreen(navHostController = navHostController , viewModel = viewModel)
         }
+
+        composable(route = Screens.PaymentMethod.fullRoute()) {
+            PaymentScreen(navHostController = navHostController , viewModel = viewModel)
+        }
+
+        composable(route = Screens.PickLocation.fullRoute()) {
+            PickLocationScreen(navHostController = navHostController , viewModel = viewModel)
+        }
+
 
         composable(
             route = Screens.AccessoryDetails.fullRoute(),
@@ -84,13 +95,6 @@ fun MainNavigation() {
 
         }
 
-        composable(route = Screens.PaymentMethod.fullRoute()) {
-            PaymentScreen(navHostController = navHostController)
-        }
-
-        composable(route = Screens.PickLocation.fullRoute()) {
-            PickLocationScreen(navHostController = navHostController)
-        }
 
     }
 

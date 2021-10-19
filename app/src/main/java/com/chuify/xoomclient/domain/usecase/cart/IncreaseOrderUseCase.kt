@@ -1,24 +1,27 @@
 package com.chuify.xoomclient.domain.usecase.cart
 
 import com.chuify.xoomclient.data.local.entity.CartEntity
-import com.chuify.xoomclient.domain.model.Accessory
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class InsertOrUpdateAccessoryUseCase @Inject constructor(
+class IncreaseOrderUseCase @Inject constructor(
     private val repo: CartRepo,
 ) {
-    suspend operator fun invoke(model: Accessory) = flow<DataState<Unit>> {
+    suspend operator fun invoke(
+        image: String,
+        name: String,
+        id: String,
+        basePrice: Double,
+    ) = flow<DataState<Unit>> {
         try {
             emit(DataState.Loading())
-            val order = repo.getById(model.id).first()
+            val order = repo.getById(id)
             order?.let {
-                val price = (order.quantity + 1) * model.price
+                val price = (order.quantity + 1) * order.basePrice
                 val newOrder = order.copy(price = price, quantity = order.quantity + 1)
                 repo.update(newOrder)
                 emit(DataState.Success())
@@ -26,12 +29,12 @@ class InsertOrUpdateAccessoryUseCase @Inject constructor(
                 val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
                 val time = df.format(Calendar.getInstance().time)
                 val orderDto = CartEntity(
-                    image = model.image,
-                    name = model.name,
-                    id = model.id,
-                    basePrice = model.price,
+                    image = image,
+                    name = name,
+                    id = id,
+                    basePrice = basePrice,
                     quantity = 1,
-                    price = model.price,
+                    price = basePrice,
                     time = time
                 )
                 repo.insert(orderDto)

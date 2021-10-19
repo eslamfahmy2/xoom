@@ -51,7 +51,6 @@ fun PaymentScreen(
         viewModel.paymentMethod
     }
 
-
     Scaffold(
         topBar = {
             SecondaryBar {
@@ -111,7 +110,7 @@ fun PaymentScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween) {
 
                                 PaymentItem(modifier = Modifier.fillMaxWidth(0.9f),
-                                    paymentMethod = paymentMethod)
+                                    paymentMethod = Payments.Mpesa)
 
                                 Checkbox(modifier = Modifier
                                     .fillMaxWidth()
@@ -121,7 +120,8 @@ fun PaymentScreen(
                                     onCheckedChange = {
                                         Log.d(TAG, "PaymentScreen: ")
                                         coroutineScope.launch {
-                                            viewModel.userIntent.send(CheckoutIntent.ChangePayment(Payments.Mpesa))
+                                            viewModel.userIntent.send(CheckoutIntent.ChangePayment(
+                                                Payments.Mpesa))
                                         }
                                     })
 
@@ -133,7 +133,7 @@ fun PaymentScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween) {
 
                                 PaymentItem(modifier = Modifier.fillMaxWidth(0.9f),
-                                    paymentMethod = paymentMethod)
+                                    paymentMethod = Payments.Points)
 
                                 Checkbox(modifier = Modifier
                                     .fillMaxWidth()
@@ -142,7 +142,8 @@ fun PaymentScreen(
                                     checked = paymentMethod is Payments.CashOnDelivery,
                                     onCheckedChange = {
                                         coroutineScope.launch {
-                                            viewModel.userIntent.send(CheckoutIntent.ChangePayment(Payments.CashOnDelivery))
+                                            viewModel.userIntent.send(CheckoutIntent.ChangePayment(
+                                                Payments.CashOnDelivery))
                                         }
                                     })
 
@@ -154,7 +155,7 @@ fun PaymentScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween) {
 
                                 PaymentItem(modifier = Modifier.fillMaxWidth(0.9f),
-                                    paymentMethod = paymentMethod)
+                                    paymentMethod = Payments.CashOnDelivery)
 
                                 Checkbox(modifier = Modifier
                                     .fillMaxWidth()
@@ -180,9 +181,7 @@ fun PaymentScreen(
                 item {
                     Button(
                         onClick = {
-                            coroutineScope.launch {
-                                viewModel.userIntent.send(CheckoutIntent.ConfirmOrder)
-                            }
+                            navHostController.popBackStack()
                         },
                         modifier = Modifier
                             .fillMaxWidth()

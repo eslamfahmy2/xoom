@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Accessory
-import com.chuify.xoomclient.domain.usecase.cart.DeleteOrUpdateAccessoryUseCase
-import com.chuify.xoomclient.domain.usecase.cart.InsertOrUpdateAccessoryUseCase
+import com.chuify.xoomclient.domain.usecase.cart.DecreaseOrderUseCase
+import com.chuify.xoomclient.domain.usecase.cart.IncreaseOrderUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListAccessoriesUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
@@ -22,8 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AccessoryViewModel @Inject constructor(
     private val listAccessoriesUseCase: ListAccessoriesUseCase,
-    private val insertOrUpdateAccessoryUseCase: InsertOrUpdateAccessoryUseCase,
-    private val deleteOrUpdateAccessoryUseCase: DeleteOrUpdateAccessoryUseCase,
+    private val insertOrUpdateAccessoryUseCase: IncreaseOrderUseCase,
+    private val deleteOrUpdateAccessoryUseCase: DecreaseOrderUseCase,
 ) : ViewModel() {
 
     val userIntent = Channel<AccessoryIntent>(Channel.UNLIMITED)
@@ -95,7 +95,12 @@ class AccessoryViewModel @Inject constructor(
 
     private suspend fun insert(accessory: Accessory) {
 
-        insertOrUpdateAccessoryUseCase(accessory).collect { dataState ->
+        insertOrUpdateAccessoryUseCase(
+            image = accessory.image,
+            name = accessory.name,
+            id = accessory.id,
+            basePrice = accessory.price
+        ).collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
@@ -114,9 +119,8 @@ class AccessoryViewModel @Inject constructor(
 
     private suspend fun decreaseOrRemove(accessory: Accessory) {
 
-
         Log.d(TAG, "handleIntent: ")
-        deleteOrUpdateAccessoryUseCase(accessory).collect { dataState ->
+        deleteOrUpdateAccessoryUseCase(accessory.id).collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)

@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AccessoryPref(
     accessory: Accessory,
-    viewModel: AccessoryDetailsViewModel = hiltViewModel(),
+    viewModel: AccessoryDetailsViewModel
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -71,9 +71,6 @@ fun AccessoryPref(
 
     }
 
-    coroutineScope.launch {
-        viewModel.userIntent.send(AccessoryDetailsIntent.OpenAccessoryPreview(accessory))
-    }
 
 }
 

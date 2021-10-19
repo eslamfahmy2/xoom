@@ -1,6 +1,7 @@
 package com.chuify.xoomclient.presentation.ui.product.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberImagePainter
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.domain.model.Product
+import com.chuify.xoomclient.presentation.theme.myGreen
 
 
 @Composable
@@ -44,7 +46,7 @@ fun ProductItem(
 
             Image(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(25.dp))
+                    .clip(RoundedCornerShape(10))
                     .padding(8.dp)
                     .size(80.dp, 80.dp)
                     .constrainAs(image) {
@@ -136,24 +138,29 @@ fun ProductItem(
 
             Column(
                 modifier = Modifier
+                    .fillMaxHeight()
                     .constrainAs(third) {
                         start.linkTo(guideline2)
                         end.linkTo(parent.end)
+                        top.linkTo(parent.top)
                     },
+                horizontalAlignment = Alignment.End ,
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
 
                 Text(
                     modifier = Modifier
                         .wrapContentSize()
                         .padding(8.dp)
-                        .align(Alignment.Start),
+                        .align(Alignment.End),
                     text = product.size,
                     color = MaterialTheme.colors.onSurface,
 
                 )
                 Row(modifier = Modifier
                     .wrapContentSize()
-                    .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
+                    .align(Alignment.End)
+                    .padding(start = 8.dp, bottom = 8.dp, end = 8.dp , top = 32.dp)) {
                     Text(
                         text = product.price.toString(),
                         color = MaterialTheme.colors.primary,

@@ -2,10 +2,7 @@ package com.chuify.xoomclient.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -40,7 +37,9 @@ fun PaymentItem(
 
 
         Image(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier
+                .padding(12.dp)
+                .size(24.dp, 24.dp),
             painter = painterResource(id = paymentMethod.icon),
             contentDescription = null)
 

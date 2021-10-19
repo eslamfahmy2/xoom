@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Accessory
 import com.chuify.xoomclient.domain.model.Vendor
+import com.chuify.xoomclient.domain.usecase.cart.CartPreviewUC
 import com.chuify.xoomclient.domain.usecase.home.ListAccessoriesUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListVendorsUseCase
 import com.chuify.xoomclient.domain.utils.DataState
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class VendorViewModel @Inject constructor(
     private val useCase: ListVendorsUseCase,
     private val useCaseAccessoriesUseCase: ListAccessoriesUseCase,
+    private val cartPreviewUC: CartPreviewUC
 ) : ViewModel() {
 
 
@@ -42,11 +44,16 @@ class VendorViewModel @Inject constructor(
     val accessories get() = _accessories
 
 
+    private val _cartCount: MutableState<Int> = mutableStateOf(0)
+    val cartCount get() = _cartCount
+
+
     init {
         handleIntent()
         viewModelScope.launch {
             loadVendors()
             loadAccessories()
+            cartPref()
         }
     }
 
@@ -87,6 +94,26 @@ class VendorViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private suspend fun cartPref() = viewModelScope.launch(Dispatchers.IO) {
+
+        cartPreviewUC().collect { dataState ->
+            when (dataState) {
+                is DataState.Error -> {
+                    Log.d(TAG, "Error: " + dataState.message)
+                }
+                is DataState.Loading -> {
+                }
+                is DataState.Success -> {
+                    dataState.data?.let {
+                        _cartCount.value = it.totalQuantity
+                    }
+
+                }
+            }
+        }
+
     }
 
     private suspend fun loadAccessories() = viewModelScope.launch(Dispatchers.IO) {

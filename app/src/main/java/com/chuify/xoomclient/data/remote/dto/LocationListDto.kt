@@ -24,18 +24,17 @@ data class LocationDto(
 
 
     @Expose
-    @SerializedName(value = "address_url", alternate = ["Address_url"])
-    val address_url: String?,
+    @SerializedName(value = "location_id", alternate = ["Docation_id"])
+    val location_id: String?,
 
+    @Expose
+    @SerializedName(value = "title", alternate = ["Title"])
+    val title: String?,
 
     @Expose
     @SerializedName(value = "details", alternate = ["Details"])
     val details: String?,
 
-
-    @Expose
-    @SerializedName(value = "instructions", alternate = ["Instructions"])
-    val instructions: String?,
 
     @Expose
     @SerializedName(value = "latitude", alternate = ["Latitude"])

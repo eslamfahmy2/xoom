@@ -26,6 +26,6 @@ interface CartDao {
     fun getCartItemsCount(): Flow<Int>
 
     @Query("SELECT * FROM `Order` WHERE id=:ID")
-    fun getById(ID: String): Flow<CartEntity>
+    suspend fun getById(ID: String): CartEntity?
 
 }

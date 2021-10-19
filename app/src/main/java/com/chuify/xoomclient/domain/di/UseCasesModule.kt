@@ -10,7 +10,6 @@ import com.chuify.xoomclient.domain.usecase.auth.AuthenticatePhoneUseCase
 import com.chuify.xoomclient.domain.usecase.auth.SignInUseCase
 import com.chuify.xoomclient.domain.usecase.auth.SignUpUseCase
 import com.chuify.xoomclient.domain.usecase.cart.*
-import com.chuify.xoomclient.domain.usecase.home.GetAccessoryDetailsUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListAccessoriesUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListProductsUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListVendorsUseCase
@@ -74,37 +73,16 @@ object UseCasesModule {
 
     @Singleton
     @Provides
-    fun provideInsertOrderUseCase(
-        repository: CartRepo,
-    ) = InsertOrUpdateProductUseCase(repo = repository)
-
-
-    @Singleton
-    @Provides
-    fun provideDeleteOrUpdateUseCase(
-        repository: CartRepo,
-    ) = DeleteOrUpdateProductUseCase(repo = repository)
-
-
-    @Singleton
-    @Provides
     fun provideInsertAccessoryUseCase(
         repository: CartRepo,
-    ) = InsertOrUpdateAccessoryUseCase(repo = repository)
+    ) = IncreaseOrderUseCase(repo = repository)
 
 
     @Singleton
     @Provides
     fun provideDeleteAccessoryUseCase(
         repository: CartRepo,
-    ) = DeleteOrUpdateAccessoryUseCase(repo = repository)
-
-
-    @Singleton
-    @Provides
-    fun provideGetAccessoryDetailsUseCase(
-        repository: CartRepo,
-    ) = GetAccessoryDetailsUseCase(cartRepo = repository)
+    ) = DecreaseOrderUseCase(repo = repository)
 
 
     @Singleton

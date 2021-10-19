@@ -16,9 +16,9 @@ data class CartEntity(
 
     val basePrice: Double = 0.0,
 
-    val quantity: Int =0,
+    val quantity: Int = 0,
 
-    val time: String ="",
+    val time: String = "",
 
-    val image: String ="",
+    val image: String = "",
 )

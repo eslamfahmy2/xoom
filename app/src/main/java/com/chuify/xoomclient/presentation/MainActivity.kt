@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            XoomGasClientTheme(darkTheme = true) {
+            XoomGasClientTheme(darkTheme = false) {
                 MainNavigation()
             }
         }

@@ -2,14 +2,16 @@ package com.chuify.xoomclient.domain.model
 
 data class Location(
 
-    val address: String,
+    val id: String?,
 
-    val details: String,
+    val title: String?,
 
-    val instructions: String,
+    val details: String?,
 
-    val latitude: Double,
+    val latitude: String?,
 
-    val longitude: Double,
+    val longitude: String?,
+
+    val selected: Boolean = false,
 
     )

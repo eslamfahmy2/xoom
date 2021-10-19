@@ -8,15 +8,16 @@ import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Cart
 import com.chuify.xoomclient.domain.model.Location
 import com.chuify.xoomclient.domain.model.Payments
-import com.chuify.xoomclient.domain.usecase.cart.DeleteOrderUs
+import com.chuify.xoomclient.domain.usecase.cart.DecreaseOrderUseCase
 import com.chuify.xoomclient.domain.usecase.cart.GetCartItemsUseCase
+import com.chuify.xoomclient.domain.usecase.cart.IncreaseOrderUseCase
 import com.chuify.xoomclient.domain.usecase.cart.OrderITemAction
-import com.chuify.xoomclient.domain.usecase.cart.UpdateOrderUs
 import com.chuify.xoomclient.domain.usecase.location.GetLocationsUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -27,8 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CheckoutViewModel @Inject constructor(
     private val getCartItemsUseCase: GetCartItemsUseCase,
-    private val updateOrderUs: UpdateOrderUs,
-    private val deleteOrderUs: DeleteOrderUs,
+    private val decreaseOrderUseCase: DecreaseOrderUseCase,
+    private val increaseOrderUseCase: IncreaseOrderUseCase,
     private val getLocationUseCase: GetLocationsUseCase,
 ) : ViewModel() {
 
@@ -38,11 +39,15 @@ class CheckoutViewModel @Inject constructor(
         mutableStateOf(CheckoutState.Loading)
     val state get() = _state
 
-    private val _paymentMethod: MutableState<Payments> = mutableStateOf(Payments.Mpesa)
+    private val _paymentMethod: MutableState<Payments> = mutableStateOf(Payments.CashOnDelivery)
     val paymentMethod get() = _paymentMethod
 
-    private val _location: MutableState<Location?> = mutableStateOf(null)
+    private val _location: MutableState<List<Location>> = mutableStateOf(listOf())
     val location get() = _location
+
+    private val _totalPrice: MutableState<Int> = mutableStateOf(0)
+    val totalPrice get() = _totalPrice
+
 
     init {
         handleIntent()
@@ -52,15 +57,14 @@ class CheckoutViewModel @Inject constructor(
         viewModelScope.launch {
 
             userIntent.consumeAsFlow().collect { intent ->
+                Log.d(TAG, "handleIntent:$intent")
                 when (intent) {
                     CheckoutIntent.LoadCart -> {
                         loadOrders()
+                        loadLocations()
                     }
                     is CheckoutIntent.DecreaseItem -> {
                         decrease(intent.order, OrderITemAction.Decrease)
-                    }
-                    is CheckoutIntent.DeleteItem -> {
-                        delete(intent.order)
                     }
                     is CheckoutIntent.IncreaseItem -> {
                         increase(intent.order, OrderITemAction.Increase)
@@ -68,9 +72,20 @@ class CheckoutViewModel @Inject constructor(
                     is CheckoutIntent.ChangePayment -> {
                         changePayment(intent.payment)
                     }
-                    CheckoutIntent.ConfirmOrder -> TODO()
+                    CheckoutIntent.ConfirmOrder -> {
+
+                    }
                     is CheckoutIntent.OnLocationSelect -> {
-                        Log.d(TAG, "OnLocationSelect: " + intent.location)
+                        Log.d(TAG, "handleIntent: " + intent.id)
+                        val res = _location.value.map {
+                            if (it.id == intent.id) {
+                                it.copy(selected = true)
+                            } else {
+                                it.copy(selected = false)
+                            }
+                        }
+                        Log.d(TAG, "handleIntent: $res")
+                        _location.value = res
                     }
                 }
             }
@@ -80,6 +95,32 @@ class CheckoutViewModel @Inject constructor(
 
     private fun changePayment(payments: Payments) {
         _paymentMethod.value = payments
+    }
+
+    private suspend fun loadLocations() {
+        if (_location.value.isNotEmpty())
+            return
+        viewModelScope.launch(Dispatchers.IO) {
+            getLocationUseCase().collect { dataState ->
+                when (dataState) {
+                    is DataState.Error -> {
+                        Log.d(TAG, "Error: " + dataState.message)
+                        //    _state.value = CheckoutState.Error(dataState.message)
+                    }
+                    is DataState.Loading -> {
+                        _state.value = CheckoutState.Loading
+                    }
+                    is DataState.Success -> {
+                        Log.d(TAG, "Success: location " + dataState.data)
+                        dataState.data?.let {
+                            _location.value = it
+                            cancel()
+                        }
+
+                    }
+                }
+            }
+        }
     }
 
     private suspend fun loadOrders() = viewModelScope.launch(Dispatchers.IO) {
@@ -105,8 +146,12 @@ class CheckoutViewModel @Inject constructor(
 
     private suspend fun increase(order: Cart, action: OrderITemAction) =
         viewModelScope.launch(Dispatchers.IO) {
-
-            updateOrderUs(order, action).collect { dataState ->
+            increaseOrderUseCase(
+                image = order.image,
+                name = order.name,
+                id = order.id,
+                basePrice = order.basePrice
+            ).collect { dataState ->
                 when (dataState) {
                     is DataState.Error -> {
                         Log.d(TAG, "Error: " + dataState.message)
@@ -126,8 +171,7 @@ class CheckoutViewModel @Inject constructor(
 
     private suspend fun decrease(order: Cart, action: OrderITemAction) =
         viewModelScope.launch(Dispatchers.IO) {
-
-            updateOrderUs(order, action).collect { dataState ->
+            decreaseOrderUseCase(order.id).collect { dataState ->
                 when (dataState) {
                     is DataState.Error -> {
                         Log.d(TAG, "Error: " + dataState.message)
@@ -144,26 +188,6 @@ class CheckoutViewModel @Inject constructor(
 
 
         }
-
-    private suspend fun delete(order: Cart) = viewModelScope.launch(Dispatchers.IO) {
-
-        deleteOrderUs(order).collect { dataState ->
-            when (dataState) {
-                is DataState.Error -> {
-                    Log.d(TAG, "Error: " + dataState.message)
-                    _state.value = CheckoutState.Error(dataState.message)
-                }
-                is DataState.Loading -> {
-
-                }
-                is DataState.Success -> {
-                    Log.d(TAG, "Success: $dataState")
-                }
-            }
-        }
-
-
-    }
 
 
 }

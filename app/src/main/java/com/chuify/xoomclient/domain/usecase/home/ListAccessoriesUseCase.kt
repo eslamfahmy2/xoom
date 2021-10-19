@@ -39,7 +39,7 @@ class ListAccessoriesUseCase @Inject constructor(
                             val productInCart = cartOrders.find { it.id == product.id }
                             productInCart?.let { item ->
                                 Log.d(TAG, "map: $item")
-                                product.copy(quantity = item.quantity)
+                                product.copy(quantity = item.quantity , totalPrice = (item.quantity*item.price))
                             } ?: product
                         }
                         Log.d(TAG, "after map-----------")

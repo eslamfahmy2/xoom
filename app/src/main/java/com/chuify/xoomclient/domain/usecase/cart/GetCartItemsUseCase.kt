@@ -1,10 +1,12 @@
 package com.chuify.xoomclient.domain.usecase.cart
 
+import android.util.Log
 import com.chuify.xoomclient.domain.mapper.CartEntityMapper
 import com.chuify.xoomclient.domain.model.CartPreview
 import com.chuify.xoomclient.domain.model.Cart
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
+import com.chuify.xoomclient.presentation.ui.signup.TAG
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -22,15 +24,15 @@ class GetCartItemsUseCase @Inject constructor(
                 } else {
                     val listOrders = it.map { orderEntityMapper.mapToDomainModel(it) }
 
-                    val totalPrice = it.sumOf { item -> item.price }
                     val quantity = it.sumOf { item -> item.quantity }
+                    val totalPrice = it.sumOf { item -> item.basePrice * item.quantity }
 
                     val cartPreview = CartPreview(
                         totalPrice = totalPrice,
                         totalQuantity = quantity)
 
                     val res = Pair(listOrders, cartPreview)
-
+                    Log.d(TAG, "invoke: $cartPreview")
                     emit(DataState.Success(res))
                 }
             }

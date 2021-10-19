@@ -142,7 +142,9 @@ fun CartItem(
                 modifier = Modifier
                     .fillMaxHeight()
                     .constrainAs(third) {
+                        start.linkTo(content.end)
                         end.linkTo(parent.end)
+                        top.linkTo(parent.top)
                     },
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.Center
@@ -160,7 +162,7 @@ fun CartItem(
                     )
                 Row(modifier = Modifier
                     .wrapContentSize()
-                    .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
+                    .padding(start = 8.dp, bottom = 8.dp, end = 8.dp , top = 32.dp)) {
                     Text(
                         text = order.price.toString(),
                         color = MaterialTheme.colors.primary,

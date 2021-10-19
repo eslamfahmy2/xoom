@@ -1,5 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.picklocation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
@@ -19,7 +20,11 @@ fun LocationItemPicker(
     onPick: (Location) -> Unit,
 ) {
 
-    Card(elevation = 2.dp, modifier = Modifier.padding(8.dp)) {
+    Card(elevation = 8.dp, modifier = Modifier
+        .padding(8.dp)
+        .clickable {
+            onPick(location)
+        }) {
 
         Column(modifier = Modifier.fillMaxWidth()) {
 
@@ -36,9 +41,11 @@ fun LocationItemPicker(
                         .padding(16.dp),
                 )
 
-                Checkbox(checked = true, onCheckedChange = {
+                Checkbox(checked = location.selected, onCheckedChange = {
                     onPick(location)
-                })
+                }, enabled = false,
+
+                    modifier = Modifier.padding(16.dp))
 
             }
 

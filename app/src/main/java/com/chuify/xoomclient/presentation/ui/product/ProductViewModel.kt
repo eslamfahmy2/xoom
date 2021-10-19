@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Product
-import com.chuify.xoomclient.domain.usecase.cart.DeleteOrUpdateProductUseCase
-import com.chuify.xoomclient.domain.usecase.cart.InsertOrUpdateProductUseCase
+import com.chuify.xoomclient.domain.usecase.cart.DecreaseOrderUseCase
+import com.chuify.xoomclient.domain.usecase.cart.IncreaseOrderUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListProductsUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
@@ -22,8 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     private val useCase: ListProductsUseCase,
-    private val insetCartItem: InsertOrUpdateProductUseCase,
-    private val deleteCartItem: DeleteOrUpdateProductUseCase,
+    private val insetCartItem: IncreaseOrderUseCase,
+    private val deleteCartItem: DecreaseOrderUseCase,
 ) : ViewModel() {
 
     val userIntent = Channel<ProductIntent>(Channel.UNLIMITED)
@@ -79,7 +79,12 @@ class ProductViewModel @Inject constructor(
         viewModelScope.launch {
 
             Log.d(TAG, "handleIntent: ")
-            insetCartItem(product).collect { dataState ->
+            insetCartItem(
+                image = product.image,
+                name = product.name,
+                id = product.id,
+                basePrice = product.price
+            ).collect { dataState ->
                 when (dataState) {
                     is DataState.Error -> {
                         Log.d(TAG, "Error: " + dataState.message)
@@ -102,7 +107,7 @@ class ProductViewModel @Inject constructor(
         viewModelScope.launch {
 
             Log.d(TAG, "handleIntent: ")
-            deleteCartItem(product).collect { dataState ->
+            deleteCartItem(product.id).collect { dataState ->
                 when (dataState) {
                     is DataState.Error -> {
                         Log.d(TAG, "Error: " + dataState.message)

@@ -77,7 +77,11 @@ fun OrdersScreen(
 
                 Column {
 
-                    TabRow(selectedTabIndex = pagerState.currentPage) {
+                    TabRow(
+                        selectedTabIndex = pagerState.currentPage,
+                        backgroundColor = MaterialTheme.colors.surface,
+                        contentColor = MaterialTheme.colors.primary,
+                    ) {
                         titles.forEachIndexed { index, title ->
                             Tab(
                                 text = { Text(title) },

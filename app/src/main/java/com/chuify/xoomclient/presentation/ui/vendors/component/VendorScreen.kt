@@ -1,5 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.vendors.component
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
@@ -17,6 +18,11 @@ import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.HomeBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.navigation.Screens
+import com.chuify.xoomclient.presentation.ui.accessoryDetails.AccessoryDetailsIntent
+import com.chuify.xoomclient.presentation.ui.accessoryDetails.AccessoryDetailsState
+import com.chuify.xoomclient.presentation.ui.accessoryDetails.AccessoryDetailsViewModel
+import com.chuify.xoomclient.presentation.ui.accessoryDetails.component.AccessoryPref
+import com.chuify.xoomclient.presentation.ui.signup.TAG
 import com.chuify.xoomclient.presentation.ui.vendors.VendorIntent
 import com.chuify.xoomclient.presentation.ui.vendors.VendorState
 import com.chuify.xoomclient.presentation.ui.vendors.VendorViewModel
@@ -28,6 +34,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun VendorScreen(
     viewModel: VendorViewModel = hiltViewModel(),
+    accessoryDetailsViewModel: AccessoryDetailsViewModel = hiltViewModel(),
     navHostController: NavHostController,
 ) {
 
@@ -35,7 +42,14 @@ fun VendorScreen(
 
     val state by remember { viewModel.state }
 
+    val cartCount by remember { viewModel.cartCount }
+
+    val stateAccessoryPref by remember { accessoryDetailsViewModel.state }
+
     val scaffoldState = rememberScaffoldState()
+
+
+
 
     Scaffold(
         topBar = {
@@ -44,7 +58,7 @@ fun VendorScreen(
                 action = {
                     navHostController.navigate(Screens.Cart.route)
                 },
-                cartCount = 0
+                cartCount = cartCount
             )
         },
         scaffoldState = scaffoldState,
@@ -94,13 +108,23 @@ fun VendorScreen(
                             viewModel.userIntent.send(VendorIntent.Filter(it))
                         }
                     },
-                    onAccessoryClicked = { accessory ->
-
-                        Gson().toJson(accessory.name.toString())?.let { json ->
-                            navHostController.navigate(Screens.AccessoryDetails.routeWithArgs(json))
+                    onAccessoryClicked = {
+                        coroutineScope.launch {
+                            Log.d(TAG, "onAccessoryClicked: $it")
+                            accessoryDetailsViewModel.userIntent.send(AccessoryDetailsIntent.OpenAccessoryPreview(it))
                         }
                     }
                 )
+                when (stateAccessoryPref) {
+                    AccessoryDetailsState.Dismiss -> {}
+                    is AccessoryDetailsState.Error -> {}
+                    is AccessoryDetailsState.Success -> {
+                        (stateAccessoryPref as AccessoryDetailsState.Success).data?.let {
+                            Log.d(TAG, "VendorScreen: on Success render $it")
+                            AccessoryPref(accessory = it, viewModel = accessoryDetailsViewModel)
+                        }
+                    }
+                }
             }
         }
 

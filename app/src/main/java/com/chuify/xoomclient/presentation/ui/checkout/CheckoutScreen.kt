@@ -100,6 +100,8 @@ fun CheckoutScreen(
 
                     val orders = (state as CheckoutState.Success).orders
 
+                    val total = (state as CheckoutState.Success).cartPreview.totalPrice
+
                     val paymentMethod by remember {
                         viewModel.paymentMethod
                     }
@@ -107,7 +109,6 @@ fun CheckoutScreen(
                     val location by remember {
                         viewModel.location
                     }
-
 
 
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -122,43 +123,45 @@ fun CheckoutScreen(
 
                         item {
 
-                            location?.let {
 
-                                Card(elevation = 2.dp, modifier = Modifier.padding(16.dp)) {
+                            Card(elevation = 8.dp, modifier = Modifier.padding(16.dp)) {
 
-                                    Column(modifier = Modifier.fillMaxWidth()) {
+                                Column(modifier = Modifier.fillMaxWidth()) {
 
-                                        Row(
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween) {
+
+                                        Text(
+                                            text = stringResource(id = R.string.delivery_address),
                                             modifier = Modifier
-                                                .fillMaxWidth(),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.SpaceBetween) {
-
-                                            Text(
-                                                text = stringResource(id = R.string.delivery_address),
-                                                modifier = Modifier
-                                                    .wrapContentSize()
-                                                    .padding(16.dp),
-                                            )
+                                                .wrapContentSize()
+                                                .padding(16.dp),
+                                        )
 
 
-                                            Text(
+                                        Text(
+                                            text = stringResource(id = R.string.change),
+                                            color = MaterialTheme.colors.primary,
+                                            modifier = Modifier
+                                                .wrapContentSize()
+                                                .padding(16.dp)
+                                                .clickable {
+                                                    navHostController.navigate(Screens.PickLocation.route)
+                                                }
+                                        )
 
-                                                text = stringResource(id = R.string.change),
-                                                color = MaterialTheme.colors.primary,
-                                                modifier = Modifier
-                                                    .wrapContentSize()
-                                                    .padding(16.dp),
-                                            )
-
-                                        }
-
+                                    }
+                                    location.firstOrNull { it.selected }?.let {
                                         LocationItem(location = it)
-
                                     }
 
 
                                 }
+
+
                             }
 
 
@@ -166,7 +169,7 @@ fun CheckoutScreen(
 
                         item {
 
-                            Card(elevation = 2.dp, modifier = Modifier.padding(16.dp)) {
+                            Card(elevation = 8.dp, modifier = Modifier.padding(16.dp)) {
 
                                 Column(modifier = Modifier.fillMaxWidth()) {
 
@@ -207,7 +210,7 @@ fun CheckoutScreen(
                         }
 
                         item {
-                            Card(elevation = 2.dp, modifier = Modifier.padding(16.dp)) {
+                            Card(elevation = 8.dp, modifier = Modifier.padding(16.dp)) {
 
                                 Column {
                                     Text(
@@ -232,12 +235,7 @@ fun CheckoutScreen(
                                                             it))
                                                     }
                                                 },
-                                                delete = {
-                                                    coroutineScope.launch {
-                                                        viewModel.userIntent.send(CheckoutIntent.DeleteItem(
-                                                            it))
-                                                    }
-                                                }
+                                                delete = {}
                                             )
                                         }
                                     }
@@ -269,7 +267,7 @@ fun CheckoutScreen(
 
                                     Row {
                                         Text(
-                                            text = "200",
+                                            text = total.toString(),
                                             color = MaterialTheme.colors.secondaryVariant,
                                             modifier = Modifier.padding(2.dp)
 
@@ -300,7 +298,7 @@ fun CheckoutScreen(
 
                                     Row {
                                         Text(
-                                            text = "200",
+                                            text = total.toString(),
                                             color = MaterialTheme.colors.primary,
                                             modifier = Modifier.padding(2.dp)
 
@@ -324,9 +322,8 @@ fun CheckoutScreen(
                         item {
                             Button(
                                 onClick = {
-                                    coroutineScope.launch {
-                                        viewModel.userIntent.send(CheckoutIntent.ConfirmOrder)
-                                    }
+                                    navHostController.navigate(Screens.Main.route)
+
                                 },
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -349,7 +346,6 @@ fun CheckoutScreen(
 
             }
         }
-
 
     }
 

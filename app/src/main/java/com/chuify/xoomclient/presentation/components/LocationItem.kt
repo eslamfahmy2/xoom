@@ -67,23 +67,17 @@ fun LocationItem(location: Location) {
                     contentDescription = null)
 
                 Column {
-                    Text(modifier = Modifier
-                        .padding(4.dp),
-                        text = location.address,
-                        color = MaterialTheme.colors.secondaryVariant
-                    )
-
-                    Text(modifier = Modifier
-                        .padding(4.dp),
-                        text = location.details,
+                    Text(modifier = Modifier.padding(4.dp),
+                        text = location.title.toString(),
                         color = MaterialTheme.colors.onSurface
+
                     )
 
-                    Text(modifier = Modifier
-                        .padding(4.dp),
-                        text = location.instructions,
+                    Text(modifier = Modifier.padding(4.dp),
+                        text = location.details.toString(),
                         color = MaterialTheme.colors.secondaryVariant
                     )
+
                 }
 
             }
