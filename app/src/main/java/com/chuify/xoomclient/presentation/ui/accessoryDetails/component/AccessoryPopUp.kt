@@ -217,7 +217,7 @@ fun AccessoryPopUp(
                     .wrapContentSize()
                     .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
                     Text(
-                        text = accessory.price.toString(),
+                        text = accessory.totalPrice.toString(),
                         color = Color.Black,
 
                         )

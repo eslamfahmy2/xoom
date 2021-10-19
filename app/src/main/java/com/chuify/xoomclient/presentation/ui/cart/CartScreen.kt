@@ -123,7 +123,8 @@ fun CartScreen(
                                             coroutineScope.launch {
                                                 viewModel.userIntent.send(CartIntent.DeleteItem(it))
                                             }
-                                        }
+                                        },
+                                        deletable = true
                                     )
                                 }
                             }
