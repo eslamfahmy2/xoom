@@ -3,11 +3,11 @@ package com.chuify.xoomclient.presentation.ui.main
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.chuify.xoomclient.presentation.ui.notification.NotificationScreen
+import com.chuify.xoomclient.presentation.ui.notification.NotificationViewModel
 import com.chuify.xoomclient.presentation.ui.order.OrdersScreen
 import com.chuify.xoomclient.presentation.ui.vendors.component.VendorScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -28,10 +28,14 @@ fun MainScreen(navHostController: NavHostController) {
     val currentScreen = remember {
         mutableStateOf(0)
     }
-
+    val notificationViewModel: NotificationViewModel = hiltViewModel()
+    val count by remember {
+        notificationViewModel.notReadCount
+    }
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
+                notificationBadge = count,
                 action = {
                     coroutineScope.launch {
                         currentScreen.value = it
@@ -45,11 +49,13 @@ fun MainScreen(navHostController: NavHostController) {
 
         HorizontalPager(
             state = pagerState,
-            count = 2) {
+            count = 3) {
             if (it == 0) {
                 VendorScreen(navHostController = navHostController)
-            } else {
+            } else if (it == 1) {
                 OrdersScreen(navHostController = navHostController)
+            } else {
+                NotificationScreen(navHostController = navHostController)
             }
         }
 

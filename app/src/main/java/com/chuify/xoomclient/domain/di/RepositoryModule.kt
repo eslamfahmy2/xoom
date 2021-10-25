@@ -1,7 +1,9 @@
 package com.chuify.xoomclient.domain.di
 
 import com.chuify.xoomclient.data.local.dao.CartDao
+import com.chuify.xoomclient.data.local.dao.NotificationDao
 import com.chuify.xoomclient.data.local.source.CartRepoImpl
+import com.chuify.xoomclient.data.local.source.NotificationRepoImpl
 import com.chuify.xoomclient.data.remote.network.ApiInterface
 import com.chuify.xoomclient.data.remote.source.AuthRepoImpl
 import com.chuify.xoomclient.data.remote.source.LocationRepoImpl
@@ -59,5 +61,14 @@ object RepositoryModule {
         api: ApiInterface,
     ): OrderRepo {
         return OrderRepoImpl(api)
+    }
+
+    @Singleton
+    @Provides
+    fun provideNotificationRepository(
+        dp: NotificationDao,
+        api: ApiInterface,
+    ): NotificationRepo {
+        return NotificationRepoImpl(dp , apiInterface = api)
     }
 }

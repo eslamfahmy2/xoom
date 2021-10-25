@@ -39,4 +39,7 @@ object MapperModule {
     @Provides
     fun provideOrderMapper() = OrderDtoMapper()
 
+    @Singleton
+    @Provides
+    fun provideNotificationMapper() = NotificationEntityMapper()
 }

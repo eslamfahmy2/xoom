@@ -31,6 +31,12 @@ class PendingOrdersViewModel @Inject constructor(
         mutableStateOf(PendingOrdersState.Loading)
     val state get() = _state
 
+    private val _cancelDialog: MutableState<Boolean> = mutableStateOf(false)
+    val cancelDialog get() = _cancelDialog
+
+    private val _orderToCancel: MutableState<Order?> = mutableStateOf(null)
+
+
     init {
         handleIntent()
     }
@@ -43,34 +49,44 @@ class PendingOrdersViewModel @Inject constructor(
                     PendingOrdersIntent.LoadPendingOrders -> {
                         loadPendingOrders()
                     }
-                    is PendingOrdersIntent.Cancel -> {
-                        cancelOrder(intent.order)
+                    is PendingOrdersIntent.ShowCancel -> {
+                        _orderToCancel.value = intent.order
+                        _cancelDialog.value = true
                     }
                     is PendingOrdersIntent.Track -> {
 
                     }
+                    is PendingOrdersIntent.ConfirmCancel -> {
+                        _orderToCancel.value?.let {
+                            cancelOrder(it, intent.reason)
+                        }
+                    }
+                    PendingOrdersIntent.DismissCancel -> {
+                        _orderToCancel.value = null
+                        _cancelDialog.value = false
+                    }
                 }
             }
         }
     }
 
-    private suspend fun cancelOrder(order: Order) = viewModelScope.launch(Dispatchers.IO) {
-        cancelUseCase.invoke(order).collect { dataState ->
-            when (dataState) {
-                is DataState.Error -> {
-                    Log.d(TAG, "Error: " + dataState.message)
-                    _state.value = PendingOrdersState.Error(dataState.message)
-                }
-                is DataState.Loading -> {
-                    _state.value = PendingOrdersState.Loading
-                }
-                is DataState.Success -> {
-                    _state.value = PendingOrdersState.Error("Success")
-
+    private suspend fun cancelOrder(order: Order, reason: String) =
+        viewModelScope.launch(Dispatchers.IO) {
+            cancelUseCase.invoke(order.id, reason).collect { dataState ->
+                when (dataState) {
+                    is DataState.Error -> {
+                        Log.d(TAG, "Error: " + dataState.message)
+                        _state.value = PendingOrdersState.Error(dataState.message)
+                    }
+                    is DataState.Loading -> {
+                        _state.value = PendingOrdersState.Loading
+                    }
+                    is DataState.Success -> {
+                        loadPendingOrders()
+                    }
                 }
             }
         }
-    }
 
 
     private suspend fun loadPendingOrders() = viewModelScope.launch(Dispatchers.IO) {

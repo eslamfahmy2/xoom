@@ -44,7 +44,8 @@
     <string name="accepted">Accepted</string>
     <string name="on_transit">On transit</string>
     <string name="completed">Completed</string>
-    <string name="cancelled">Cancelled</string> <!--gray-->
+    <string name="cancelled">Cancelled</string>
+    <string name="are_sure">"the order will be cancel ! are you sure? "</string> <!--gray-->
 
 
 </resources>

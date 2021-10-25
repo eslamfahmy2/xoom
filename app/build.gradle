@@ -113,6 +113,9 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
     //Pager
     implementation "com.google.accompanist:accompanist-pager:0.19.0"
+    //PretyTime
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
+
 
 
     //Testing

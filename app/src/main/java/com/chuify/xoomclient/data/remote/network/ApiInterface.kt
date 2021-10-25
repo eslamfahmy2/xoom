@@ -70,5 +70,10 @@ interface ApiInterface {
         @Field("reason") reason: String,
     ): Response<StatusDto>
 
+    //----------------------------------------------------------------------------------------------------
+    @Headers("authorized:true", "userid:true")
+    @GET("notifications/user_id")
+    suspend fun listNotifications(): Response<NotificationListDto>
+
 
 }
