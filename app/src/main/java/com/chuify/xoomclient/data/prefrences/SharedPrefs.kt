@@ -3,6 +3,7 @@ package com.chuify.xoomclient.data.prefrences
 import android.content.Context
 import android.content.SharedPreferences
 import com.chuify.xoomclient.data.remote.dto.UserDto
+import com.chuify.xoomclient.domain.model.User
 import com.chuify.xoomclient.presentation.application.BaseApplication
 import javax.inject.Inject
 
@@ -54,6 +55,15 @@ class SharedPrefs @Inject constructor(
     fun getUserID(): String {
         return get(USER_ID, String::class.java)
     }
+
+    fun getUser() = User(
+        userId = get(USER_ID, String::class.java),
+        firstname = get(USER_FIRST_NAME, String::class.java),
+        lastname = get(USER_LAST_NAME, String::class.java),
+        email = get(USER_EMAIL, String::class.java),
+        phone = get(USER_PHONE, String::class.java),
+        token = get(USER_TOKEN, String::class.java),
+    )
 
     private fun <T> get(key: String, clazz: Class<T>): T =
         when (clazz) {

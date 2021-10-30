@@ -75,5 +75,11 @@ interface ApiInterface {
     @GET("notifications/user_id")
     suspend fun listNotifications(): Response<NotificationListDto>
 
+    //----------------------------------------------------------------------------------------------------
+
+    @Headers("authorized:true", "userid:true")
+    @GET("loyalpoints/user_id")
+    suspend fun getLoyalPoints(): Response<LoyaltyPointDto>
+
 
 }

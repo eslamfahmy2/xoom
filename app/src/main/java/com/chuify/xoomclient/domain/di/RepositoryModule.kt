@@ -4,11 +4,9 @@ import com.chuify.xoomclient.data.local.dao.CartDao
 import com.chuify.xoomclient.data.local.dao.NotificationDao
 import com.chuify.xoomclient.data.local.source.CartRepoImpl
 import com.chuify.xoomclient.data.local.source.NotificationRepoImpl
+import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.data.remote.network.ApiInterface
-import com.chuify.xoomclient.data.remote.source.AuthRepoImpl
-import com.chuify.xoomclient.data.remote.source.LocationRepoImpl
-import com.chuify.xoomclient.data.remote.source.OrderRepoImpl
-import com.chuify.xoomclient.data.remote.source.VendorRepoImpl
+import com.chuify.xoomclient.data.remote.source.*
 import com.chuify.xoomclient.domain.repository.*
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
@@ -69,6 +67,15 @@ object RepositoryModule {
         dp: NotificationDao,
         api: ApiInterface,
     ): NotificationRepo {
-        return NotificationRepoImpl(dp , apiInterface = api)
+        return NotificationRepoImpl(dp, apiInterface = api)
+    }
+
+    @Singleton
+    @Provides
+    fun provideProfileRepository(
+        sharedPrefs: SharedPrefs ,
+        api: ApiInterface,
+    ): ProfileRepo {
+        return ProfileRepoImpl(sharedPrefs = sharedPrefs, apiInterface = api)
     }
 }
