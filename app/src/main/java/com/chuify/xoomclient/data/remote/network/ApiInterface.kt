@@ -81,5 +81,16 @@ interface ApiInterface {
     @GET("loyalpoints/user_id")
     suspend fun getLoyalPoints(): Response<LoyaltyPointDto>
 
+    //----------------------------------------------------------------------------------------------------
+    @Headers("authorized:true", "userid:true")
+    @FormUrlEncoded
+    @POST("address/user_id")
+    fun saveAddress(
+        @Field("address_url") address_url: String?,
+        @Field("details") details: String?,
+        @Field("instructions") instructions: String?,
+        @Field("latitude") latitude: Double,
+        @Field("longitude") longitude: Double,
+    ): Response<StatusDto>
 
 }

@@ -208,14 +208,11 @@ fun TrackOrderScreen(
                                                     color = MaterialTheme.colors.onSurface,
                                                 )
 
-
                                             }
 
                                         }
 
-
                                     }
-
 
                                 }
                             }
@@ -223,9 +220,7 @@ fun TrackOrderScreen(
                     }
                 }
 
-
             }
-
 
         }
 

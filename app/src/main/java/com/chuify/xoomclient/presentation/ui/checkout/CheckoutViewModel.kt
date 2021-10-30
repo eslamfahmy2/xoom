@@ -13,6 +13,7 @@ import com.chuify.xoomclient.domain.usecase.cart.GetCartItemsUseCase
 import com.chuify.xoomclient.domain.usecase.cart.IncreaseOrderUseCase
 import com.chuify.xoomclient.domain.usecase.cart.OrderITemAction
 import com.chuify.xoomclient.domain.usecase.location.GetLocationsUseCase
+import com.chuify.xoomclient.domain.usecase.location.SaveLocationsUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +32,7 @@ class CheckoutViewModel @Inject constructor(
     private val decreaseOrderUseCase: DecreaseOrderUseCase,
     private val increaseOrderUseCase: IncreaseOrderUseCase,
     private val getLocationUseCase: GetLocationsUseCase,
+    private val saveLocationsUseCase: SaveLocationsUseCase,
 ) : ViewModel() {
 
     val userIntent = Channel<CheckoutIntent>(Channel.UNLIMITED)
