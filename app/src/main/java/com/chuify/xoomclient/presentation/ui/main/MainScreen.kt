@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import com.chuify.xoomclient.presentation.ui.notification.NotificationScreen
 import com.chuify.xoomclient.presentation.ui.notification.NotificationViewModel
 import com.chuify.xoomclient.presentation.ui.order.OrdersScreen
+import com.chuify.xoomclient.presentation.ui.profile.ProfileScreen
 import com.chuify.xoomclient.presentation.ui.vendors.component.VendorScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -49,13 +50,20 @@ fun MainScreen(navHostController: NavHostController) {
 
         HorizontalPager(
             state = pagerState,
-            count = 3) {
-            if (it == 0) {
-                VendorScreen(navHostController = navHostController)
-            } else if (it == 1) {
-                OrdersScreen(navHostController = navHostController)
-            } else {
-                NotificationScreen(navHostController = navHostController)
+            count = 4) {
+            when (it) {
+                0 -> {
+                    VendorScreen(navHostController = navHostController)
+                }
+                1 -> {
+                    OrdersScreen(navHostController = navHostController)
+                }
+                2 -> {
+                    NotificationScreen(navHostController = navHostController)
+                }
+                else -> {
+                    ProfileScreen(navHostController = navHostController)
+                }
             }
         }
 

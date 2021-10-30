@@ -14,6 +14,7 @@ import com.chuify.xoomclient.presentation.ui.checkout.CheckoutViewModel
 import com.chuify.xoomclient.presentation.ui.main.MainScreen
 import com.chuify.xoomclient.presentation.ui.payment.PaymentScreen
 import com.chuify.xoomclient.presentation.ui.picklocation.PickLocationScreen
+import com.chuify.xoomclient.presentation.ui.track.TrackOrderScreen
 import com.chuify.xoomclient.presentation.ui.vendorDetails.VendorDetailsScreen
 import com.chuify.xoomclient.presentation.ui.vendors.component.VendorScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -71,17 +72,20 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
             route = Screens.Checkout.fullRoute(),
 
             ) {
-            CheckoutScreen(navHostController = navHostController , viewModel = viewModel)
+            CheckoutScreen(navHostController = navHostController, viewModel = viewModel)
         }
 
         composable(route = Screens.PaymentMethod.fullRoute()) {
-            PaymentScreen(navHostController = navHostController , viewModel = viewModel)
+            PaymentScreen(navHostController = navHostController, viewModel = viewModel)
         }
 
         composable(route = Screens.PickLocation.fullRoute()) {
-            PickLocationScreen(navHostController = navHostController , viewModel = viewModel)
+            PickLocationScreen(navHostController = navHostController, viewModel = viewModel)
         }
 
+        composable(route = Screens.Track.fullRoute()) {
+            TrackOrderScreen(navHostController = navHostController)
+        }
 
         composable(
             route = Screens.AccessoryDetails.fullRoute(),

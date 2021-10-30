@@ -63,4 +63,10 @@ sealed class Screens(val route: String) {
             return route
         }
     }
+
+    object Track : Screens("track") {
+        fun fullRoute(): String {
+            return route
+        }
+    }
 }

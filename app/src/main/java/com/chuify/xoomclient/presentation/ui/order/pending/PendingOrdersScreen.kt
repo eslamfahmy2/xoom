@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
+import com.chuify.xoomclient.presentation.navigation.Screens
 import com.chuify.xoomclient.presentation.ui.order.component.PendingOrderItem
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
@@ -82,7 +83,9 @@ fun PendingOrdersScreen(
                 val data = (state as PendingOrdersState.Success).orders
                 LazyColumn() {
                     items(data) { it ->
-                        PendingOrderItem(order = it, onTrack = {}, onCancel = {
+                        PendingOrderItem(order = it, onTrack = {
+                            navHostController.navigate(Screens.Track.route)
+                        }, onCancel = {
                             coroutineScope.launch {
                                 viewModel.userIntent.send(PendingOrdersIntent.ShowCancel(it))
                             }
