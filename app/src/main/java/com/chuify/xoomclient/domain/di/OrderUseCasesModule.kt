@@ -5,6 +5,7 @@ import com.chuify.xoomclient.domain.mapper.OrderDtoMapper
 import com.chuify.xoomclient.domain.repository.OrderRepo
 import com.chuify.xoomclient.domain.usecase.order.GetCompletedOrderListUseCase
 import com.chuify.xoomclient.domain.usecase.order.GetPendingOrderListUseCase
+import com.chuify.xoomclient.domain.usecase.order.TrackOrderUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,5 +30,11 @@ object OrderUseCasesModule {
         orderDtoMapper: OrderDtoMapper,
     ) = GetCompletedOrderListUseCase(orderRepo = repository, orderDtoMapper = orderDtoMapper)
 
+
+    @Singleton
+    @Provides
+    fun provideTrackOrderUseCase(
+        repository: OrderRepo,
+    ) = TrackOrderUseCase(orderRepo = repository)
 
 }
