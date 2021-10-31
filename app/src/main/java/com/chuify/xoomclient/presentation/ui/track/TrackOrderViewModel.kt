@@ -24,7 +24,8 @@ class TrackOrderViewModel @Inject constructor(
 
     val userIntent = Channel<TrackOrderIntent>(Channel.UNLIMITED)
 
-    private val _state: MutableStateFlow<TrackOrderState> = MutableStateFlow(TrackOrderState.Loading)
+    private val _state: MutableStateFlow<TrackOrderState> =
+        MutableStateFlow(TrackOrderState.Loading)
     val state get(): StateFlow<TrackOrderState> = _state
 
     init {

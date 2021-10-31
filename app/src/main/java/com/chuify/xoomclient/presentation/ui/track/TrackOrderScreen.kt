@@ -1,5 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.track
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,6 +33,7 @@ import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
@@ -82,9 +84,9 @@ fun TrackOrderScreen(
                     style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 )
 
-                when (state.value) {
+                when (val st = state.value) {
                     is TrackOrderState.Error -> {
-                        (state as TrackOrderState.Error).message?.let {
+                        st.message?.let {
                             coroutineScope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar(
                                     message = it,
@@ -113,10 +115,13 @@ fun TrackOrderScreen(
                                             Text(text = "12/5")
                                         }
 
-                                        Image(painterResource(
-                                            id = R.drawable.driver),
+                                        Image(
+                                            painterResource(
+                                                id = R.drawable.driver
+                                            ),
                                             contentDescription = null,
-                                            Modifier.align(Alignment.CenterEnd))
+                                            Modifier.align(Alignment.CenterEnd)
+                                        )
                                     }
                                 }
                             }
@@ -142,17 +147,21 @@ fun TrackOrderScreen(
                                     Column {
 
 
-                                        Row(horizontalArrangement = Arrangement.Start,
+                                        Row(
+                                            horizontalArrangement = Arrangement.Start,
                                             verticalAlignment = Alignment.CenterVertically,
                                             modifier = Modifier
                                                 .fillMaxSize()
-                                                .padding(8.dp)) {
+                                                .padding(8.dp)
+                                        ) {
 
                                             Text(
                                                 modifier = Modifier.padding(8.dp),
                                                 text = stringResource(id = R.string.track_order),
-                                                style = TextStyle(fontSize = 25.sp,
-                                                    fontWeight = FontWeight.Bold)
+                                                style = TextStyle(
+                                                    fontSize = 25.sp,
+                                                    fontWeight = FontWeight.Bold
+                                                )
                                             )
 
 
@@ -167,11 +176,13 @@ fun TrackOrderScreen(
                                         }
 
 
-                                        Row(horizontalArrangement = Arrangement.Start,
+                                        Row(
+                                            horizontalArrangement = Arrangement.Start,
                                             verticalAlignment = Alignment.CenterVertically,
                                             modifier = Modifier
                                                 .fillMaxSize()
-                                                .padding(8.dp)) {
+                                                .padding(8.dp)
+                                        ) {
 
                                             Image(
                                                 modifier = Modifier
@@ -200,9 +211,11 @@ fun TrackOrderScreen(
                                                 Text(
                                                     modifier = Modifier
                                                         .wrapContentSize()
-                                                        .padding(start = 8.dp,
+                                                        .padding(
+                                                            start = 8.dp,
                                                             bottom = 8.dp,
-                                                            end = 8.dp)
+                                                            end = 8.dp
+                                                        )
                                                         .align(Alignment.Start),
                                                     text = "refill",
                                                     color = MaterialTheme.colors.onSurface,
