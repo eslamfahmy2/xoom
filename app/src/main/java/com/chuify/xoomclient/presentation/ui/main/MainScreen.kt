@@ -6,9 +6,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.chuify.xoomclient.presentation.ui.notification.NotificationIntent
 import com.chuify.xoomclient.presentation.ui.notification.NotificationScreen
 import com.chuify.xoomclient.presentation.ui.notification.NotificationViewModel
 import com.chuify.xoomclient.presentation.ui.order.OrdersScreen
+import com.chuify.xoomclient.presentation.ui.profile.ProfileIntent
 import com.chuify.xoomclient.presentation.ui.profile.ProfileScreen
 import com.chuify.xoomclient.presentation.ui.vendors.component.VendorScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -68,4 +70,8 @@ fun MainScreen(navHostController: NavHostController) {
         }
 
     }
+    LaunchedEffect(true) {
+        notificationViewModel.userIntent.send(NotificationIntent.LoadNotifications)
+    }
+
 }

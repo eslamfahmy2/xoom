@@ -13,7 +13,8 @@ class UserDtoMapper : DomainMapper<UserDto, User> {
             lastname = model.lastname!!,
             phone = model.phone!!,
             email = model.email!!,
-            token = model.access_token!!
+            token = model.access_token!! ,
+            points = String()
         )
     }
 

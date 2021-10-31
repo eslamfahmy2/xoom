@@ -25,7 +25,8 @@ object ProfileUseCasesModule {
     @Provides
     fun provideGetLocalityPointsUseCase(
         profileRepo: ProfileRepo,
-    ) = GetLoyaltyPointsUseCase(profileRepo = profileRepo)
+        sharedPrefs: SharedPrefs
+    ) = GetLoyaltyPointsUseCase(profileRepo = profileRepo , sharedPrefs = sharedPrefs)
 
 
 }

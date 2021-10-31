@@ -13,4 +13,6 @@ data class User(
     val phone: String,
 
     val token: String,
+
+    val points: String,
 )

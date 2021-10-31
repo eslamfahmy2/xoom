@@ -6,26 +6,35 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
+import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.components.SolidBar
+import com.chuify.xoomclient.presentation.ui.notification.NotificationIntent
+import com.chuify.xoomclient.presentation.ui.notification.NotificationItem
+import com.chuify.xoomclient.presentation.ui.notification.NotificationState
+import com.chuify.xoomclient.presentation.ui.product.ProductState
 import com.google.accompanist.pager.ExperimentalPagerApi
+import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -41,9 +50,7 @@ fun ProfileScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val state = remember {
-        viewModel.state
-    }
+    val state = viewModel.state.collectAsState().value
 
     Scaffold(
         topBar = { SolidBar() },
@@ -69,132 +76,265 @@ fun ProfileScreen(
             elevation = 20.dp
         )
         {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
 
-                item {
+            Column(modifier = Modifier.padding(8.dp)) {
 
-                    Card(
-                        elevation = 4.dp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Image(
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .size(50.dp)
-                                    .clip(CircleShape)
-                                    .border(2.dp, Color.Gray, CircleShape)
-                                    .padding(8.dp),
-                                imageVector = Icons.Filled.Person,
-                                contentDescription = "avatar",
-                                contentScale = ContentScale.Crop,
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = stringResource(id = R.string.profile),
+                    style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                )
 
+                when (state) {
+                    is ProfileState.Error -> {
+                        state.message?.let {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = it,
+                                    actionLabel = "Dismiss",
                                 )
-
-                            Text(
-                                text = "Name",
-                                fontSize = 16.sp,
-                                modifier = Modifier.padding(8.dp)
-                            )
+                            }
                         }
-
                     }
-
-                }
-
-                item {
-                    Card(
-                        elevation = 4.dp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth()
+                    ProfileState.Loading -> {
+                        LoadingListScreen(
+                            count = 1,
+                            height = 10000.dp
+                        )
+                    }
+                    is ProfileState.Success -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
 
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.padding(8.dp),
-                                        imageVector = Icons.Filled.DarkMode,
-                                        contentDescription = null,
-                                        tint = Color.Green
-                                    )
-                                    Text(
-                                        text = "Dark mode",
-                                        fontSize = 16.sp,
-                                        modifier = Modifier.padding(4.dp),
-                                    )
-                                }
-                                val check = remember {
-                                    mutableStateOf(true)
-                                }
+                            item {
 
-                                Switch(checked = check.value, onCheckedChange = {
-                                    check.value = it
-                                })
+                                Card(
+                                    elevation = 4.dp,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(32.dp)
+                                ) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Image(
+                                            modifier = Modifier
+                                                .padding(8.dp)
+                                                .size(50.dp)
+                                                .clip(CircleShape)
+                                                .border(2.dp, Color.Gray, CircleShape)
+                                                .padding(8.dp),
+                                            imageVector = Icons.Filled.Person,
+                                            contentDescription = "avatar",
+                                            contentScale = ContentScale.Crop,
+
+                                            )
+
+                                        Text(
+                                            text = state.user.firstname,
+                                            fontSize = 16.sp,
+                                            modifier = Modifier.padding(8.dp)
+                                        )
+                                    }
+
+                                }
 
                             }
 
-                            Divider(
-                                color = Color.LightGray, thickness = 1.dp,
-                                modifier = Modifier.padding(start = 56.dp),
-                            )
-
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically
+                            item {
+                                Card(
+                                    elevation = 4.dp,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(32.dp)
                                 ) {
-                                    Icon(
-                                        modifier = Modifier.padding(8.dp),
-                                        imageVector = Icons.Filled.DarkMode,
-                                        contentDescription = null,
-                                        tint = Color.Green
-                                    )
-                                    Text(
-                                        text = "Test",
-                                        fontSize = 16.sp,
-                                        modifier = Modifier.padding(4.dp),
-                                    )
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(8.dp),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(
+                                                    modifier = Modifier.padding(8.dp),
+                                                    imageVector = Icons.Filled.DarkMode,
+                                                    contentDescription = null,
+                                                    tint = Color.Green
+                                                )
+                                                Text(
+                                                    text = "Dark mode",
+                                                    fontSize = 16.sp,
+                                                    modifier = Modifier.padding(4.dp),
+                                                )
+                                            }
+                                            val check = remember {
+                                                mutableStateOf(true)
+                                            }
+
+                                            Switch(checked = check.value, onCheckedChange = {
+                                                check.value = it
+                                            })
+
+                                        }
+
+                                        Divider(
+                                            color = Color.LightGray, thickness = 1.dp,
+                                            modifier = Modifier.padding(start = 56.dp),
+                                        )
+
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(8.dp),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(
+                                                    modifier = Modifier.padding(8.dp),
+                                                    imageVector = Icons.Filled.PermIdentity,
+                                                    contentDescription = null,
+                                                    tint = Color.Green
+                                                )
+                                                Text(
+                                                    text = "First name " + state.user.firstname,
+                                                    fontSize = 16.sp,
+                                                    modifier = Modifier.padding(4.dp),
+                                                )
+                                            }
+                                            Icon(
+                                                modifier = Modifier,
+                                                imageVector = Icons.Filled.KeyboardArrowRight,
+                                                contentDescription = null,
+                                                tint = Color.LightGray
+                                            )
+                                        }
+
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(8.dp),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(
+                                                    modifier = Modifier.padding(8.dp),
+                                                    imageVector = Icons.Filled.PermIdentity,
+                                                    contentDescription = null,
+                                                    tint = Color.Green
+                                                )
+                                                Text(
+                                                    text = "Last name " + state.user.lastname,
+                                                    fontSize = 16.sp,
+                                                    modifier = Modifier.padding(4.dp),
+                                                )
+                                            }
+                                            Icon(
+                                                modifier = Modifier,
+                                                imageVector = Icons.Filled.KeyboardArrowRight,
+                                                contentDescription = null,
+                                                tint = Color.LightGray
+                                            )
+                                        }
+
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(8.dp),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(
+                                                    modifier = Modifier.padding(8.dp),
+                                                    imageVector = Icons.Filled.Phone,
+                                                    contentDescription = null,
+                                                    tint = Color.Green
+                                                )
+                                                Text(
+                                                    text = "Phone number " + state.user.phone,
+                                                    fontSize = 16.sp,
+                                                    modifier = Modifier.padding(4.dp),
+                                                )
+                                            }
+                                            Icon(
+                                                modifier = Modifier,
+                                                imageVector = Icons.Filled.KeyboardArrowRight,
+                                                contentDescription = null,
+                                                tint = Color.LightGray
+                                            )
+                                        }
+
+
+                                        if (state.user.points.isNotEmpty() && state.user.points != "0") {
+
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(8.dp),
+                                                horizontalArrangement = Arrangement.SpaceBetween,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Row(
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    Icon(
+                                                        modifier = Modifier.padding(8.dp),
+                                                        imageVector = Icons.Filled.Money,
+                                                        contentDescription = null,
+                                                        tint = Color.Green
+                                                    )
+                                                    Text(
+                                                        text = "Total points  " + state.user.points,
+                                                        fontSize = 16.sp,
+                                                        modifier = Modifier.padding(4.dp),
+                                                    )
+                                                }
+                                                Icon(
+                                                    modifier = Modifier,
+                                                    imageVector = Icons.Filled.KeyboardArrowRight,
+                                                    contentDescription = null,
+                                                    tint = Color.LightGray
+                                                )
+                                            }
+                                        }
+
+
+                                    }
                                 }
-                                Icon(
-                                    modifier = Modifier,
-                                    imageVector = Icons.Filled.KeyboardArrowRight,
-                                    contentDescription = null,
-                                    tint = Color.LightGray
-                                )
+
                             }
 
+                            item {
+                                Button(modifier = Modifier
+                                    .padding(32.dp)
+                                    .fillMaxWidth(), onClick = { /*TODO*/ }) {
+                                    Text(text = "Logout")
+                                }
+                            }
                         }
-                    }
 
-                }
-
-                item {
-                    Button(modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(), onClick = { /*TODO*/ }) {
-                        Text(text = "Logout")
                     }
                 }
+
+
             }
+
 
         }
 

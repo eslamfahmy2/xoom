@@ -10,10 +10,7 @@ import com.chuify.xoomclient.presentation.ui.signup.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,7 +24,7 @@ class ProfileViewModel @Inject constructor(
     val userIntent = Channel<ProfileIntent>(Channel.UNLIMITED)
 
     private val _state: MutableStateFlow<ProfileState> = MutableStateFlow(ProfileState.Loading)
-    val state get() : StateFlow<ProfileState> = _state
+    val state get() = _state.asStateFlow()
 
     private val _localityPoints: MutableStateFlow<String> = MutableStateFlow(String())
     val localityPoints get() : StateFlow<String> = _localityPoints

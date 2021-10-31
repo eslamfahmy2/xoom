@@ -1,5 +1,6 @@
 package com.chuify.xoomclient.domain.usecase.profile
 
+import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.domain.repository.ProfileRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
@@ -9,6 +10,7 @@ import javax.inject.Inject
 
 class GetLoyaltyPointsUseCase @Inject constructor(
     private val profileRepo: ProfileRepo,
+    private val sharedPrefs: SharedPrefs
 ) {
 
     suspend operator fun invoke() = flow<DataState<String>> {
@@ -20,6 +22,7 @@ class GetLoyaltyPointsUseCase @Inject constructor(
                 }
                 is ResponseState.Success -> {
                     response.data.loyalPoints?.let {
+                        sharedPrefs.saveUserPoints(it)
                         emit(DataState.Success(it))
                     }
                 }

@@ -22,6 +22,7 @@ class SharedPrefs @Inject constructor(
         const val USER_PHONE = "USER_PHONE"
         const val USER_TOKEN = "USER_TOKEN"
         const val USER_ID = "USER_ID"
+        const val USER_POINTS = "USER_POINTS"
     }
 
     private val sharedPref: SharedPreferences =
@@ -56,6 +57,10 @@ class SharedPrefs @Inject constructor(
         return get(USER_ID, String::class.java)
     }
 
+    fun saveUserPoints(it: String) {
+        put(USER_POINTS,it)
+    }
+
     fun getUser() = User(
         userId = get(USER_ID, String::class.java),
         firstname = get(USER_FIRST_NAME, String::class.java),
@@ -63,6 +68,7 @@ class SharedPrefs @Inject constructor(
         email = get(USER_EMAIL, String::class.java),
         phone = get(USER_PHONE, String::class.java),
         token = get(USER_TOKEN, String::class.java),
+        points = get(USER_POINTS, String::class.java),
     )
 
     private fun <T> get(key: String, clazz: Class<T>): T =
@@ -99,8 +105,11 @@ class SharedPrefs @Inject constructor(
             remove(USER_PHONE)
             remove(USER_TOKEN)
             remove(USER_ID)
+            remove(USER_POINTS)
         }.apply()
     }
+
+
 
 
 }
