@@ -16,12 +16,16 @@ class CancelUseCase @Inject constructor(
     suspend operator fun invoke(id: String, reason: String) = flow<DataState<Nothing>> {
         try {
             emit(DataState.Loading())
-            when (val response = orderRepo.cancelOrder(id, reason)) {
-                is ResponseState.Error -> {
-                    emit(DataState.Error(response.message))
-                }
-                is ResponseState.Success -> {
-                    emit(DataState.Success())
+            if (reason.isEmpty()) {
+                emit(DataState.Error("Please add a reason "))
+            } else {
+                when (val response = orderRepo.cancelOrder(id, reason)) {
+                    is ResponseState.Error -> {
+                        emit(DataState.Error(response.message))
+                    }
+                    is ResponseState.Success -> {
+                        emit(DataState.Success())
+                    }
                 }
             }
 

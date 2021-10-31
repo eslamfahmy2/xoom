@@ -100,7 +100,6 @@ fun VendorDetailsScreen(
 
                     when (selected.value) {
                         VendorDetails.GAS -> {
-
                             Button(
                                 onClick = {
 
@@ -131,7 +130,6 @@ fun VendorDetailsScreen(
 
                         }
                         VendorDetails.ACCESSORIES -> {
-
                             Button(
                                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
                                 modifier = Modifier
@@ -152,7 +150,6 @@ fun VendorDetailsScreen(
 
                             }
 
-
                             Spacer(modifier = Modifier.padding(8.dp))
 
                             Button(
@@ -171,7 +168,8 @@ fun VendorDetailsScreen(
                 Box {
                     HorizontalPager(
                         state = pagerState,
-                        count = 2) {
+                        count = 2
+                    ) {
                         if (it == 0) {
                             ProductsScreen(viewModel = hiltViewModel(), id = vendor.id)
                         } else {
@@ -189,7 +187,8 @@ fun VendorDetailsScreen(
                             CartPreview(
                                 modifier = Modifier.align(Alignment.BottomCenter),
                                 quantity = data.totalQuantity.toString(),
-                                price = data.totalPrice.toString()) {
+                                price = data.totalPrice.toString()
+                            ) {
 
                             }
 

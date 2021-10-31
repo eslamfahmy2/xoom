@@ -13,6 +13,8 @@ import com.chuify.xoomclient.presentation.ui.signup.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
@@ -30,6 +32,11 @@ class CompletedOrdersViewModel @Inject constructor(
     private val _state: MutableState<CompletedOrdersState> =
         mutableStateOf(CompletedOrdersState.Loading)
     val state get() = _state
+
+    private val _progress: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val progress get() = _progress.asSharedFlow()
+
+
 
     init {
         handleIntent()
@@ -52,17 +59,22 @@ class CompletedOrdersViewModel @Inject constructor(
     }
 
     private suspend fun reorder(order: Order) = viewModelScope.launch(Dispatchers.IO) {
+        _progress.value = true
         reorderUseCase.invoke(order).collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
-                    _state.value = CompletedOrdersState.Error(dataState.message)
+                    _progress.value = false
+                    //  _state.value = CompletedOrdersState.Error(dataState.message)
                 }
                 is DataState.Loading -> {
-                    _state.value = CompletedOrdersState.Loading
+                    _progress.value = true
+                    //     _state.value = CompletedOrdersState.Loading
                 }
                 is DataState.Success -> {
-                    _state.value = CompletedOrdersState.Error("Success")
+                    _progress.value = false
+                    loadCompletedOrders()
+                    //  _state.value = CompletedOrdersState.Success()
                 }
             }
         }

@@ -129,6 +129,7 @@ class LoginFragment : Fragment() {
 
                             }
                             LoginState.Loading -> {
+
                                 Dialog(
                                     onDismissRequest = { },
                                     DialogProperties(dismissOnBackPress = false,

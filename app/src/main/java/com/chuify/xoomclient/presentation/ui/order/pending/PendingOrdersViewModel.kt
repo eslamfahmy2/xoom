@@ -13,8 +13,7 @@ import com.chuify.xoomclient.presentation.ui.signup.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,8 +33,10 @@ class PendingOrdersViewModel @Inject constructor(
     private val _cancelDialog: MutableState<Boolean> = mutableStateOf(false)
     val cancelDialog get() = _cancelDialog
 
-    private val _orderToCancel: MutableState<Order?> = mutableStateOf(null)
+    private val _progress: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val progress get() = _progress.asSharedFlow()
 
+    private val _orderToCancel: MutableState<Order?> = mutableStateOf(null)
 
     init {
         handleIntent()
@@ -72,16 +73,20 @@ class PendingOrdersViewModel @Inject constructor(
 
     private suspend fun cancelOrder(order: Order, reason: String) =
         viewModelScope.launch(Dispatchers.IO) {
+
+            _cancelDialog.value = false
             cancelUseCase.invoke(order.id, reason).collect { dataState ->
                 when (dataState) {
                     is DataState.Error -> {
                         Log.d(TAG, "Error: " + dataState.message)
-                        _state.value = PendingOrdersState.Error(dataState.message)
+                        _progress.value = false
+                        //  _state.value = PendingOrdersState.Error(dataState.message)
                     }
                     is DataState.Loading -> {
-                        _state.value = PendingOrdersState.Loading
+                        _progress.value = true
                     }
                     is DataState.Success -> {
+                        _progress.value = false
                         loadPendingOrders()
                     }
                 }
@@ -103,7 +108,7 @@ class PendingOrdersViewModel @Inject constructor(
                     dataState.data?.let {
                         _state.value = PendingOrdersState.Success(orders = it)
                     }
-
+                    _progress.value = false
                 }
             }
         }

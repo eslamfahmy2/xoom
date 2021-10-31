@@ -85,6 +85,7 @@ class NotificationViewModel @Inject constructor(
                 }
                 is DataState.Success -> {
                     dataState.data?.let {
+                        Log.d(TAG, "loadNotifications: $it")
                         _state.value = NotificationState.Success(notifications = it)
                     }
 

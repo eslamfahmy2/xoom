@@ -2,7 +2,9 @@ package com.chuify.xoomclient.presentation.ui.product
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Product
@@ -24,6 +26,7 @@ class ProductViewModel @Inject constructor(
     private val useCase: ListProductsUseCase,
     private val insetCartItem: IncreaseOrderUseCase,
     private val deleteCartItem: DecreaseOrderUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val userIntent = Channel<ProductIntent>(Channel.UNLIMITED)
@@ -57,7 +60,7 @@ class ProductViewModel @Inject constructor(
 
     private suspend fun loadProducts() {
 
-        useCase("111").collect { dataState ->
+        useCase(savedStateHandle.get<String>("productID") ?: "111").collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)

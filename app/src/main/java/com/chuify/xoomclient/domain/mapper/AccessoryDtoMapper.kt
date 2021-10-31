@@ -8,9 +8,9 @@ class AccessoryDtoMapper : DomainMapper<AccessoryDto, Accessory> {
 
     override fun mapToDomainModel(model: AccessoryDto): Accessory {
         return Accessory(
-            id = model.product_id!!,
-            name = model.product_name!!,
-            image = model.image!!,
+            id = model.product_id ?: "",
+            name = model.product_name ?: "",
+            image = model.image ?: "",
             price = model.selling_price!!.toDouble(),
 
             )

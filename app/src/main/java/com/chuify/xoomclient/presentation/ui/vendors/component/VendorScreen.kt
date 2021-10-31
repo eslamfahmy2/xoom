@@ -102,7 +102,7 @@ fun VendorScreen(
                     state = rememberSwipeRefreshState(isRefreshing),
                     onRefresh = {
                         coroutineScope.launch {
-
+                            viewModel.userIntent.send(VendorIntent.LoadVendors)
                         }
                     },
                 ) {
