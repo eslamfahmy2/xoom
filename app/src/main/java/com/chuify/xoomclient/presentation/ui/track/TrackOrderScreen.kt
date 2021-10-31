@@ -30,6 +30,7 @@ import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
+import com.chuify.xoomclient.presentation.components.SecondaryBar
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 
@@ -53,6 +54,11 @@ fun TrackOrderScreen(
 
 
     Scaffold(
+        topBar = {
+            SecondaryBar() {
+                navHostController.popBackStack()
+            }
+        },
         scaffoldState = scaffoldState,
         snackbarHost = {
             scaffoldState.snackbarHostState
@@ -161,7 +167,9 @@ fun TrackOrderScreen(
 
                         Card(
                             elevation = 4.dp,
-                            modifier = Modifier.fillMaxWidth()     .padding(8.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
 
                         ) {
                             Row(
@@ -195,7 +203,9 @@ fun TrackOrderScreen(
                     item {
                         Card(
                             elevation = 4.dp,
-                            modifier = Modifier.fillMaxWidth()     .padding(8.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
 
                         ) {
                             Row(
@@ -227,7 +237,9 @@ fun TrackOrderScreen(
                     item {
                         Card(
                             elevation = 4.dp,
-                            modifier = Modifier.fillMaxWidth()     .padding(8.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
 
                         ) {
                             Row(
@@ -259,7 +271,9 @@ fun TrackOrderScreen(
                     item {
                         Card(
                             elevation = 4.dp,
-                            modifier = Modifier.fillMaxWidth()     .padding(8.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
 
                         ) {
 
