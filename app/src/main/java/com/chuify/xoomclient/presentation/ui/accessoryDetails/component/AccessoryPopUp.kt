@@ -86,11 +86,14 @@ fun AccessoryPopUp(
 
     Card(
         elevation = 8.dp,
-        modifier = Modifier.animateContentSize()) {
+        modifier = Modifier.animateContentSize()
+    ) {
         Column {
 
-            Row(verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Icon(
                     modifier = Modifier
                         .padding(16.dp)
@@ -107,10 +110,12 @@ fun AccessoryPopUp(
 
             }
 
-            Column(modifier = Modifier
-                .background(MaterialTheme.colors.primary)
-                .clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
-                .background(MaterialTheme.colors.background)) {
+            Column(
+                modifier = Modifier
+                    .background(MaterialTheme.colors.primary)
+                    .clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
+                    .background(MaterialTheme.colors.background)
+            ) {
 
 
                 Card(elevation = 4.dp, modifier = Modifier.padding(4.dp)) {
@@ -129,11 +134,13 @@ fun AccessoryPopUp(
                     )
                 }
 
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
 
                     Text(
                         modifier = Modifier
@@ -145,12 +152,14 @@ fun AccessoryPopUp(
 
                     if (accessory.quantity > 0) {
 
-                        Row(modifier = Modifier.padding(8.dp)) {
+                        Row(
+                            modifier = Modifier.padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
 
                             Button(
                                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
                                 modifier = Modifier
-                                    .size(30.dp, 30.dp)
                                     .border(
                                         width = 1.dp,
                                         shape = RoundedCornerShape(5.dp),
@@ -161,29 +170,24 @@ fun AccessoryPopUp(
                                 },
 
                                 ) {
-                                Icon(Icons.Filled.AddShoppingCart,
-                                    contentDescription = "Localized description")
-
+                                Text(text = "-")
                             }
 
-                            Text(modifier = Modifier.padding(4.dp),
-                                text = accessory.quantity.toString())
+                            Text(
+                                modifier = Modifier.padding(4.dp),
+                                text = accessory.quantity.toString()
+                            )
 
                             Button(
-                                modifier = Modifier.size(28.dp, 28.dp),
                                 onClick = {
                                     increaseCartItem(accessory)
                                 }) {
-                                Icon(
-                                    Icons.Filled.Add, contentDescription = null,
-                                    modifier = Modifier.size(28.dp, 28.dp),
-                                )
+                                Text(text = "+")
                             }
                         }
                     } else {
                         Box(modifier = Modifier.padding(8.dp)) {
                             Button(
-                                modifier = Modifier.size(28.dp, 28.dp),
                                 onClick = {
                                     increaseCartItem(accessory)
                                 }) {
@@ -203,7 +207,8 @@ fun AccessoryPopUp(
                     .background(MaterialTheme.colors.primary)
                     .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween) {
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
 
                 Text(
                     modifier = Modifier
@@ -213,9 +218,11 @@ fun AccessoryPopUp(
                     color = MaterialTheme.colors.onSurface,
                 )
 
-                Row(modifier = Modifier
-                    .wrapContentSize()
-                    .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
+                Row(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                ) {
                     Text(
                         text = accessory.totalPrice.toString(),
                         color = Color.Black,

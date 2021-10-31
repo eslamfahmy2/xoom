@@ -81,12 +81,12 @@ fun AccessoryItem(
 
                 if (accessory.quantity > 0) {
 
-                    Row(modifier = Modifier.padding(8.dp)) {
+                    Row(modifier = Modifier.padding(8.dp) ,
+                    verticalAlignment = Alignment.CenterVertically) {
 
                         Button(
                             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
                             modifier = Modifier
-                                .size(30.dp, 30.dp)
                                 .border(
                                     width = 1.dp,
                                     shape = RoundedCornerShape(5.dp),
@@ -97,29 +97,22 @@ fun AccessoryItem(
                             },
 
                             ) {
-                            Icon(Icons.Filled.AddShoppingCart,
-                                contentDescription = "Localized description")
-
+                            Text(text = "-")
                         }
 
                         Text(modifier = Modifier.padding(4.dp),
                             text = accessory.quantity.toString())
 
                         Button(
-                            modifier = Modifier.size(28.dp, 28.dp),
-                            onClick = {
+                           onClick = {
                                 increaseCartItem(accessory)
                             }) {
-                            Icon(
-                                Icons.Filled.Add, contentDescription = null,
-                                modifier = Modifier.size(28.dp, 28.dp),
-                            )
+                            Text(text = "+")
                         }
                     }
                 } else {
                     Box(modifier = Modifier.padding(8.dp)) {
                         Button(
-                            modifier = Modifier.size(28.dp, 28.dp),
                             onClick = {
                                 increaseCartItem(accessory)
                             }) {

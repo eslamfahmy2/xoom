@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -78,157 +78,307 @@ fun TrackOrderScreen(
         {
             Column(modifier = Modifier.padding(8.dp)) {
 
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = stringResource(id = R.string.track_order),
-                    style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
-                when (val st = state.value) {
-                    is TrackOrderState.Error -> {
-                        st.message?.let {
-                            coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    message = it,
-                                    actionLabel = "Dismiss",
+                    Text(
+                        modifier = Modifier.padding(8.dp),
+                        text = stringResource(id = R.string.track_order),
+                        style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                    )
+
+                    Icon(
+                        modifier = Modifier.padding(8.dp),
+                        imageVector = Icons.Filled.QrCode,
+                        contentDescription = null,
+                        tint = Color.Green
+                    )
+
+                }
+
+
+
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+
+                    item {
+                        Card(
+                            elevation = 4.dp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color.LightGray)
+                                    .padding(4.dp)
+                                    .clip(RoundedCornerShape(4))
+                            ) {
+
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .align(Alignment.CenterEnd)
+                                ) {
+                                    Image(
+                                        modifier = Modifier
+                                            .align(Alignment.CenterEnd)
+                                            .padding(32.dp),
+                                        painter = painterResource(
+                                            id = R.drawable.driver
+                                        ),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Crop,
+
+                                        )
+                                }
+                                Column(Modifier.align(Alignment.CenterStart)) {
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(4.dp)
+                                            .padding(start = 24.dp),
+                                        text = "Get it by",
+                                        color = Color.Black
+                                    )
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(4.dp)
+                                            .padding(start = 24.dp),
+                                        text = "12/5",
+                                        color = Color.Black
+                                    )
+                                }
+
+
+                            }
+                        }
+                    }
+
+                    item {
+
+                        Card(
+                            elevation = 4.dp,
+                            modifier = Modifier.fillMaxWidth()     .padding(8.dp)
+
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.Top
+                            ) {
+
+
+                                Icon(
+                                    modifier = Modifier.padding(8.dp),
+                                    imageVector = Icons.Filled.DarkMode,
+                                    contentDescription = null,
+                                    tint = Color.Green
+                                )
+                                Surface(
+                                    modifier = Modifier.size(4.dp, 50.dp),
+                                    color = Color.Green
+                                ) {}
+
+                                Text(
+                                    modifier = Modifier.padding(8.dp),
+                                    text = "Submitted"
+                                )
+                            }
+
+                        }
+
+                    }
+
+                    item {
+                        Card(
+                            elevation = 4.dp,
+                            modifier = Modifier.fillMaxWidth()     .padding(8.dp)
+
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.Top
+                            ) {
+
+
+                                Icon(
+                                    modifier = Modifier.padding(8.dp),
+                                    imageVector = Icons.Filled.Book,
+                                    contentDescription = null,
+                                    tint = Color.Green
+                                )
+                                Surface(
+                                    modifier = Modifier.size(4.dp, 50.dp),
+                                    color = Color.LightGray
+                                ) {}
+
+                                Text(
+                                    modifier = Modifier.padding(8.dp),
+                                    text = "Accepted"
                                 )
                             }
                         }
                     }
-                    TrackOrderState.Loading -> {
-                        LoadingListScreen(
-                            count = 3,
-                            height = 250.dp
-                        )
+
+                    item {
+                        Card(
+                            elevation = 4.dp,
+                            modifier = Modifier.fillMaxWidth()     .padding(8.dp)
+
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.Top
+                            ) {
+
+
+                                Icon(
+                                    modifier = Modifier.padding(8.dp),
+                                    imageVector = Icons.Filled.Motorcycle,
+                                    contentDescription = null,
+                                    tint = Color.Green
+                                )
+                                Surface(
+                                    modifier = Modifier.size(4.dp, 50.dp),
+                                    color = Color.LightGray
+                                ) {}
+
+                                Text(
+                                    modifier = Modifier.padding(8.dp),
+                                    text = "On Transit"
+                                )
+                            }
+                        }
                     }
 
-                    is TrackOrderState.Success -> {
+                    item {
+                        Card(
+                            elevation = 4.dp,
+                            modifier = Modifier.fillMaxWidth()     .padding(8.dp)
 
-                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        ) {
 
-                            item {
-                                Card(elevation = 4.dp) {
-                                    Box(modifier = Modifier.background(Color.LightGray)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.Top
+                            ) {
 
-                                        Column(Modifier.align(Alignment.CenterStart)) {
-                                            Text(text = "Get it by")
-                                            Text(text = "12/5")
-                                        }
 
-                                        Image(
-                                            painterResource(
-                                                id = R.drawable.driver
-                                            ),
-                                            contentDescription = null,
-                                            Modifier.align(Alignment.CenterEnd)
+                                Icon(
+                                    modifier = Modifier.padding(8.dp),
+                                    imageVector = Icons.Filled.DeliveryDining,
+                                    contentDescription = null,
+                                    tint = Color.Green
+                                )
+                                Surface(
+                                    modifier = Modifier.size(4.dp, 50.dp),
+                                    color = Color.LightGray
+                                ) {}
+
+                                Text(
+                                    modifier = Modifier.padding(8.dp),
+                                    text = "Delivered"
+                                )
+                            }
+
+                        }
+                    }
+
+                    item {
+
+                        Card(
+                            elevation = 4.dp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+
+                            Column {
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                ) {
+
+                                    Text(
+                                        modifier = Modifier.padding(8.dp),
+                                        text = stringResource(id = R.string.track_order),
+                                        style = TextStyle(
+                                            fontSize = 25.sp,
+                                            fontWeight = FontWeight.Bold
                                         )
-                                    }
-                                }
-                            }
+                                    )
 
-                            item {
-                                Row {
-                                    Box() {
-                                        Icon(
-                                            modifier = Modifier.padding(8.dp),
-                                            imageVector = Icons.Filled.DarkMode,
-                                            contentDescription = null,
-                                            tint = Color.Green
+                                    Icon(
+                                        modifier = Modifier.padding(8.dp),
+                                        imageVector = Icons.Filled.Phone,
+                                        contentDescription = null,
+                                        tint = Color.Green
+                                    )
+
+
+                                }
+
+
+                                Row(
+                                    horizontalArrangement = Arrangement.Start,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(8.dp)
+                                ) {
+
+                                    Image(
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .size(80.dp, 80.dp)
+                                            .clip(RoundedCornerShape(10)),
+                                        painter = painterResource(id = R.drawable.driver),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Crop
+                                    )
+
+                                    Column(
+                                        modifier = Modifier.padding(start = 8.dp),
+                                    ) {
+
+                                        Text(
+                                            modifier = Modifier
+                                                .wrapContentSize()
+                                                .padding(8.dp)
+                                                .align(Alignment.Start),
+                                            text = "Name",
+                                            color = MaterialTheme.colors.onSurface,
+
+                                            )
+
+                                        Text(
+                                            modifier = Modifier
+                                                .wrapContentSize()
+                                                .padding(
+                                                    start = 8.dp,
+                                                    bottom = 8.dp,
+                                                    end = 8.dp
+                                                )
+                                                .align(Alignment.Start),
+                                            text = "Phone",
+                                            color = MaterialTheme.colors.onSurface,
                                         )
-                                    }
-                                    Text(text = "Submitted")
-                                }
-                            }
-
-                            item {
-
-                                Card(elevation = 4.dp) {
-
-                                    Column {
-
-
-                                        Row(
-                                            horizontalArrangement = Arrangement.Start,
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .padding(8.dp)
-                                        ) {
-
-                                            Text(
-                                                modifier = Modifier.padding(8.dp),
-                                                text = stringResource(id = R.string.track_order),
-                                                style = TextStyle(
-                                                    fontSize = 25.sp,
-                                                    fontWeight = FontWeight.Bold
-                                                )
-                                            )
-
-
-                                            Icon(
-                                                modifier = Modifier.padding(8.dp),
-                                                imageVector = Icons.Filled.DarkMode,
-                                                contentDescription = null,
-                                                tint = Color.Green
-                                            )
-
-
-                                        }
-
-
-                                        Row(
-                                            horizontalArrangement = Arrangement.Start,
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .padding(8.dp)
-                                        ) {
-
-                                            Image(
-                                                modifier = Modifier
-                                                    .padding(8.dp)
-                                                    .size(80.dp, 80.dp)
-                                                    .clip(RoundedCornerShape(10)),
-                                                painter = painterResource(id = androidx.navigation.ui.R.color.mtrl_scrim_color),
-                                                contentDescription = null,
-                                                contentScale = ContentScale.Crop
-                                            )
-
-                                            Column(
-                                                modifier = Modifier.padding(start = 8.dp),
-                                            ) {
-
-                                                Text(
-                                                    modifier = Modifier
-                                                        .wrapContentSize()
-                                                        .padding(8.dp)
-                                                        .align(Alignment.Start),
-                                                    text = "name",
-                                                    color = MaterialTheme.colors.onSurface,
-
-                                                    )
-
-                                                Text(
-                                                    modifier = Modifier
-                                                        .wrapContentSize()
-                                                        .padding(
-                                                            start = 8.dp,
-                                                            bottom = 8.dp,
-                                                            end = 8.dp
-                                                        )
-                                                        .align(Alignment.Start),
-                                                    text = "refill",
-                                                    color = MaterialTheme.colors.onSurface,
-                                                )
-
-                                            }
-
-                                        }
 
                                     }
 
                                 }
+
                             }
+
                         }
                     }
                 }
@@ -241,7 +391,7 @@ fun TrackOrderScreen(
     }
 
     LaunchedEffect(true) {
-        viewModel.userIntent.send(TrackOrderIntent.TrackOrder("25424"))
+        viewModel.userIntent.send(TrackOrderIntent.TrackOrder("25414"))
     }
 
 

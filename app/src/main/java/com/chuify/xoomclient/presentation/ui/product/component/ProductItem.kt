@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddShoppingCart
+import androidx.compose.material.icons.filled.RemoveShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberImagePainter
 import com.chuify.xoomclient.R
@@ -74,7 +76,7 @@ fun ProductItem(
                     text = product.name,
                     color = MaterialTheme.colors.onSurface,
 
-                )
+                    )
 
                 Text(
                     modifier = Modifier
@@ -87,12 +89,14 @@ fun ProductItem(
 
                 if (product.quantity > 0) {
 
-                    Row(modifier = Modifier.padding(8.dp)) {
+                    Row(
+                        modifier = Modifier.padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
 
                         Button(
                             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
                             modifier = Modifier
-                                .size(30.dp, 30.dp)
                                 .border(
                                     width = 1.dp,
                                     shape = RoundedCornerShape(5.dp),
@@ -103,29 +107,25 @@ fun ProductItem(
                             },
 
                             ) {
-                            Icon(Icons.Filled.AddShoppingCart,
-                                contentDescription = "Localized description")
+                            Text(text = "-")
+
 
                         }
 
                         Text(modifier = Modifier.padding(4.dp), text = product.quantity.toString())
 
                         Button(
-                            modifier = Modifier.size(28.dp, 28.dp),
                             onClick = {
                                 increaseCartItem(product)
                             }) {
-                            Icon(
-                                Icons.Filled.Add, contentDescription = null,
-                                modifier = Modifier.size(28.dp, 28.dp),
-                            )
+                            Text(text = "+")
+
                         }
                     }
                 } else {
 
                     Box(modifier = Modifier.padding(8.dp)) {
                         Button(
-                            modifier = Modifier.size(28.dp, 28.dp),
                             onClick = {
                                 increaseCartItem(product)
                             }) {
@@ -144,7 +144,7 @@ fun ProductItem(
                         end.linkTo(parent.end)
                         top.linkTo(parent.top)
                     },
-                horizontalAlignment = Alignment.End ,
+                horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
 
@@ -156,21 +156,23 @@ fun ProductItem(
                     text = product.size,
                     color = MaterialTheme.colors.onSurface,
 
-                )
-                Row(modifier = Modifier
-                    .wrapContentSize()
-                    .align(Alignment.End)
-                    .padding(start = 8.dp, bottom = 8.dp, end = 8.dp , top = 32.dp)) {
+                    )
+                Row(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .align(Alignment.End)
+                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp, top = 32.dp)
+                ) {
                     Text(
                         text = product.price.toString(),
                         color = MaterialTheme.colors.primary,
 
-                    )
+                        )
                     Text(
                         text = stringResource(R.string.currency),
                         color = MaterialTheme.colors.primary,
 
-                    )
+                        )
 
                 }
 

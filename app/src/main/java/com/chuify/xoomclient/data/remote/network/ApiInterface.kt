@@ -61,6 +61,10 @@ interface ApiInterface {
     @GET("orders/{order_id}/rider")
     suspend fun trackOrder(@Path("order_id") order_id: String): Response<TrackDto>
 
+    @Headers("authorized:true")
+    @GET("orders/{order_id}/rider")
+    suspend fun trackOrders(@Path("order_id") order_id: String): String
+
     //----------------------------------------------------------------------------------------------------
     @FormUrlEncoded
     @Headers("authorized:true", "userid:true")
