@@ -1,6 +1,8 @@
 package com.chuify.xoomclient.presentation.ui.main
 
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -27,14 +29,13 @@ fun BottomNavigationBar(
             BottomNavigationItem(
                 icon = {
                     if (item is NavigationItem.Notification && notificationBadge > 0) {
-                        BadgeBox(
-                            badgeContent = {
-                                Text(text = notificationBadge.toString())
-                            },
-                            backgroundColor = MaterialTheme.colors.primary
-                        ) {
+
+                        BadgedBox(badge = {
+                            Text(text = notificationBadge.toString())
+                        }) {
                             Icon(item.icon, contentDescription = item.title)
                         }
+
                     } else
                         Icon(item.icon, contentDescription = item.title)
                 },
@@ -44,7 +45,7 @@ fun BottomNavigationBar(
                 alwaysShowLabel = index == selected,
                 selected = index == selected,
                 onClick = {
-                    if (index > 2) 1 else action(index)
+                    action(index)
                 }
             )
         }

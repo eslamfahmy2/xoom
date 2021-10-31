@@ -28,7 +28,7 @@ class SplashActivity : AppCompatActivity() {
         val token = sharedPreferences.getToken()
         Log.d(TAG, "token $token")
         if (token.isEmpty()) {
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
         } else {
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
         }

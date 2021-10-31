@@ -15,6 +15,8 @@ import com.chuify.xoomclient.presentation.ui.signup.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
@@ -47,14 +49,11 @@ class VendorViewModel @Inject constructor(
     private val _cartCount: MutableState<Int> = mutableStateOf(0)
     val cartCount get() = _cartCount
 
+    private val _refreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val refreshing get() = _refreshing.asStateFlow()
 
     init {
         handleIntent()
-        viewModelScope.launch {
-            loadVendors()
-            loadAccessories()
-            cartPref()
-        }
     }
 
     private fun handleIntent() {
@@ -65,6 +64,8 @@ class VendorViewModel @Inject constructor(
                 when (intent) {
                     VendorIntent.LoadVendors -> {
                         loadVendors()
+                        loadAccessories()
+                        cartPref()
                     }
                     is VendorIntent.Filter -> {
                         filter(intent.searchText)
@@ -77,6 +78,7 @@ class VendorViewModel @Inject constructor(
     }
 
     private suspend fun loadVendors() = viewModelScope.launch(Dispatchers.IO) {
+        _refreshing.value = true
         useCase().collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {
@@ -90,9 +92,11 @@ class VendorViewModel @Inject constructor(
                     _vendors.value = dataState.data ?: listOf()
                     _state.value = VendorState.Success(
                         data = dataState.data ?: listOf(),
-                        searchText = _searchText.value)
+                        searchText = _searchText.value
+                    )
                 }
             }
+            _refreshing.value = false
         }
     }
 

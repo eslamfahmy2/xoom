@@ -1,14 +1,12 @@
 package com.chuify.xoomclient.presentation.ui.vendors.component
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,13 +20,17 @@ import com.chuify.xoomclient.presentation.ui.accessoryDetails.AccessoryDetailsIn
 import com.chuify.xoomclient.presentation.ui.accessoryDetails.AccessoryDetailsState
 import com.chuify.xoomclient.presentation.ui.accessoryDetails.AccessoryDetailsViewModel
 import com.chuify.xoomclient.presentation.ui.accessoryDetails.component.AccessoryPref
+import com.chuify.xoomclient.presentation.ui.order.complet.CompletedOrdersIntent
 import com.chuify.xoomclient.presentation.ui.signup.TAG
 import com.chuify.xoomclient.presentation.ui.vendors.VendorIntent
 import com.chuify.xoomclient.presentation.ui.vendors.VendorState
 import com.chuify.xoomclient.presentation.ui.vendors.VendorViewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
@@ -94,30 +96,48 @@ fun VendorScreen(
                 )
             }
             is VendorState.Success -> {
-                VendorIdlScreen(
-                    data = (state as VendorState.Success).data,
-                    accessories = viewModel.accessories.value,
-                    onItemClicked = {
-                        Gson().toJson(it.copy(image = String()))?.let { json ->
-                            navHostController.navigate(Screens.VendorDetails.routeWithArgs(json))
+
+                val isRefreshing by viewModel.refreshing.collectAsState()
+                SwipeRefresh(
+                    state = rememberSwipeRefreshState(isRefreshing),
+                    onRefresh = {
+                        coroutineScope.launch {
+
                         }
                     },
-                    searchText = (state as VendorState.Success).searchText,
-                    onTextChange = {
-                        coroutineScope.launch {
-                            viewModel.userIntent.send(VendorIntent.Filter(it))
+                ) {
+                    VendorIdlScreen(
+                        data = (state as VendorState.Success).data,
+                        accessories = viewModel.accessories.value,
+                        onItemClicked = {
+                            Gson().toJson(it.copy(image = String()))?.let { json ->
+                                navHostController.navigate(Screens.VendorDetails.routeWithArgs(json))
+                            }
+                        },
+                        searchText = (state as VendorState.Success).searchText,
+                        onTextChange = {
+                            coroutineScope.launch {
+                                viewModel.userIntent.send(VendorIntent.Filter(it))
+                            }
+                        },
+                        onAccessoryClicked = {
+                            coroutineScope.launch {
+                                Log.d(TAG, "onAccessoryClicked: $it")
+                                accessoryDetailsViewModel.userIntent.send(
+                                    AccessoryDetailsIntent.OpenAccessoryPreview(
+                                        it
+                                    )
+                                )
+                            }
                         }
-                    },
-                    onAccessoryClicked = {
-                        coroutineScope.launch {
-                            Log.d(TAG, "onAccessoryClicked: $it")
-                            accessoryDetailsViewModel.userIntent.send(AccessoryDetailsIntent.OpenAccessoryPreview(it))
-                        }
-                    }
-                )
+                    )
+                }
+
                 when (stateAccessoryPref) {
-                    AccessoryDetailsState.Dismiss -> {}
-                    is AccessoryDetailsState.Error -> {}
+                    AccessoryDetailsState.Dismiss -> {
+                    }
+                    is AccessoryDetailsState.Error -> {
+                    }
                     is AccessoryDetailsState.Success -> {
                         (stateAccessoryPref as AccessoryDetailsState.Success).data?.let {
                             Log.d(TAG, "VendorScreen: on Success render $it")
@@ -128,6 +148,9 @@ fun VendorScreen(
             }
         }
 
+        LaunchedEffect(true) {
+            viewModel.userIntent.send(VendorIntent.LoadVendors)
+        }
 
     }
 

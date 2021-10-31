@@ -37,11 +37,13 @@ fun HomeBar(
         modifier = Modifier.fillMaxWidth(),
         color = MaterialTheme.colors.surface
     ) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = 16.dp, end = 16.dp,
-                top = 8.dp, bottom = 8.dp),
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 16.dp, end = 16.dp,
+                    top = 8.dp, bottom = 8.dp
+                ),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
@@ -53,7 +55,11 @@ fun HomeBar(
                     /*
                      Tween Animates between values over specified [durationMillis]
                     */
-                    tween(delayMillis = 10000, durationMillis = 10000, easing = FastOutLinearInEasing),
+                    tween(
+                        delayMillis = 10000,
+                        durationMillis = 10000,
+                        easing = FastOutLinearInEasing
+                    ),
                     RepeatMode.Reverse
                 )
             )
@@ -61,7 +67,8 @@ fun HomeBar(
 
             Row(
                 horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically) {
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
                 Text(
                     text = title,
@@ -94,12 +101,10 @@ fun HomeBar(
                 ) {
 
                 if (cartCount > 0) {
-                    BadgeBox(
-                        badgeContent = {
-                            Text(text = cartCount.toString())
-                        },
-                        backgroundColor = MaterialTheme.colors.primary
-                    ) {
+
+                    BadgedBox(badge = {
+                        Text(text = cartCount.toString())
+                    }) {
                         Icon(
                             Icons.Filled.ShoppingCart,
                             contentDescription = null
