@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.usecase.profile.GetLoyaltyPointsUseCase
 import com.chuify.xoomclient.domain.usecase.profile.GetProfileUseCase
+import com.chuify.xoomclient.domain.usecase.profile.ThemeUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val getProfileUseCase: GetProfileUseCase,
     private val getLoyaltyPointsUseCase: GetLoyaltyPointsUseCase,
+    private val themeUseCase: ThemeUseCase
 ) : ViewModel() {
 
     val userIntent = Channel<ProfileIntent>(Channel.UNLIMITED)
@@ -26,8 +28,9 @@ class ProfileViewModel @Inject constructor(
     private val _state: MutableStateFlow<ProfileState> = MutableStateFlow(ProfileState.Loading)
     val state get() = _state.asStateFlow()
 
-    private val _localityPoints: MutableStateFlow<String> = MutableStateFlow(String())
-    val localityPoints get() : StateFlow<String> = _localityPoints
+    private val _isDark: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    val isDark get() = _isDark.asStateFlow()
+
 
     init {
         handleIntent()
@@ -36,10 +39,56 @@ class ProfileViewModel @Inject constructor(
     private fun handleIntent() {
         viewModelScope.launch {
             userIntent.consumeAsFlow().collect { intent ->
+                Log.d(TAG, "handleIntent: $intent")
                 when (intent) {
                     ProfileIntent.LoadProfile -> {
+                        getTheme()
                         loadProfile()
                         getLoyaltyPoints()
+
+                    }
+                    is ProfileIntent.ChangeTheme -> {
+                        updateTHeme(intent.boolean)
+                    }
+                }
+            }
+        }
+    }
+
+
+    private suspend fun getTheme() {
+        Log.d(TAG, "getTheme: ")
+        viewModelScope.launch(Dispatchers.IO) {
+            themeUseCase.getTheme().collect { dataSate ->
+                when (dataSate) {
+                    is DataState.Error -> {
+                        Log.d(TAG, "updateTHeme: " + dataSate.message)
+                    }
+                    is DataState.Loading -> {
+                    }
+                    is DataState.Success -> {
+                        dataSate.data?.let {
+                            _isDark.value = it
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun updateTHeme(boolean: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            themeUseCase.changeTheme(boolean = boolean).collect { dataSate ->
+                when (dataSate) {
+                    is DataState.Error -> {
+                        Log.d(TAG, "updateTHeme: " + dataSate.message)
+                    }
+                    is DataState.Loading -> {
+                    }
+                    is DataState.Success -> {
+                        dataSate.data?.let {
+                            _isDark.value = it
+                        }
                     }
                 }
             }
@@ -67,23 +116,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     private suspend fun getLoyaltyPoints() = viewModelScope.launch(Dispatchers.IO) {
-        getLoyaltyPointsUseCase().collect { dataState ->
-            when (dataState) {
-                is DataState.Error -> {
-                    Log.d(TAG, "Error: " + dataState.message)
-                    //    _state.value = ProfileState.Error(dataState.message)
-                }
-                is DataState.Loading -> {
-                    //   _state.value = ProfileState.Loading
-                }
-                is DataState.Success -> {
-                    dataState.data?.let {
-                        _localityPoints.value = it
-                    }
-
-                }
-            }
-        }
+        getLoyaltyPointsUseCase().collect()
     }
 
 }

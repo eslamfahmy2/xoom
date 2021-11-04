@@ -1,10 +1,12 @@
 package com.chuify.xoomclient.domain.di
 
 
+
 import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.domain.repository.ProfileRepo
 import com.chuify.xoomclient.domain.usecase.profile.GetLoyaltyPointsUseCase
 import com.chuify.xoomclient.domain.usecase.profile.GetProfileUseCase
+import com.chuify.xoomclient.domain.usecase.profile.ThemeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +28,13 @@ object ProfileUseCasesModule {
     fun provideGetLocalityPointsUseCase(
         profileRepo: ProfileRepo,
         sharedPrefs: SharedPrefs
-    ) = GetLoyaltyPointsUseCase(profileRepo = profileRepo , sharedPrefs = sharedPrefs)
+    ) = GetLoyaltyPointsUseCase(profileRepo = profileRepo, sharedPrefs = sharedPrefs)
+
+    @Singleton
+    @Provides
+    fun provideThemeUseCaseUseCase(
+        sharedPrefs: SharedPrefs
+    ) = ThemeUseCase(sharedPrefs = sharedPrefs)
 
 
 }

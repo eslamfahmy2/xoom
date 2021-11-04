@@ -52,7 +52,7 @@ class OTPFragment : Fragment() {
             setContent {
 
                 XoomGasClientTheme(
-                    darkTheme = application.isDark()
+                    darkTheme = false
                 ) {
 
                     val coroutineScope = rememberCoroutineScope()
@@ -73,7 +73,7 @@ class OTPFragment : Fragment() {
                             HomeBar(
                                 title = "Sign up",
                                 action = {
-                                    application.toggleTheme()
+
                                 },
                                 cartCount = 1
                             )

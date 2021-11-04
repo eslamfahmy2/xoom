@@ -1,15 +1,13 @@
 package com.chuify.xoomclient.data.prefrences
 
-import android.content.Context
 import android.content.SharedPreferences
 import com.chuify.xoomclient.data.remote.dto.UserDto
 import com.chuify.xoomclient.domain.model.User
-import com.chuify.xoomclient.presentation.application.BaseApplication
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
 class SharedPrefs @Inject constructor(
-    context: BaseApplication,
+    private val sharedPref: SharedPreferences
 ) {
 
     companion object {
@@ -25,8 +23,6 @@ class SharedPrefs @Inject constructor(
         const val USER_POINTS = "USER_POINTS"
     }
 
-    private val sharedPref: SharedPreferences =
-        context.getSharedPreferences(PREF, Context.MODE_PRIVATE)
 
     fun saveTheme(isDark: Boolean) {
         put(IS_DARK, isDark)
@@ -58,7 +54,7 @@ class SharedPrefs @Inject constructor(
     }
 
     fun saveUserPoints(it: String) {
-        put(USER_POINTS,it)
+        put(USER_POINTS, it)
     }
 
     fun getUser() = User(
@@ -108,8 +104,6 @@ class SharedPrefs @Inject constructor(
             remove(USER_POINTS)
         }.apply()
     }
-
-
 
 
 }

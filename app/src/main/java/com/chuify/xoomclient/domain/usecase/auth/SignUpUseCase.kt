@@ -8,7 +8,6 @@ import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
 import com.chuify.xoomclient.domain.utils.Validator
-
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 

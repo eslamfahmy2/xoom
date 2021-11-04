@@ -1,12 +1,12 @@
 package com.chuify.xoomclient.presentation.ui.profile
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -29,10 +29,7 @@ import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.components.SolidBar
-import com.chuify.xoomclient.presentation.ui.notification.NotificationIntent
-import com.chuify.xoomclient.presentation.ui.notification.NotificationItem
-import com.chuify.xoomclient.presentation.ui.notification.NotificationState
-import com.chuify.xoomclient.presentation.ui.product.ProductState
+import com.chuify.xoomclient.presentation.ui.signup.TAG
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 
@@ -51,6 +48,7 @@ fun ProfileScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val state = viewModel.state.collectAsState().value
+    val isDark = viewModel.isDark.collectAsState().value
 
     Scaffold(
         topBar = { SolidBar() },
@@ -175,13 +173,23 @@ fun ProfileScreen(
                                                     modifier = Modifier.padding(4.dp),
                                                 )
                                             }
-                                            val check = remember {
-                                                mutableStateOf(true)
-                                            }
+                                            Log.d(TAG, "ProfileScreen: is dark $isDark")
+                                            Switch(
+                                                checked = isDark,
+                                                onCheckedChange = {
+                                                    coroutineScope.launch {
+                                                        viewModel.userIntent.send(
+                                                            ProfileIntent.ChangeTheme(
+                                                                it
+                                                            )
+                                                        )
+                                                    }
+                                                },
+                                                colors = SwitchDefaults.colors(
+                                                    checkedThumbColor = Color.Green
+                                                )
 
-                                            Switch(checked = check.value, onCheckedChange = {
-                                                check.value = it
-                                            })
+                                                )
 
                                         }
 

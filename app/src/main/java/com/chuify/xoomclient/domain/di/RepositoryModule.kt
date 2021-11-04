@@ -5,6 +5,7 @@ import com.chuify.xoomclient.data.local.dao.NotificationDao
 import com.chuify.xoomclient.data.local.source.CartRepoImpl
 import com.chuify.xoomclient.data.local.source.NotificationRepoImpl
 import com.chuify.xoomclient.data.prefrences.SharedPrefs
+
 import com.chuify.xoomclient.data.remote.network.ApiInterface
 import com.chuify.xoomclient.data.remote.source.*
 import com.chuify.xoomclient.domain.repository.*
@@ -73,7 +74,7 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideProfileRepository(
-        sharedPrefs: SharedPrefs ,
+        sharedPrefs: SharedPrefs,
         api: ApiInterface,
     ): ProfileRepo {
         return ProfileRepoImpl(sharedPrefs = sharedPrefs, apiInterface = api)
