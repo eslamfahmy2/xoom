@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import com.chuify.xoomclient.data.remote.dto.UserDto
 import com.chuify.xoomclient.domain.model.User
 import javax.inject.Inject
+import com.google.gson.Gson
+
 
 @Suppress("UNCHECKED_CAST")
 class SharedPrefs @Inject constructor(
@@ -14,13 +16,11 @@ class SharedPrefs @Inject constructor(
         private const val PREF = "MyAppPrefName"
         const val IS_DARK = "IS_DARK"
 
-        const val USER_FIRST_NAME = "USER_FIRST_NAME"
-        const val USER_LAST_NAME = "USER_LAST_NAME"
-        const val USER_EMAIL = "USER_EMAIL"
-        const val USER_PHONE = "USER_PHONE"
         const val USER_TOKEN = "USER_TOKEN"
+        const val USER = "USER"
         const val USER_ID = "USER_ID"
         const val USER_POINTS = "USER_POINTS"
+
     }
 
 
@@ -36,12 +36,9 @@ class SharedPrefs @Inject constructor(
 
     fun saveUser(user: UserDto) {
 
-        put(USER_FIRST_NAME, user.firstname)
-        put(USER_LAST_NAME, user.lastname)
-        put(USER_EMAIL, user.email)
-        put(USER_PHONE, user.phone)
-        put(USER_TOKEN, user.access_token)
-        put(USER_ID, user.user_id)
+        val gson = Gson()
+        val it = gson.toJson(user)
+        put(USER, it)
 
     }
 
@@ -57,15 +54,11 @@ class SharedPrefs @Inject constructor(
         put(USER_POINTS, it)
     }
 
-    fun getUser() = User(
-        userId = get(USER_ID, String::class.java),
-        firstname = get(USER_FIRST_NAME, String::class.java),
-        lastname = get(USER_LAST_NAME, String::class.java),
-        email = get(USER_EMAIL, String::class.java),
-        phone = get(USER_PHONE, String::class.java),
-        token = get(USER_TOKEN, String::class.java),
-        points = get(USER_POINTS, String::class.java),
-    )
+    fun getUser(): UserDto? {
+        val serializedUser = get(USER, String::class.java)
+        val gson = Gson()
+        return gson.fromJson(serializedUser, UserDto::class.java)
+    }
 
     private fun <T> get(key: String, clazz: Class<T>): T =
         when (clazz) {
@@ -95,10 +88,7 @@ class SharedPrefs @Inject constructor(
     fun clear() {
         sharedPref.edit().run {
             remove(PREF)
-            remove(USER_FIRST_NAME)
-            remove(USER_LAST_NAME)
-            remove(USER_EMAIL)
-            remove(USER_PHONE)
+            remove(USER)
             remove(USER_TOKEN)
             remove(USER_ID)
             remove(USER_POINTS)

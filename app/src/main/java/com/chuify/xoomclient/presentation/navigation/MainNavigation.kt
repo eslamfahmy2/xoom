@@ -11,6 +11,7 @@ import com.chuify.xoomclient.domain.model.Vendor
 import com.chuify.xoomclient.presentation.ui.cart.CartScreen
 import com.chuify.xoomclient.presentation.ui.checkout.CheckoutScreen
 import com.chuify.xoomclient.presentation.ui.checkout.CheckoutViewModel
+import com.chuify.xoomclient.presentation.ui.editProfile.EditProfileScreen
 import com.chuify.xoomclient.presentation.ui.main.MainScreen
 import com.chuify.xoomclient.presentation.ui.payment.PaymentScreen
 import com.chuify.xoomclient.presentation.ui.picklocation.PickLocationScreen
@@ -55,7 +56,8 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
                 Gson().fromJson(it, Vendor::class.java)?.let { vendor ->
                     VendorDetailsScreen(
                         vendor = vendor,
-                        navHostController = navHostController)
+                        navHostController = navHostController
+                    )
                 }
             }
 
@@ -97,6 +99,10 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
             backStackEntry.arguments?.getString(Screens.AccessoryDetails.accessoryArg)?.let {
             }
 
+        }
+
+        composable(route = Screens.EditProfile.fullRoute()) {
+            EditProfileScreen(navHostController = navHostController)
         }
 
 

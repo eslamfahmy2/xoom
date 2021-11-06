@@ -69,4 +69,10 @@ sealed class Screens(val route: String) {
             return route
         }
     }
+
+    object EditProfile : Screens("edit_profile") {
+        fun fullRoute(): String {
+            return route
+        }
+    }
 }

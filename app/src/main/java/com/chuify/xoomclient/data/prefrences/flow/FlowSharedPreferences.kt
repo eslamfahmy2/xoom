@@ -21,5 +21,21 @@ class FlowSharedPreferences @JvmOverloads constructor(
     fun getBoolean(key: String, defaultValue: Boolean = false): Preference<Boolean> =
         BooleanPreference(key, defaultValue, keyFlow, sharedPreferences, coroutineContext)
 
+
+    fun <T> getUser(
+        key: String,
+        serializer: NullableSerializer<T>,
+        defaultValue: T?
+    ): Preference<T?> =
+        NullableObjectPreference(
+            key,
+            serializer,
+            defaultValue,
+            keyFlow,
+            sharedPreferences,
+            coroutineContext
+        )
+
     fun clear() = sharedPreferences.edit().clear().apply()
+
 }

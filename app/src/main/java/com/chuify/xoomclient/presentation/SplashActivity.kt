@@ -1,5 +1,6 @@
 package com.chuify.xoomclient.presentation
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@SuppressLint("CustomSplashScreen")
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 @ExperimentalFoundationApi
@@ -30,7 +32,7 @@ class SplashActivity : AppCompatActivity() {
         if (token.isEmpty()) {
             startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
         } else {
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
         }
         finish()
 

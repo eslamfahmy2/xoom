@@ -1,7 +1,10 @@
 package com.chuify.xoomclient.data.remote.dto
 
+import com.chuify.xoomclient.data.prefrences.flow.NullableSerializer
+import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class UserDto(
 
@@ -37,4 +40,4 @@ data class UserDto(
     @Expose
     @SerializedName(value = "Access_token", alternate = ["access_token"])
     val access_token: String?,
-)
+) : Serializable

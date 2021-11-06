@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -29,10 +30,13 @@ import com.chuify.xoomclient.R
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.components.SolidBar
+import com.chuify.xoomclient.presentation.navigation.Screens
 import com.chuify.xoomclient.presentation.ui.signup.TAG
 import com.google.accompanist.pager.ExperimentalPagerApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
+@ExperimentalCoroutinesApi
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
@@ -41,8 +45,6 @@ fun ProfileScreen(
     navHostController: NavHostController,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
-
-
     val scaffoldState = rememberScaffoldState()
 
     val coroutineScope = rememberCoroutineScope()
@@ -115,28 +117,74 @@ fun ProfileScreen(
                                         .fillMaxWidth()
                                         .padding(32.dp)
                                 ) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Image(
-                                            modifier = Modifier
-                                                .padding(8.dp)
-                                                .size(50.dp)
-                                                .clip(CircleShape)
-                                                .border(2.dp, Color.Gray, CircleShape)
-                                                .padding(8.dp),
-                                            imageVector = Icons.Filled.Person,
-                                            contentDescription = "avatar",
-                                            contentScale = ContentScale.Crop,
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
 
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Image(
+                                                modifier = Modifier
+                                                    .padding(8.dp)
+                                                    .size(50.dp)
+                                                    .clip(CircleShape)
+                                                    .border(2.dp, Color.Gray, CircleShape)
+                                                    .padding(8.dp),
+                                                imageVector = Icons.Filled.Person,
+                                                contentDescription = "avatar",
+                                                contentScale = ContentScale.Crop,
+
+                                                )
+
+                                            Text(
+                                                text = state.user.firstname,
+                                                fontSize = 16.sp,
+                                                modifier = Modifier.padding(8.dp)
                                             )
+                                        }
 
-                                        Text(
-                                            text = state.user.firstname,
-                                            fontSize = 16.sp,
-                                            modifier = Modifier.padding(8.dp)
+                                        Divider(
+                                            color = Color.LightGray, thickness = 1.dp,
+                                            modifier = Modifier.padding(start = 56.dp),
                                         )
+
+
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(8.dp)
+                                                .clickable {
+                                                    navHostController.navigate(Screens.EditProfile.fullRoute())
+                                                },
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(
+                                                    modifier = Modifier.padding(8.dp),
+                                                    imageVector = Icons.Filled.Edit,
+                                                    contentDescription = null,
+                                                    tint = Color.Green
+                                                )
+                                                Text(
+                                                    text = "Edit profile",
+                                                    fontSize = 16.sp,
+                                                    modifier = Modifier.padding(4.dp),
+                                                )
+                                            }
+
+                                            Icon(
+                                                modifier = Modifier,
+                                                imageVector = Icons.Filled.KeyboardArrowRight,
+                                                contentDescription = null,
+                                                tint = Color.LightGray
+                                            )
+                                        }
                                     }
 
                                 }
+
 
                             }
 
@@ -189,9 +237,11 @@ fun ProfileScreen(
                                                     checkedThumbColor = Color.Green
                                                 )
 
-                                                )
+                                            )
 
                                         }
+
+
 
                                         Divider(
                                             color = Color.LightGray, thickness = 1.dp,

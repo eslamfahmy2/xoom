@@ -1,6 +1,7 @@
 package com.chuify.xoomclient.data.remote.network
 
 import com.chuify.xoomclient.data.remote.dto.*
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -89,12 +90,26 @@ interface ApiInterface {
     @Headers("authorized:true", "userid:true")
     @FormUrlEncoded
     @POST("address/user_id")
-    fun saveAddress(
+    suspend fun saveAddress(
         @Field("address_url") address_url: String?,
         @Field("details") details: String?,
         @Field("instructions") instructions: String?,
         @Field("latitude") latitude: Double,
         @Field("longitude") longitude: Double,
     ): Response<StatusDto>
+
+
+    //----------------------------------------------------------------------------------------------------
+    @Headers("authorized:true", "userid:true")
+    @FormUrlEncoded
+    @PUT("users/user_id")
+    suspend  fun updateUser(
+        @Field("firstname") firstname: String,
+        @Field("lastname") lastname: String,
+        @Field("email") email: String
+    ): Response<UserDto>
+
+    //----------------------------------------------------------------------------------------------------
+
 
 }
