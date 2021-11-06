@@ -32,7 +32,6 @@ class CheckoutViewModel @Inject constructor(
     private val decreaseOrderUseCase: DecreaseOrderUseCase,
     private val increaseOrderUseCase: IncreaseOrderUseCase,
     private val getLocationUseCase: GetLocationsUseCase,
-    private val saveLocationsUseCase: SaveLocationsUseCase,
 ) : ViewModel() {
 
     val userIntent = Channel<CheckoutIntent>(Channel.UNLIMITED)

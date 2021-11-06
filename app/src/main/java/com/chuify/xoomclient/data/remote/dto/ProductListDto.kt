@@ -45,4 +45,11 @@ data class ProductDto(
     @SerializedName(value = "selling_price", alternate = ["Selling_price"])
     val selling_price: String?,
 
+    @Expose
+    @SerializedName(value = "quantity", alternate = ["Quantity"])
+    val quantity: String?,
+
+
+
+
     )

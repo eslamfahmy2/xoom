@@ -13,11 +13,14 @@ class OrderDtoMapper : DomainMapper<OrderDto, Order> {
             image = model.orderdetails.first().image!!,
             name = model.orderdetails.first().product_name!!,
             refill = model.orderdetails.first().refill_new!!,
-            status = model.orderstatus!!
+            status = model.orderstatus!!,
+            products = model.orderdetails ,
+            locationID = model.location_id!! ,
+            paymentMethod = model.paymentMethod!! ,
+            totalPrice = model.totalprice!!
 
         )
     }
-
 
 
 }

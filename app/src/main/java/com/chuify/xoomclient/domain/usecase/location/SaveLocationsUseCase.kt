@@ -3,6 +3,7 @@ package com.chuify.xoomclient.domain.usecase.location
 import com.chuify.xoomclient.domain.repository.LocationRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
+import com.chuify.xoomclient.domain.utils.Validator
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -20,6 +21,15 @@ class SaveLocationsUseCase @Inject constructor(
     ) = flow<DataState<Nothing>> {
         try {
             emit(DataState.Loading())
+            if (addressUrl.isEmpty()) {
+                throw Exception("title required")
+            }
+            if (details.isEmpty()) {
+                throw Exception("details required")
+            }
+            if (instructions.isEmpty()) {
+                throw Exception("instructions required")
+            }
             when (val response = locationRepo.saveAddress(
                 addressUrl = addressUrl,
                 details = details,

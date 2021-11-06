@@ -6,6 +6,7 @@ import com.chuify.xoomclient.domain.model.User
 import com.chuify.xoomclient.domain.repository.ProfileRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
+import com.chuify.xoomclient.domain.utils.Validator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flow
@@ -26,7 +27,15 @@ class UpdateUserUseCase @Inject constructor(
     ) = flow<DataState<User>> {
         try {
             emit(DataState.Loading())
-
+            if (!Validator.isValidName(firstName)) {
+                throw Exception("first name not valid")
+            }
+            if (!Validator.isValidName(lastName)) {
+                throw Exception("last name not valid")
+            }
+            if (!Validator.isValidEmail(email)) {
+                throw Exception("email not valid")
+            }
             when (val response = profileRepo.updateUser(
                 firstName = firstName,
                 lastName = lastName,

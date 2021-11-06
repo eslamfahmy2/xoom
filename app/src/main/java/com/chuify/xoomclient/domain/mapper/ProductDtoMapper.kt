@@ -21,16 +21,5 @@ class ProductDtoMapper : DomainMapper<ProductDto, Product> {
         return initial.map { mapToDomainModel(it) }
     }
 
-    fun mapFromDomainModel(domainModel: Product): ProductDto {
-        return ProductDto(
-            product_id = domainModel.id,
-            product_name = domainModel.name,
-            image = domainModel.image,
-            product_size = domainModel.size,
-            refill_new = domainModel.refill,
-            selling_price = domainModel.price.toString()
-        )
-    }
-
 
 }
