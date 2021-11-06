@@ -115,7 +115,6 @@ class EditProfileViewModel @Inject constructor(
                         _firstName.value = dataState.data.firstname
                         _lastName.value = dataState.data.lastname
                         _email.value = dataState.data.email
-                        _state.value = EditProfileState.Success(dataState.data)
                     }
 
                 }

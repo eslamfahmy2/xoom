@@ -206,7 +206,7 @@ fun EditProfileScreen(
                                         shape = MaterialTheme.shapes.large,
                                         color = MaterialTheme.colors.primary
                                     ),
-                                text = "Signup",
+                                text = "Edit",
                                 style = TextStyle(
                                     fontSize = 16.sp
                                 )

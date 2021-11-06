@@ -12,6 +12,7 @@ import com.chuify.xoomclient.presentation.ui.cart.CartScreen
 import com.chuify.xoomclient.presentation.ui.checkout.CheckoutScreen
 import com.chuify.xoomclient.presentation.ui.checkout.CheckoutViewModel
 import com.chuify.xoomclient.presentation.ui.editProfile.EditProfileScreen
+import com.chuify.xoomclient.presentation.ui.locations.LocationsScreen
 import com.chuify.xoomclient.presentation.ui.main.MainScreen
 import com.chuify.xoomclient.presentation.ui.payment.PaymentScreen
 import com.chuify.xoomclient.presentation.ui.picklocation.PickLocationScreen
@@ -23,7 +24,9 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.gson.Gson
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -105,6 +108,9 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
             EditProfileScreen(navHostController = navHostController)
         }
 
+        composable(route = Screens.Locations.fullRoute()) {
+            LocationsScreen(navHostController = navHostController)
+        }
 
     }
 

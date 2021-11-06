@@ -52,7 +52,7 @@ class UpdateUserUseCase @Inject constructor(
 
                 }
             }
-            TODO("Add validations")
+
 
         } catch (e: Exception) {
             emit(DataState.Error(e.message))

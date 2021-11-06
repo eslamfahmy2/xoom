@@ -181,6 +181,47 @@ fun ProfileScreen(
                                                 tint = Color.LightGray
                                             )
                                         }
+
+
+                                        Divider(
+                                            color = Color.LightGray, thickness = 1.dp,
+                                            modifier = Modifier.padding(start = 56.dp),
+                                        )
+
+
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(8.dp)
+                                                .clickable {
+                                                    navHostController.navigate(Screens.Locations.fullRoute())
+                                                },
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(
+                                                    modifier = Modifier.padding(8.dp),
+                                                    imageVector = Icons.Filled.LocationCity,
+                                                    contentDescription = null,
+                                                    tint = Color.Green
+                                                )
+                                                Text(
+                                                    text = stringResource(id = R.string.delivery_address),
+                                                    fontSize = 16.sp,
+                                                    modifier = Modifier.padding(4.dp),
+                                                )
+                                            }
+
+                                            Icon(
+                                                modifier = Modifier,
+                                                imageVector = Icons.Filled.KeyboardArrowRight,
+                                                contentDescription = null,
+                                                tint = Color.LightGray
+                                            )
+                                        }
                                     }
 
                                 }

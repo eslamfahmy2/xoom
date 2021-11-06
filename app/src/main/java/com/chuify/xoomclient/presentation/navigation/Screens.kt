@@ -75,4 +75,11 @@ sealed class Screens(val route: String) {
             return route
         }
     }
+
+
+    object Locations : Screens("locations") {
+        fun fullRoute(): String {
+            return route
+        }
+    }
 }
