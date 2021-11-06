@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.usecase.profile.GetLoyaltyPointsUseCase
 import com.chuify.xoomclient.domain.usecase.profile.GetProfileUseCase
+import com.chuify.xoomclient.domain.usecase.profile.LogOutUseCase
 import com.chuify.xoomclient.domain.usecase.profile.ThemeUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val getProfileUseCase: GetProfileUseCase,
     private val getLoyaltyPointsUseCase: GetLoyaltyPointsUseCase,
-    private val themeUseCase: ThemeUseCase
+    private val themeUseCase: ThemeUseCase,
+    private val logOutUseCase: LogOutUseCase
 ) : ViewModel() {
 
     val userIntent = Channel<ProfileIntent>(Channel.UNLIMITED)
@@ -52,11 +54,30 @@ class ProfileViewModel @Inject constructor(
                     is ProfileIntent.ChangeTheme -> {
                         updateTHeme(intent.boolean)
                     }
+                    ProfileIntent.LogOut -> {
+                        logOut()
+                    }
                 }
             }
         }
     }
 
+    private suspend fun logOut() {
+        viewModelScope.launch(Dispatchers.IO) {
+            logOutUseCase().collect { dataSate ->
+                when (dataSate) {
+                    is DataState.Error -> {
+                        Log.d(TAG, "updateTHeme: " + dataSate.message)
+                    }
+                    is DataState.Loading -> {
+                    }
+                    is DataState.Success -> {
+                        _state.value = ProfileState.LoggedOut
+                    }
+                }
+            }
+        }
+    }
 
     private suspend fun getTheme() {
         Log.d(TAG, "getTheme: ")

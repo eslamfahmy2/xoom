@@ -1,11 +1,10 @@
 package com.chuify.xoomclient.presentation.ui.profile
 
+import android.content.Intent
 import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -19,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
+import com.chuify.xoomclient.presentation.AuthenticationActivity
+import com.chuify.xoomclient.presentation.SplashActivity
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.components.SolidBar
@@ -36,6 +38,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
+@ExperimentalFoundationApi
 @ExperimentalCoroutinesApi
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -115,7 +118,7 @@ fun ProfileScreen(
                                     elevation = 4.dp,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(32.dp)
+                                        .padding(16.dp)
                                 ) {
                                     Column(
                                         modifier = Modifier.fillMaxWidth()
@@ -234,7 +237,7 @@ fun ProfileScreen(
                                     elevation = 4.dp,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(32.dp)
+                                        .padding(16.dp)
                                 ) {
                                     Column(
                                         modifier = Modifier.fillMaxWidth()
@@ -421,13 +424,28 @@ fun ProfileScreen(
 
                             item {
                                 Button(modifier = Modifier
-                                    .padding(32.dp)
-                                    .fillMaxWidth(), onClick = { /*TODO*/ }) {
+                                    .padding(16.dp)
+                                    .fillMaxWidth(), onClick = {
+                                    coroutineScope.launch {
+                                        viewModel.userIntent.send(ProfileIntent.LogOut)
+                                    }
+                                }) {
                                     Text(text = "Logout")
                                 }
                             }
                         }
 
+                    }
+                    ProfileState.LoggedOut -> {
+                        LocalContext.current.startActivity(
+                            Intent(
+                                LocalContext.current,
+                                SplashActivity::class.java
+                            )
+                        )
+                        (LocalContext.current as? ComponentActivity)?.let {
+                            it.finish()
+                        }
                     }
                 }
 

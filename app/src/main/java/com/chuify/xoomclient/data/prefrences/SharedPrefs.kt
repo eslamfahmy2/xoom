@@ -2,7 +2,6 @@ package com.chuify.xoomclient.data.prefrences
 
 import android.content.SharedPreferences
 import com.chuify.xoomclient.data.remote.dto.UserDto
-import com.chuify.xoomclient.domain.model.User
 import javax.inject.Inject
 import com.google.gson.Gson
 
@@ -30,8 +29,13 @@ class SharedPrefs @Inject constructor(
 
     fun isDark() = get(IS_DARK, Boolean::class.java)
 
-    fun saveToken(token: String) {
+    fun saveToken(token: String?) {
         put(USER_TOKEN, token)
+    }
+
+    fun saveUserID(id: String?) {
+        put(USER_ID, id)
+
     }
 
     fun saveUser(user: UserDto) {

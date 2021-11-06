@@ -91,7 +91,7 @@ class EditProfileViewModel @Inject constructor(
                     }
                     is DataState.Success -> {
                         dataSate.data?.let {
-                            _state.value = EditProfileState.Success(it)
+                            _state.value = EditProfileState.ProfileUpdated
                         }
 
                     }
@@ -115,6 +115,7 @@ class EditProfileViewModel @Inject constructor(
                         _firstName.value = dataState.data.firstname
                         _lastName.value = dataState.data.lastname
                         _email.value = dataState.data.email
+                        _state.value = EditProfileState.Success(it)
                     }
 
                 }

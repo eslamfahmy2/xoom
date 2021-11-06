@@ -230,6 +230,10 @@ fun EditProfileScreen(
                             LoadingDialog()
                         }
                         is EditProfileState.Success -> {
+
+                        }
+                        EditProfileState.ProfileUpdated -> {
+
                             navHostController.popBackStack()
                         }
                     }

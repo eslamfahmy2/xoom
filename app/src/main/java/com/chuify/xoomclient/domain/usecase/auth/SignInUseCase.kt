@@ -36,6 +36,8 @@ class SignInUseCase @Inject constructor(
                     if (response.data.status.equals("1")) {
                         val data = mapper.mapToDomainModel(response.data)
                         sharedPreferences.saveUser(response.data)
+                        sharedPreferences.saveToken(response.data.access_token)
+                        sharedPreferences.saveUserID(response.data.user_id)
                         emit(DataState.Success(data))
                     } else {
                         emit(DataState.Error(response.data.msg))
