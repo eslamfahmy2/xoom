@@ -77,7 +77,7 @@ class SignUpFragment : Fragment() {
                     Scaffold(
                         topBar = {
                             HomeBar(
-                                title = "Signup",
+
                                 action = {
 
                                 },

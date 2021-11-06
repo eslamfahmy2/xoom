@@ -3,20 +3,22 @@ package com.chuify.xoomclient.presentation.ui.product.component
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
+import com.chuify.xoomclient.presentation.ui.product.ProductIntent
 import com.chuify.xoomclient.presentation.ui.product.ProductState
 import com.chuify.xoomclient.presentation.ui.product.ProductViewModel
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
-fun ProductsScreen(id: String, viewModel: ProductViewModel) {
+fun ProductsScreen(
+    id: String,
+    viewModel: ProductViewModel = hiltViewModel()
+) {
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -59,16 +61,24 @@ fun ProductsScreen(id: String, viewModel: ProductViewModel) {
                 ProductDataScreen(
                     data = (state as ProductState.Success).data,
                     onIncrease = {
-                        viewModel.insert(it)
+                        coroutineScope.launch {
+                            viewModel.userIntent.send(ProductIntent.Insert(it))
+                        }
                     },
                     onDecrease = {
-                        viewModel.decreaseOrRemove(it)
+                        coroutineScope.launch {
+                            viewModel.userIntent.send(ProductIntent.DecreaseOrRemove(it))
+                        }
                     }
                 )
 
             }
         }
 
+    }
+
+    LaunchedEffect(true) {
+        viewModel.userIntent.send(ProductIntent.InitLoad(id))
     }
 
 

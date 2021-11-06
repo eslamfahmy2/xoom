@@ -71,7 +71,7 @@ class OTPFragment : Fragment() {
                     Scaffold(
                         topBar = {
                             HomeBar(
-                                title = "Sign up",
+
                                 action = {
 
                                 },

@@ -47,6 +47,15 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
 
         composable(
             route = Screens.Vendors.route,
+            enterTransition = { _, _ ->
+                slideInVertically(initialOffsetY = { 5000 }, animationSpec = tween(500))
+            },
+            exitTransition = { _, _ ->
+                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
+            },
+            popExitTransition = { _, _ ->
+                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
+            }
         ) {
             VendorScreen(navHostController = navHostController)
         }
@@ -60,6 +69,9 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
             ) { backStackEntry ->
             backStackEntry.arguments?.getString(Screens.VendorDetails.vendorArg)?.let {
                 Gson().fromJson(it, Vendor::class.java)?.let { vendor ->
+
+
+
                     VendorDetailsScreen(
                         vendor = vendor,
                         navHostController = navHostController

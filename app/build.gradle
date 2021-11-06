@@ -86,6 +86,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.firebase:firebase-messaging-ktx:22.0.0'
     kapt 'com.google.dagger:hilt-compiler:2.37'
+
+
+    // ViewModel utilities for Compose
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0"
+
+
     //KTX
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'

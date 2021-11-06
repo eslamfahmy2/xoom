@@ -79,7 +79,6 @@ class LoginFragment : Fragment() {
                     Scaffold(
                         topBar = {
                             HomeBar(
-                                title = "",
                                 action = {
 
                                 },

@@ -15,7 +15,6 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -38,8 +37,7 @@ fun VendorIdlScreen(
     onAccessoryClicked: (Accessory) -> Unit,
 ) {
 
-    Column(modifier = Modifier.padding(start = 8.dp, end = 8.dp,
-        bottom = 8.dp)) {
+    Column() {
         TextField(
             modifier = Modifier
                 .fillMaxWidth()

@@ -1,25 +1,22 @@
 package com.chuify.xoomclient.presentation.components
 
-import android.util.Log
-import androidx.compose.animation.*
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.chuify.xoomclient.presentation.ui.signup.TAG
 
 enum class BikePosition {
     Start, Finish
@@ -29,13 +26,12 @@ enum class BikePosition {
 @ExperimentalMaterialApi
 @Composable
 fun HomeBar(
-    title: String,
     action: () -> Unit,
     cartCount: Int,
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colors.surface
+        color = MaterialTheme.colors.primary
     ) {
         Row(
             modifier = Modifier
@@ -47,10 +43,10 @@ fun HomeBar(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            var bikeState by remember { mutableStateOf(BikePosition.Start) }
+            val bikeState = remember { mutableStateOf(BikePosition.Start) }
 
             val offsetAnimation by animateDpAsState(
-                targetValue = if (bikeState == BikePosition.Start) 0.dp else 1000.dp,
+                targetValue = if (bikeState.value == BikePosition.Start) 0.dp else 1000.dp,
                 animationSpec = infiniteRepeatable(
                     /*
                      Tween Animates between values over specified [durationMillis]
@@ -70,15 +66,6 @@ fun HomeBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Text(
-                    text = title,
-                    style = TextStyle(
-                        color = MaterialTheme.colors.onSurface,
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                )
-
 
                 Image(
                     painterResource(com.chuify.xoomclient.R.drawable.xoom_gas_rider),
@@ -91,7 +78,7 @@ fun HomeBar(
 
             }
 
-            bikeState = BikePosition.Finish
+            bikeState.value = BikePosition.Finish
             IconButton(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 onClick = {
@@ -100,16 +87,20 @@ fun HomeBar(
 
                 ) {
 
+
                 if (cartCount > 0) {
 
                     BadgedBox(badge = {
-                        Text(text = cartCount.toString())
+                        Badge() {
+                            Text(text = cartCount.toString() , fontSize = 16.sp)
+                        }
                     }) {
                         Icon(
                             Icons.Filled.ShoppingCart,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
+
                 } else {
                     Icon(
                         Icons.Filled.ShoppingCart,

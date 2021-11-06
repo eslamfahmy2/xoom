@@ -17,23 +17,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
+import com.chuify.xoomclient.domain.model.Product
 import com.chuify.xoomclient.domain.model.Vendor
 import com.chuify.xoomclient.presentation.components.CartPreview
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.SecondaryBar
 import com.chuify.xoomclient.presentation.ui.accessory.component.AccessoryScreen
+import com.chuify.xoomclient.presentation.ui.product.ProductViewModel
 import com.chuify.xoomclient.presentation.ui.product.component.ProductsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import dagger.hilt.android.internal.lifecycle.HiltViewModelFactory
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 enum class VendorDetails {
     GAS,
     ACCESSORIES
 }
+
 
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -171,7 +179,7 @@ fun VendorDetailsScreen(
                         count = 2
                     ) {
                         if (it == 0) {
-                            ProductsScreen(viewModel = hiltViewModel(), id = vendor.id)
+                            ProductsScreen(id = vendor.id)
                         } else {
                             AccessoryScreen(viewModel = hiltViewModel())
                         }
