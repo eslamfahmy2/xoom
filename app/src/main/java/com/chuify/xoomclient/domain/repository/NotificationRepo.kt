@@ -17,4 +17,6 @@ interface NotificationRepo {
 
     suspend fun insert(entity: NotificationEntity)
 
+    suspend fun clear()
+
 }

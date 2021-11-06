@@ -42,5 +42,9 @@ class NotificationRepoImpl @Inject constructor(
         return dp.insert(entity)
     }
 
+    override suspend fun clear() {
+        return dp.deleteAll()
+    }
+
 
 }

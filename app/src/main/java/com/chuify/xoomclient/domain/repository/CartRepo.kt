@@ -11,11 +11,12 @@ interface CartRepo {
 
     suspend fun delete(model: CartEntity)
 
-    suspend fun deleteAll()
+    suspend fun clear()
 
     suspend fun getAll(): Flow<List<CartEntity>>
 
     suspend fun getCartItemsCount(): Flow<Int>
 
     suspend fun getById(id: String): CartEntity?
+
 }

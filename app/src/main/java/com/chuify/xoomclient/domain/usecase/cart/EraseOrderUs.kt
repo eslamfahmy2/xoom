@@ -11,7 +11,7 @@ class EraseOrderUs @Inject constructor(
     suspend operator fun invoke() = flow<DataState<Unit>> {
         try {
             emit(DataState.Loading())
-            repo.deleteAll()
+            repo.clear()
             emit(DataState.Success())
         } catch (e: Exception) {
             emit(DataState.Error(e.message))

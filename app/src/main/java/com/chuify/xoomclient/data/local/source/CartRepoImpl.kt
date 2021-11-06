@@ -22,7 +22,8 @@ class CartRepoImpl @Inject constructor(
         return dp.delete(model)
     }
 
-    override suspend fun deleteAll() {
+
+    override suspend fun clear() {
         return dp.deleteAll()
     }
 

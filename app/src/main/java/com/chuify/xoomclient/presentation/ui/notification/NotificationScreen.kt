@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,7 +38,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun NotificationScreen(
     navHostController: NavHostController,
-    viewModel: NotificationViewModel = hiltViewModel(),
+    viewModel: NotificationViewModel,
 ) {
 
 
@@ -145,7 +146,9 @@ fun NotificationItem(
         backgroundColor = if (notification.open) MaterialTheme.colors.surface else Color.Gray
     ) {
 
-        Column(modifier = Modifier.padding(8.dp) .fillMaxWidth()) {
+        Column(modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()) {
             Text(text = notification.title, modifier = Modifier.padding(8.dp))
             Text(text = notification.description, modifier = Modifier.padding(start = 8.dp))
             Text(
@@ -153,8 +156,9 @@ fun NotificationItem(
                 modifier = Modifier
                     .padding(8.dp)
                     .align(End),
-                color = MaterialTheme.colors.secondaryVariant,
-                fontSize = 14.sp
+
+                fontSize = 12.sp,
+                fontFamily = FontFamily.Monospace
             )
 
         }

@@ -4,6 +4,8 @@ package com.chuify.xoomclient.domain.di
 import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.data.prefrences.flow.FlowSharedPreferences
 import com.chuify.xoomclient.domain.mapper.UserDtoMapper
+import com.chuify.xoomclient.domain.repository.CartRepo
+import com.chuify.xoomclient.domain.repository.NotificationRepo
 import com.chuify.xoomclient.domain.repository.ProfileRepo
 import com.chuify.xoomclient.domain.usecase.profile.*
 import dagger.Module
@@ -41,8 +43,13 @@ object ProfileUseCasesModule {
     @Provides
     fun provideLogOutUseCase(
         flowSharedPreferences: FlowSharedPreferences,
-        sharedPrefs: SharedPrefs
-    ) = LogOutUseCase(flowSharedPreferences = flowSharedPreferences, sharedPrefs = sharedPrefs)
+        sharedPrefs: SharedPrefs,
+        notificationRepo: NotificationRepo,
+        cartRepo: CartRepo
+    ) = LogOutUseCase(
+        flowSharedPreferences = flowSharedPreferences, sharedPrefs = sharedPrefs,
+        notificationRepo = notificationRepo, cartRepo = cartRepo
+    )
 
 
     @Singleton

@@ -17,8 +17,10 @@ import com.chuify.xoomclient.presentation.ui.vendors.component.VendorScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
+@ExperimentalCoroutinesApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
@@ -34,9 +36,8 @@ fun MainScreen(navHostController: NavHostController) {
         mutableStateOf(0)
     }
     val notificationViewModel: NotificationViewModel = hiltViewModel()
-    val count by remember {
-        notificationViewModel.notReadCount
-    }
+    val count = notificationViewModel.notReadCount.collectAsState().value
+
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
@@ -54,7 +55,8 @@ fun MainScreen(navHostController: NavHostController) {
 
         HorizontalPager(
             state = pagerState,
-            count = 4) {
+            count = 4
+        ) {
             when (it) {
                 0 -> {
                     VendorScreen(navHostController = navHostController)
@@ -63,7 +65,10 @@ fun MainScreen(navHostController: NavHostController) {
                     OrdersScreen(navHostController = navHostController)
                 }
                 2 -> {
-                    NotificationScreen(navHostController = navHostController)
+                    NotificationScreen(
+                        navHostController = navHostController,
+                        viewModel = notificationViewModel
+                    )
                 }
                 else -> {
                     ProfileScreen(navHostController = navHostController)

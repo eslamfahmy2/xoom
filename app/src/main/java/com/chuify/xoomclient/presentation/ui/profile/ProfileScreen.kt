@@ -425,6 +425,7 @@ fun ProfileScreen(
                             item {
                                 Button(modifier = Modifier
                                     .padding(16.dp)
+                                    .padding(bottom = 32.dp)
                                     .fillMaxWidth(), onClick = {
                                     coroutineScope.launch {
                                         viewModel.userIntent.send(ProfileIntent.LogOut)

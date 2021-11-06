@@ -13,6 +13,8 @@ import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
@@ -32,8 +34,8 @@ class NotificationViewModel @Inject constructor(
         mutableStateOf(NotificationState.Loading)
     val state get() = _state
 
-    private val _notReadCount = mutableStateOf(0)
-    val notReadCount get() = _notReadCount
+    private val _notReadCount = MutableStateFlow(0)
+    val notReadCount get() = _notReadCount.asStateFlow()
 
     init {
         handleIntent()
@@ -46,6 +48,7 @@ class NotificationViewModel @Inject constructor(
                 when (intent) {
                     NotificationIntent.LoadNotifications -> {
                         loadNotifications()
+                        loadNotReadNotifications()
                     }
                     is NotificationIntent.MarkRead -> {
                         markAsRead(intent.notification)
@@ -102,7 +105,7 @@ class NotificationViewModel @Inject constructor(
                     _state.value = NotificationState.Error(dataState.message)
                 }
                 is DataState.Loading -> {
-                    _state.value = NotificationState.Loading
+                    //  _state.value = NotificationState.Loading
                 }
                 is DataState.Success -> {
                     Log.d(TAG, "marked suuessfully: ")
