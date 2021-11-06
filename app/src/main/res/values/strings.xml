@@ -33,7 +33,7 @@
     <string name="change">Change</string>
     <string name="select_payment_methid">Select payment method</string>
     <string name="delivery_address">Delivery address</string>
-    <string name="confirm_order">Confrim order</string>
+    <string name="confirm_order">Confirm order</string>
     <string name="payment_method">Payment Method</string>
     <string name="next">Next</string>
     <string name="cancel">Cancel</string>
@@ -46,7 +46,8 @@
     <string name="completed">Completed</string>
     <string name="cancelled">Cancelled</string>
     <string name="are_sure">"the order will be cancel ! are you sure? "</string>
-    <string name="edit_profile">Edit profile</string> <!--gray-->
+    <string name="edit_profile">Edit profile</string>
+    <string name="save_location">Add Address</string> <!--gray-->
 
 
 </resources>

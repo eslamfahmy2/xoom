@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,8 +24,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
@@ -52,6 +59,8 @@ fun LocationsScreen(
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.collectAsState().value
+
+    val showDialog = viewModel.showDialog.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -90,7 +99,6 @@ fun LocationsScreen(
                     style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 )
 
-
                 when (state) {
                     is LocationsState.Error -> {
                         state.message?.let {
@@ -126,7 +134,9 @@ fun LocationsScreen(
                                         .padding(8.dp)
                                         .fillMaxWidth(),
                                     onClick = {
-
+                                        coroutineScope.launch {
+                                            viewModel.userIntent.send(LocationsIntent.ShowDialog)
+                                        }
                                     })
                                 {
                                     Text(
@@ -147,9 +157,202 @@ fun LocationsScreen(
 
                         }
                     }
+                    LocationsState.LoadSaveAddress -> {
+                        LoadingDialog()
+                    }
                 }
 
             }
+
+            if (showDialog) {
+
+
+                Dialog(
+                    onDismissRequest = {
+                        coroutineScope.launch {
+                            viewModel.userIntent.send(LocationsIntent.DismissDialog)
+                        }
+                    },
+                    DialogProperties(
+                        dismissOnBackPress = true,
+                        dismissOnClickOutside = true
+                    )
+                ) {
+
+
+                    Card(
+                        modifier = Modifier ,
+                        elevation = 20.dp
+                    )
+                    {
+
+                        Column(modifier = Modifier.padding(8.dp)) {
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    modifier = Modifier.padding(8.dp),
+                                    imageVector = Icons.Filled.LocationCity,
+                                    contentDescription = null,
+                                    tint = Color.Green
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.save_location),
+                                    style = TextStyle(
+                                        fontSize = 25.sp,
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    modifier = Modifier.padding(4.dp),
+                                )
+                            }
+
+
+                            val title = viewModel.title.collectAsState().value
+                            val details = viewModel.details.collectAsState().value
+                            val instructions = viewModel.instructions.collectAsState().value
+
+
+                            Column(
+                                modifier = Modifier.wrapContentSize()
+                            ) {
+
+                                TextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                        .background(
+                                            color = MaterialTheme.colors.surface,
+                                            shape = MaterialTheme.shapes.medium
+                                        ),
+                                    value = title,
+                                    onValueChange = {
+                                        coroutineScope.launch {
+                                            viewModel.userIntent.send(
+                                                LocationsIntent.TitleChange(
+                                                    it
+                                                )
+                                            )
+                                        }
+                                    },
+                                    label = {
+                                        Text(text = "Title")
+                                    },
+                                    keyboardOptions = KeyboardOptions(
+                                        autoCorrect = false,
+                                        keyboardType = KeyboardType.Text,
+                                        imeAction = ImeAction.Next
+                                    ),
+                                    textStyle = TextStyle(
+                                        color = MaterialTheme.colors.secondaryVariant,
+                                        fontSize = 16.sp
+                                    )
+
+                                )
+
+
+                                TextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                        .background(
+                                            color = MaterialTheme.colors.surface,
+                                        ),
+                                    value = details,
+                                    onValueChange = {
+                                        coroutineScope.launch {
+                                            viewModel.userIntent.send(
+                                                LocationsIntent.DetailsChange(
+                                                    it
+                                                )
+                                            )
+                                        }
+                                    },
+                                    label = {
+                                        Text(text = "Details")
+                                    },
+                                    keyboardOptions = KeyboardOptions(
+                                        autoCorrect = false,
+                                        keyboardType = KeyboardType.Text,
+                                        imeAction = ImeAction.Next
+                                    ),
+                                    textStyle = TextStyle(
+                                        color = MaterialTheme.colors.secondaryVariant,
+                                        fontSize = 16.sp
+                                    )
+
+                                )
+
+
+                                TextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                        .background(
+                                            color = MaterialTheme.colors.surface,
+                                        ),
+                                    value = instructions,
+                                    onValueChange = {
+                                        coroutineScope.launch {
+                                            viewModel.userIntent.send(
+                                                LocationsIntent.InstructionsChange(
+                                                    it
+                                                )
+                                            )
+                                        }
+                                    },
+                                    label = {
+                                        Text(text = "Instructions")
+                                    },
+                                    keyboardOptions = KeyboardOptions(
+                                        autoCorrect = false,
+                                        keyboardType = KeyboardType.Text,
+                                        imeAction = ImeAction.Next
+                                    ),
+                                    textStyle = TextStyle(
+                                        color = MaterialTheme.colors.secondaryVariant,
+                                        fontSize = 16.sp
+                                    )
+
+                                )
+
+
+                                Button(
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .fillMaxWidth(),
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            viewModel.userIntent.send(LocationsIntent.SaveAddress)
+                                        }
+                                    })
+                                {
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .background(
+                                                shape = MaterialTheme.shapes.large,
+                                                color = MaterialTheme.colors.primary
+                                            ),
+                                        text = "Save address",
+                                        style = TextStyle(
+                                            fontSize = 16.sp
+                                        )
+                                    )
+                                }
+
+                            }
+
+
+                        }
+                    }
+
+
+                }
+
+
+            }
+
 
         }
 

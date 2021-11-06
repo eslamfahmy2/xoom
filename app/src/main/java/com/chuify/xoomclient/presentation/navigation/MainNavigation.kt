@@ -1,6 +1,9 @@
 package com.chuify.xoomclient.presentation.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
@@ -38,7 +41,7 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
 
     AnimatedNavHost(navController = navHostController, startDestination = Screens.Main.route) {
 
-        composable(route = Screens.Main.fullRoute()) {
+        composable(route = Screens.Main.fullRoute() ,) {
             MainScreen(navHostController = navHostController)
         }
 
@@ -104,11 +107,31 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
 
         }
 
-        composable(route = Screens.EditProfile.fullRoute()) {
+        composable(route = Screens.EditProfile.fullRoute(),
+            enterTransition = { _, _ ->
+                slideInVertically(initialOffsetY = { 5000 }, animationSpec = tween(500))
+            },
+            exitTransition = { _, _ ->
+                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
+            },
+            popExitTransition = { _, _ ->
+                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
+            }
+        ) {
             EditProfileScreen(navHostController = navHostController)
         }
 
-        composable(route = Screens.Locations.fullRoute()) {
+        composable(route = Screens.Locations.fullRoute(),
+            enterTransition = { _, _ ->
+                slideInVertically(initialOffsetY = { 5000 }, animationSpec = tween(500))
+            },
+            exitTransition = { _, _ ->
+                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
+            },
+            popExitTransition = { _, _ ->
+                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
+            }
+        ) {
             LocationsScreen(navHostController = navHostController)
         }
 

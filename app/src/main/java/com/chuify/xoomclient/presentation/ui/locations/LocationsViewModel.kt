@@ -1,8 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.locations
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.usecase.location.GetLocationsUseCase
@@ -32,6 +30,18 @@ class LocationsViewModel @Inject constructor(
         MutableStateFlow(LocationsState.Loading)
     val state get() = _state.asStateFlow()
 
+    private val _showDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val showDialog get() = _showDialog.asStateFlow()
+
+    private val _title: MutableStateFlow<String> = MutableStateFlow(String())
+    val title get() = _title.asStateFlow()
+
+    private val _details: MutableStateFlow<String> = MutableStateFlow(String())
+    val details get() = _details.asStateFlow()
+
+    private val _instructions: MutableStateFlow<String> = MutableStateFlow(String())
+    val instructions get() = _instructions.asStateFlow()
+
 
     init {
         handleIntent()
@@ -46,9 +56,65 @@ class LocationsViewModel @Inject constructor(
                     LocationsIntent.LoadLocations -> {
                         loadLocations()
                     }
+                    is LocationsIntent.DetailsChange -> {
+                        _details.value = intent.data
+                    }
+                    is LocationsIntent.InstructionsChange -> {
+                        _instructions.value = intent.data
+                    }
+                    LocationsIntent.SaveAddress -> {
+                        _showDialog.value = false
+                        saveLocation(
+                            addressUrl = _title.value,
+                            details = _details.value,
+                            instructions = _instructions.value
+                        )
+                    }
+                    is LocationsIntent.TitleChange -> {
+                        _title.value = intent.data
+                    }
+                    LocationsIntent.DismissDialog -> {
+                        _showDialog.value = false
+                    }
+                    LocationsIntent.ShowDialog -> {
+                        _showDialog.value = true
+                    }
                 }
             }
         }
+    }
+
+    private suspend fun saveLocation(
+        addressUrl: String,
+        details: String,
+        instructions: String,
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            saveLocationsUseCase(
+                addressUrl = addressUrl,
+                details = details,
+                instructions = instructions,
+                lat = 0.0,
+                lng = 0.0,
+            ).collect { dataState ->
+                when (dataState) {
+                    is DataState.Error -> {
+                        Log.d(TAG, "Error: " + dataState.message)
+                        _state.value = LocationsState.Error(dataState.message)
+                    }
+                    is DataState.Loading -> {
+                        _state.value = LocationsState.Loading
+                    }
+                    is DataState.Success -> {
+                        Log.d(TAG, "Success: location $dataState")
+
+                        loadLocations()
+
+                    }
+                }
+            }
+        }
+
     }
 
 

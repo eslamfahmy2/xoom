@@ -1,6 +1,5 @@
 package com.chuify.xoomclient.domain.usecase.location
 
-import com.chuify.xoomclient.domain.mapper.LocationDtoMapper
 import com.chuify.xoomclient.domain.repository.LocationRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState

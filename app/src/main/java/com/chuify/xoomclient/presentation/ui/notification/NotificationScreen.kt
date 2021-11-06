@@ -96,7 +96,7 @@ fun NotificationScreen(
                     NotificationState.Loading -> {
                         LoadingListScreen(
                             count = 3,
-                            height = 250.dp
+                            height = 100.dp
                         )
                     }
 

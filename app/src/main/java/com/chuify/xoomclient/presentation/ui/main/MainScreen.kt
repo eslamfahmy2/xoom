@@ -2,9 +2,12 @@ package com.chuify.xoomclient.presentation.ui.main
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.chuify.xoomclient.presentation.ui.notification.NotificationIntent
@@ -51,9 +54,9 @@ fun MainScreen(navHostController: NavHostController) {
                 selected = currentScreen.value
             )
         }
-    ) {
-
+    ) { innerPadding ->
         HorizontalPager(
+            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
             state = pagerState,
             count = 4
         ) {

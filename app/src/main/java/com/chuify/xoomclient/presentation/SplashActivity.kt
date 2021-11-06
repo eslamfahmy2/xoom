@@ -12,8 +12,10 @@ import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.presentation.ui.signup.TAG
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @SuppressLint("CustomSplashScreen")
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -32,7 +34,7 @@ class SplashActivity : AppCompatActivity() {
         if (token.isEmpty()) {
             startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
         } else {
-            startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
+            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
         }
         finish()
 

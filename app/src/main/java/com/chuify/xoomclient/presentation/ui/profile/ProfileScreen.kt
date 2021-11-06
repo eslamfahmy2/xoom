@@ -100,10 +100,7 @@ fun ProfileScreen(
                         }
                     }
                     ProfileState.Loading -> {
-                        LoadingListScreen(
-                            count = 1,
-                            height = 10000.dp
-                        )
+
                     }
                     is ProfileState.Success -> {
                         LazyColumn(
@@ -127,7 +124,7 @@ fun ProfileScreen(
                                         Row(verticalAlignment = Alignment.CenterVertically) {
                                             Image(
                                                 modifier = Modifier
-                                                    .padding(8.dp)
+                                                    .padding(16.dp)
                                                     .size(50.dp)
                                                     .clip(CircleShape)
                                                     .border(2.dp, Color.Gray, CircleShape)
@@ -207,7 +204,7 @@ fun ProfileScreen(
                                             ) {
                                                 Icon(
                                                     modifier = Modifier.padding(8.dp),
-                                                    imageVector = Icons.Filled.LocationCity,
+                                                    imageVector = Icons.Filled.MyLocation,
                                                     contentDescription = null,
                                                     tint = Color.Green
                                                 )
@@ -423,16 +420,24 @@ fun ProfileScreen(
                             }
 
                             item {
-                                Button(modifier = Modifier
-                                    .padding(16.dp)
-                                    .padding(bottom = 32.dp)
-                                    .fillMaxWidth(), onClick = {
-                                    coroutineScope.launch {
-                                        viewModel.userIntent.send(ProfileIntent.LogOut)
+
+                                Card(
+                                    elevation = 4.dp,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp)
+                                ) {
+
+                                    Button(modifier = Modifier
+                                        .fillMaxWidth(), onClick = {
+                                        coroutineScope.launch {
+                                            viewModel.userIntent.send(ProfileIntent.LogOut)
+                                        }
+                                    }) {
+                                        Text(text = "Logout")
                                     }
-                                }) {
-                                    Text(text = "Logout")
                                 }
+
                             }
                         }
 
