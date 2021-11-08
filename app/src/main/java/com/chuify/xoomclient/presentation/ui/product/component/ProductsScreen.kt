@@ -1,6 +1,7 @@
 package com.chuify.xoomclient.presentation.ui.product.component
 
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
@@ -36,7 +37,7 @@ fun ProductsScreen(
                 snackHostState = scaffoldState.snackbarHostState,
                 onDismiss = { scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() },
             )
-        }
+        },
     ) {
 
         when (state) {

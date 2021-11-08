@@ -37,15 +37,14 @@ fun CartPreview(
             Row(
                 modifier = Modifier.align(Alignment.CenterStart),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start) {
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Text(
                     text = price,
-                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(2.dp)
                 )
                 Text(
                     text = stringResource(R.string.currency),
-                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(2.dp)
                 )
 
@@ -58,7 +57,6 @@ fun CartPreview(
             ) {
                 Text(
                     text = quantity,
-                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = "x",
@@ -67,11 +65,13 @@ fun CartPreview(
                 )
                 Text(
                     text = stringResource(R.string.checkout),
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(2.dp))
+                    modifier = Modifier.padding(2.dp)
+                )
 
-                Icon(Icons.Filled.ArrowForward, contentDescription = null,
-                    modifier = Modifier.padding(4.dp))
+                Icon(
+                    Icons.Filled.ArrowForward, contentDescription = null,
+                    modifier = Modifier.padding(4.dp)
+                )
 
 
             }

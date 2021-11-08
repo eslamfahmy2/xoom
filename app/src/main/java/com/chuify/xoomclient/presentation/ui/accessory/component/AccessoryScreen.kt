@@ -4,8 +4,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.unit.dp
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
@@ -22,9 +21,7 @@ fun AccessoryScreen(viewModel: AccessoryViewModel) {
 
     val coroutineScope = rememberCoroutineScope()
 
-    val state by remember {
-        viewModel.state
-    }
+    val state = viewModel.state.collectAsState().value
 
     val scaffoldState = rememberScaffoldState()
 
@@ -43,7 +40,7 @@ fun AccessoryScreen(viewModel: AccessoryViewModel) {
 
         when (state) {
             is AccessoryState.Error -> {
-                (state as AccessoryState.Error).message?.let {
+                state.message?.let {
                     coroutineScope.launch {
                         scaffoldState.snackbarHostState.showSnackbar(
                             message = it,
@@ -60,7 +57,7 @@ fun AccessoryScreen(viewModel: AccessoryViewModel) {
             }
             is AccessoryState.Success -> {
                 AccessoryData(
-                    data = (state as AccessoryState.Success).data,
+                    data = state.data,
                     onIncrease = {
                         coroutineScope.launch {
                             viewModel.userIntent.send(AccessoryIntent.IncreaseAccessoryCart(it))

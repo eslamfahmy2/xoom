@@ -1,13 +1,9 @@
 package com.chuify.xoomclient.presentation.ui.accessory.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,8 +39,10 @@ fun AccessoryItem(
                 contentScale = ContentScale.Crop
             )
 
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
 
                 Column(
                     modifier = Modifier,
@@ -60,9 +58,11 @@ fun AccessoryItem(
 
                         )
 
-                    Row(modifier = Modifier
-                        .wrapContentSize()
-                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
+                    Row(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                    ) {
                         Text(
                             text = accessory.price.toString(),
                             color = MaterialTheme.colors.primary,
@@ -81,17 +81,17 @@ fun AccessoryItem(
 
                 if (accessory.quantity > 0) {
 
-                    Row(modifier = Modifier.padding(8.dp) ,
-                    verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier.padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
 
-                        Button(
+                        OutlinedButton(
                             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    shape = RoundedCornerShape(5.dp),
-                                    color = Color.Gray,
-                                ),
+                            border = BorderStroke(
+                                width = 1.dp,
+                                color = Color.Gray,
+                            ),
                             onClick = {
                                 decreaseCartItem(accessory)
                             },
@@ -100,11 +100,13 @@ fun AccessoryItem(
                             Text(text = "-")
                         }
 
-                        Text(modifier = Modifier.padding(4.dp),
-                            text = accessory.quantity.toString())
+                        Text(
+                            modifier = Modifier.padding(6.dp),
+                            text = accessory.quantity.toString()
+                        )
 
                         Button(
-                           onClick = {
+                            onClick = {
                                 increaseCartItem(accessory)
                             }) {
                             Text(text = "+")

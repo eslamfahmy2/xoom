@@ -1,8 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.accessory
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Accessory
@@ -12,7 +10,10 @@ import com.chuify.xoomclient.domain.usecase.home.ListAccessoriesUseCase
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
@@ -28,12 +29,12 @@ class AccessoryViewModel @Inject constructor(
 
     val userIntent = Channel<AccessoryIntent>(Channel.UNLIMITED)
 
-    private val _state: MutableState<AccessoryState> = mutableStateOf(AccessoryState.Loading)
-    val state get() = _state
+    private val _state: MutableStateFlow<AccessoryState> = MutableStateFlow(AccessoryState.Loading)
+    val state get() = _state.asStateFlow()
 
-    private val _searchText: MutableState<String> = mutableStateOf(String())
+    private val _searchText: MutableStateFlow<String> = MutableStateFlow(String())
 
-    private val _accessoryList: MutableState<List<Accessory>> = mutableStateOf(listOf())
+    private val _accessoryList: MutableStateFlow<List<Accessory>> = MutableStateFlow(listOf())
 
 
     init {
@@ -74,7 +75,7 @@ class AccessoryViewModel @Inject constructor(
     }
 
 
-    private suspend fun loadAccessories() {
+    private suspend fun loadAccessories() = viewModelScope.launch(Dispatchers.IO) {
         listAccessoriesUseCase().collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {
@@ -87,13 +88,14 @@ class AccessoryViewModel @Inject constructor(
                 is DataState.Success -> {
                     _accessoryList.value = dataState.data ?: listOf()
                     _state.value = AccessoryState.Success(
-                        data = dataState.data ?: listOf())
+                        data = dataState.data ?: listOf()
+                    )
                 }
             }
         }
     }
 
-    private suspend fun insert(accessory: Accessory) {
+    private suspend fun insert(accessory: Accessory) = viewModelScope.launch(Dispatchers.IO) {
 
         insertOrUpdateAccessoryUseCase(
             image = accessory.image,
@@ -117,25 +119,26 @@ class AccessoryViewModel @Inject constructor(
 
     }
 
-    private suspend fun decreaseOrRemove(accessory: Accessory) {
+    private suspend fun decreaseOrRemove(accessory: Accessory) =
+        viewModelScope.launch(Dispatchers.IO) {
 
-        Log.d(TAG, "handleIntent: ")
-        deleteOrUpdateAccessoryUseCase(accessory.id).collect { dataState ->
-            when (dataState) {
-                is DataState.Error -> {
-                    Log.d(TAG, "Error: " + dataState.message)
-                    _state.value = AccessoryState.Error(dataState.message)
-                }
-                is DataState.Loading -> {
-                }
-                is DataState.Success -> {
-                    Log.d(TAG, "Success: $dataState")
+            Log.d(TAG, "handleIntent: ")
+            deleteOrUpdateAccessoryUseCase(accessory.id).collect { dataState ->
+                when (dataState) {
+                    is DataState.Error -> {
+                        Log.d(TAG, "Error: " + dataState.message)
+                        _state.value = AccessoryState.Error(dataState.message)
+                    }
+                    is DataState.Loading -> {
+                    }
+                    is DataState.Success -> {
+                        Log.d(TAG, "Success: $dataState")
+                    }
                 }
             }
+
+
         }
-
-
-    }
 
 
 }

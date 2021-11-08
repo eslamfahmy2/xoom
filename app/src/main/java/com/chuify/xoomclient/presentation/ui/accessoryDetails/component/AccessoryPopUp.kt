@@ -1,31 +1,24 @@
 package com.chuify.xoomclient.presentation.ui.accessoryDetails.component
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.*
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.domain.model.Accessory
@@ -75,6 +68,7 @@ fun AccessoryPref(
 }
 
 
+@ExperimentalAnimationApi
 @Composable
 fun AccessoryPopUp(
     accessory: Accessory,
@@ -83,12 +77,14 @@ fun AccessoryPopUp(
     dismiss: () -> Unit,
 ) {
 
+   // val visible = remember { mutableStateOf(false) }
 
     Card(
         elevation = 8.dp,
-        modifier = Modifier.animateContentSize()
+        modifier = Modifier.animateContentSize(),
+        backgroundColor = MaterialTheme.colors.surface
     ) {
-        Column {
+        Column(modifier = Modifier.animateContentSize()) {
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -111,10 +107,7 @@ fun AccessoryPopUp(
             }
 
             Column(
-                modifier = Modifier
-                    .background(MaterialTheme.colors.primary)
-                    .clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
-                    .background(MaterialTheme.colors.background)
+                modifier = Modifier.clip(RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
             ) {
 
 
@@ -151,30 +144,28 @@ fun AccessoryPopUp(
                     )
 
                     if (accessory.quantity > 0) {
-
+                     //   visible.value = true
                         Row(
                             modifier = Modifier.padding(8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
 
-                            Button(
+                            OutlinedButton(
                                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
-                                modifier = Modifier
-                                    .border(
-                                        width = 1.dp,
-                                        shape = RoundedCornerShape(5.dp),
-                                        color = Color.Gray,
-                                    ),
                                 onClick = {
                                     decreaseCartItem(accessory)
                                 },
+                                border = BorderStroke(
+                                    width = 1.dp,
+                                    color = Color.Gray,
+                                )
 
-                                ) {
+                            ) {
                                 Text(text = "-")
                             }
 
                             Text(
-                                modifier = Modifier.padding(4.dp),
+                                modifier = Modifier.padding(6.dp),
                                 text = accessory.quantity.toString()
                             )
 
@@ -186,6 +177,7 @@ fun AccessoryPopUp(
                             }
                         }
                     } else {
+                       // visible.value = false
                         Box(modifier = Modifier.padding(8.dp)) {
                             Button(
                                 onClick = {
@@ -199,48 +191,62 @@ fun AccessoryPopUp(
 
                 }
             }
-
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colors.primary)
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+/*
+            val density = LocalDensity.current
+            AnimatedVisibility(
+                visible = visible.value,
+                enter = slideInVertically(
+                    // Slide in from 40 dp from the top.
+                    initialOffsetY = { with(density) { -40.dp.roundToPx() } }
+                ) + expandVertically(
+                    // Expand from the top.
+                    expandFrom = Alignment.Top
+                ) + fadeIn(
+                    // Fade in with the initial alpha of 0.3f.
+                    initialAlpha = 0.3f
+                ),
+                exit = slideOutVertically() + shrinkVertically() + fadeOut()
             ) {
-
-                Text(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(8.dp),
-                    text = stringResource(id = R.string.total),
-                    color = MaterialTheme.colors.onSurface,
-                )
-
+*/
                 Row(
                     modifier = Modifier
-                        .wrapContentSize()
-                        .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colors.primary)
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = accessory.totalPrice.toString(),
-                        color = Color.Black,
 
-                        )
-                    Spacer(modifier = Modifier.padding(2.dp))
                     Text(
-                        text = stringResource(R.string.currency),
-                        color = Color.Black,
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(8.dp),
+                        text = stringResource(id = R.string.total),
+                    )
 
-                        )
+                    Row(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                    ) {
+                        Text(
+                            text = accessory.totalPrice.toString(),
+                            color = Color.Black,
+
+                            )
+                        Spacer(modifier = Modifier.padding(2.dp))
+                        Text(
+                            text = stringResource(R.string.currency),
+                            color = Color.Black,
+
+                            )
+
+                    }
+
 
                 }
 
-
-            }
-
-
+      //      }
         }
 
 

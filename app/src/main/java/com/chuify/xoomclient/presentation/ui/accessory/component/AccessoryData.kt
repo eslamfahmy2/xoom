@@ -16,8 +16,8 @@ fun AccessoryData(
 ) {
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(data) {
-            AccessoryItem(accessory = it,
+        items(data) { accessory ->
+            AccessoryItem(accessory = accessory,
                 increaseCartItem = { onIncrease(it) },
                 decreaseCartItem = { onDecrease(it) })
         }
