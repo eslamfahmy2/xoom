@@ -36,7 +36,7 @@ fun MainScreen(navHostController: NavHostController) {
     val coroutineScope = rememberCoroutineScope()
 
     val currentScreen = remember {
-        mutableStateOf(0)
+        mutableStateOf(pagerState.currentPage)
     }
     val notificationViewModel: NotificationViewModel = hiltViewModel()
     val count = notificationViewModel.notReadCount.collectAsState().value
