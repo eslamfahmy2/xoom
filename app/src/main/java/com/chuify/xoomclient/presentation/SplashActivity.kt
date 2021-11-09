@@ -9,12 +9,13 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import com.chuify.xoomclient.data.prefrences.SharedPrefs
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
+private const val TAG = "SplashActivity"
 @ExperimentalCoroutinesApi
 @SuppressLint("CustomSplashScreen")
 @ExperimentalAnimationApi
@@ -34,7 +35,7 @@ class SplashActivity : AppCompatActivity() {
         if (token.isEmpty()) {
             startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
         } else {
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
         }
         finish()
 

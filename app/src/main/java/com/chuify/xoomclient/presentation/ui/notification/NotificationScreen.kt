@@ -11,7 +11,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,7 +25,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.domain.model.Notification
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
@@ -44,9 +46,7 @@ fun NotificationScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val state by remember {
-        viewModel.state
-    }
+    val state = viewModel.state.collectAsState().value
 
     Scaffold(
         topBar = { SolidBar() },
@@ -82,7 +82,7 @@ fun NotificationScreen(
 
                 when (state) {
                     is NotificationState.Error -> {
-                        (state as NotificationState.Error).message?.let {
+                        state.message?.let {
                             coroutineScope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar(
                                     message = it,
@@ -99,7 +99,7 @@ fun NotificationScreen(
                     }
 
                     is NotificationState.Success -> {
-                        val data = (state as NotificationState.Success).notifications
+                        val data = state.notifications
                         LazyColumn() {
                             items(data) {
                                 NotificationItem(notification = it, action = {

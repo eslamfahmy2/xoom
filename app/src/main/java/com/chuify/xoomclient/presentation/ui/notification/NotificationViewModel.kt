@@ -1,8 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.notification
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Notification
@@ -10,8 +8,9 @@ import com.chuify.xoomclient.domain.usecase.notification.GetNotReadCountUseCase
 import com.chuify.xoomclient.domain.usecase.notification.GetNotificationListUseCase
 import com.chuify.xoomclient.domain.usecase.notification.MarkAsReadUseCase
 import com.chuify.xoomclient.domain.utils.DataState
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +19,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+private const val TAG = "NotificationViewModel"
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     private val getNotificationList: GetNotificationListUseCase,
@@ -30,9 +29,9 @@ class NotificationViewModel @Inject constructor(
 
     val userIntent = Channel<NotificationIntent>(Channel.UNLIMITED)
 
-    private val _state: MutableState<NotificationState> =
-        mutableStateOf(NotificationState.Loading)
-    val state get() = _state
+    private val _state: MutableStateFlow<NotificationState> =
+        MutableStateFlow(NotificationState.Loading)
+    val state get() = _state.asStateFlow()
 
     private val _notReadCount = MutableStateFlow(0)
     val notReadCount get() = _notReadCount.asStateFlow()
@@ -58,7 +57,7 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
-    private fun loadNotReadNotifications() = viewModelScope.launch {
+    private fun loadNotReadNotifications() = viewModelScope.launch(Dispatchers.IO) {
         getNotReadCountUseCase().collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {
@@ -76,7 +75,7 @@ class NotificationViewModel @Inject constructor(
     }
 
 
-    private fun loadNotifications() = viewModelScope.launch {
+    private fun loadNotifications() = viewModelScope.launch(Dispatchers.IO) {
         getNotificationList().collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {
@@ -97,7 +96,7 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
-    private fun markAsRead(notification: Notification) = viewModelScope.launch {
+    private fun markAsRead(notification: Notification) = viewModelScope.launch(Dispatchers.IO) {
         markAsReadUseCase(notification).collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {

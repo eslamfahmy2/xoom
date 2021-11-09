@@ -1,7 +1,6 @@
 package com.chuify.xoomclient.domain.usecase.cart
 
 import android.text.format.DateFormat
-import android.util.Log
 import com.chuify.xoomclient.domain.model.Cart
 import com.chuify.xoomclient.domain.model.Location
 import com.chuify.xoomclient.domain.model.Payments
@@ -9,7 +8,6 @@ import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.repository.OrderRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
-import com.chuify.xoomclient.presentation.ui.signup.TAG
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.flow
@@ -62,7 +60,7 @@ class SubmitOrderUseCase @Inject constructor(
                     }
                     orderJson.add("products", array)
                     val body = orderJson.toString()
-                    Log.d(TAG, "productssubmit $body")
+
 
                     when (val response = orderRepo.submitOrder(body)) {
                         is ResponseState.Error -> {

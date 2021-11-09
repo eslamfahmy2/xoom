@@ -9,7 +9,7 @@ import com.chuify.xoomclient.domain.model.Order
 import com.chuify.xoomclient.domain.usecase.order.GetCompletedOrderListUseCase
 import com.chuify.xoomclient.domain.usecase.order.RecorderUseCase
 import com.chuify.xoomclient.domain.utils.DataState
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "CompletedOrdersViewMode"
 
 @HiltViewModel
 class CompletedOrdersViewModel @Inject constructor(

@@ -8,7 +8,7 @@ import com.chuify.xoomclient.domain.usecase.cart.DecreaseOrderUseCase
 import com.chuify.xoomclient.domain.usecase.cart.IncreaseOrderUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListAccessoriesUseCase
 import com.chuify.xoomclient.domain.utils.DataState
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+private const val TAG = "AccessoryViewModel"
 
 @HiltViewModel
 class AccessoryViewModel @Inject constructor(

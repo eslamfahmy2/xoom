@@ -13,7 +13,7 @@ import com.chuify.xoomclient.domain.usecase.cart.IncreaseOrderUseCase
 import com.chuify.xoomclient.domain.usecase.cart.SubmitOrderUseCase
 import com.chuify.xoomclient.domain.usecase.location.GetLocationsUseCase
 import com.chuify.xoomclient.domain.utils.DataState
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "CheckoutViewModel"
 
 @HiltViewModel
 class CheckoutViewModel @Inject constructor(

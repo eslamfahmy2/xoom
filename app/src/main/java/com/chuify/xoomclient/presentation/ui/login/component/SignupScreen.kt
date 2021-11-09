@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.signup.component
+package com.chuify.xoomclient.presentation.ui.login.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,19 +11,12 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.os.bundleOf
-import androidx.navigation.NavController
-import com.chuify.xoomclient.R
-import com.chuify.xoomclient.presentation.ui.signup.SignUpIntent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -31,30 +24,29 @@ fun SignupScreen(
     firstName: String,
     lastName: String,
     email: String,
-    coroutineScope: CoroutineScope,
-    userIntent: Channel<SignUpIntent>,
-    navController: NavController,
+    onFirstNameChange: (String) -> Unit,
+    onLastNameChange: (String) -> Unit,
+    onEmailNameChange: (String) -> Unit,
+    onSignup: () -> Unit,
+    onLogin: () -> Unit,
 
 
     ) {
 
-    ConstraintLayout(
+    val focusManager = LocalFocusManager.current
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
-
+            .padding(8.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Top
     ) {
 
-        val (header, content, footer) = createRefs()
 
         Column(
             modifier = Modifier
-                .wrapContentSize()
-                .constrainAs(header) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    bottom.linkTo(content.top)
-                },
+                .wrapContentSize(),
         ) {
 
             Text(
@@ -77,14 +69,10 @@ fun SignupScreen(
 
         }
 
-        Column(modifier = Modifier
-            .wrapContentSize()
-            .constrainAs(content) {
-                top.linkTo(header.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(footer.top)
-            }) {
+        Column(
+            modifier = Modifier
+                .wrapContentSize()
+        ) {
 
             TextField(
                 modifier = Modifier
@@ -96,9 +84,7 @@ fun SignupScreen(
                     ),
                 value = firstName,
                 onValueChange = {
-                    coroutineScope.launch {
-                        userIntent.send(SignUpIntent.FirstNameChange(it))
-                    }
+                    onFirstNameChange(it)
                 },
                 label = {
                     Text(text = "First name")
@@ -109,7 +95,6 @@ fun SignupScreen(
                     imeAction = ImeAction.Next
                 ),
                 textStyle = TextStyle(
-                    color = MaterialTheme.colors.secondaryVariant,
                     fontSize = 16.sp
                 )
 
@@ -125,9 +110,7 @@ fun SignupScreen(
                     ),
                 value = lastName,
                 onValueChange = {
-                    coroutineScope.launch {
-                        userIntent.send(SignUpIntent.LastNameChange(it))
-                    }
+                    onLastNameChange(it)
                 },
                 label = {
                     Text(text = "Last name")
@@ -138,7 +121,6 @@ fun SignupScreen(
                     imeAction = ImeAction.Next
                 ),
                 textStyle = TextStyle(
-                    color = MaterialTheme.colors.secondaryVariant,
                     fontSize = 16.sp
                 )
 
@@ -154,9 +136,7 @@ fun SignupScreen(
                     ),
                 value = email,
                 onValueChange = {
-                    coroutineScope.launch {
-                        userIntent.send(SignUpIntent.EmailChange(it))
-                    }
+                    onEmailNameChange(it)
                 },
                 label = {
                     Text(text = "Email")
@@ -167,7 +147,6 @@ fun SignupScreen(
                     imeAction = ImeAction.Next
                 ),
                 textStyle = TextStyle(
-                    color = MaterialTheme.colors.secondaryVariant,
                     fontSize = 16.sp
                 )
 
@@ -179,9 +158,8 @@ fun SignupScreen(
                     .padding(8.dp)
                     .fillMaxWidth(),
                 onClick = {
-                    coroutineScope.launch {
-                        userIntent.send(SignUpIntent.SignUp)
-                    }
+                    focusManager.clearFocus()
+                    onSignup()
                 })
             {
                 Text(
@@ -202,13 +180,7 @@ fun SignupScreen(
 
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .constrainAs(footer) {
-                    top.linkTo(content.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                },
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
 
@@ -227,11 +199,8 @@ fun SignupScreen(
                     .wrapContentSize()
                     .padding(8.dp)
                     .clickable {
-                        val bundle = bundleOf()
-                        navController.navigate(
-                            R.id.action_signUpFragment_to_loginFragment,
-                            bundle
-                        )
+                        focusManager.clearFocus()
+                        onLogin()
                     },
                 text = "Login",
                 color = MaterialTheme.colors.primary,

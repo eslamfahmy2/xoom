@@ -6,7 +6,7 @@ import com.chuify.xoomclient.domain.model.CartPreview
 import com.chuify.xoomclient.domain.model.Cart
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.conflate
@@ -35,7 +35,7 @@ class GetCartItemsUseCase @Inject constructor(
                         totalQuantity = quantity)
 
                     val res = Pair(listOrders, cartPreview)
-                    Log.d(TAG, "invoke: $cartPreview")
+
                     emit(DataState.Success(res))
                 }
             }

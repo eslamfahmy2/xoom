@@ -3,17 +3,18 @@ package com.chuify.xoomclient.domain.usecase.auth
 
 import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.domain.mapper.UserDtoMapper
-import com.chuify.xoomclient.domain.model.User
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
 import com.chuify.xoomclient.domain.utils.Validator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class SignUpUseCase @Inject constructor(
     private val repo: AuthRepo,
-    private val mapper: UserDtoMapper,
     private val sharedPreferences: SharedPrefs,
 ) {
 
@@ -22,9 +23,13 @@ class SignUpUseCase @Inject constructor(
         lastname: String,
         email: String,
         phone: String,
-    ) = flow<DataState<User>> {
+    ) = flow<DataState<LoginResult>> {
         try {
             emit(DataState.Loading())
+            val phoneNumber = "+254$phone"
+            if (!Validator.isValidName(phoneNumber)) {
+                throw Exception("phone not valid")
+            }
             if (!Validator.isValidName(firstname)) {
                 throw Exception("first name not valid")
             }
@@ -35,12 +40,11 @@ class SignUpUseCase @Inject constructor(
                 throw Exception("email not valid")
             }
 
-
             val response = repo.register(
                 firstname = firstname,
                 lastname = lastname,
                 email = email,
-                phone = phone
+                phone = phoneNumber
             )
 
             when (response) {
@@ -49,12 +53,21 @@ class SignUpUseCase @Inject constructor(
                 }
                 is ResponseState.Success -> {
 
-                    if (response.data.status.equals("0")) {
-                        throw Exception(response.data.msg)
+                    when {
+                        response.data.status.equals("0") -> {
+                            emit(DataState.Error(response.data.msg))
+                        }
+                        response.data.status.equals("1") -> {
+                            sharedPreferences.saveUser(response.data)
+                            sharedPreferences.saveToken(response.data.access_token)
+                            sharedPreferences.saveUserID(response.data.user_id)
+                            sharedPreferences.saveUser(response.data)
+                            emit(DataState.Success(LoginResult.Login))
+                        }
+                        else -> {
+                            emit(DataState.Error(response.data.msg))
+                        }
                     }
-                    sharedPreferences.saveUser(response.data)
-                    val user = mapper.mapToDomainModel(response.data)
-                    emit(DataState.Success(user))
 
                 }
             }
@@ -63,5 +76,5 @@ class SignUpUseCase @Inject constructor(
         } catch (e: Exception) {
             emit(DataState.Error(e.message))
         }
-    }
+    }.flowOn(Dispatchers.IO).conflate()
 }

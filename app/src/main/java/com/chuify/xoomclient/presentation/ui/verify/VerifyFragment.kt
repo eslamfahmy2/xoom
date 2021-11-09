@@ -21,11 +21,10 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.chuify.xoomclient.R
-import com.chuify.xoomclient.presentation.components.HomeBar
-import com.chuify.xoomclient.presentation.components.DefaultSnackBar
-import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.application.BaseApplication
+import com.chuify.xoomclient.presentation.components.DefaultSnackBar
+import com.chuify.xoomclient.presentation.components.HomeBar
+import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
 import com.chuify.xoomclient.presentation.ui.verify.component.VerifyScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -98,7 +97,7 @@ class VerifyFragment : Fragment() {
                             phone = phone,
                             coroutineScope = coroutineScope,
                             userIntent = viewModel.userIntent,
-                            navController = findNavController() ,
+                            navController = findNavController(),
                             activity = activity
                         )
                         when (state) {
@@ -116,7 +115,8 @@ class VerifyFragment : Fragment() {
 
                             }
                             VerifyState.Loading -> {
-                                Box(Modifier.fillMaxSize(),
+                                Box(
+                                    Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     CircularProgressIndicator(
@@ -126,13 +126,6 @@ class VerifyFragment : Fragment() {
                             }
                             is VerifyState.Success -> {
 
-                                findNavController().navigate(
-                                    R.id.action_verifyFragment_to_OTPFragment,
-                                    Bundle()
-                                )
-                                coroutineScope.launch {
-                                    viewModel.userIntent.send(VerifyIntent.Idl)
-                                }
 
                             }
                         }

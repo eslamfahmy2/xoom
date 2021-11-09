@@ -9,7 +9,7 @@ import com.chuify.xoomclient.domain.model.Order
 import com.chuify.xoomclient.domain.usecase.order.CancelUseCase
 import com.chuify.xoomclient.domain.usecase.order.GetPendingOrderListUseCase
 import com.chuify.xoomclient.domain.utils.DataState
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+private const val TAG = "PendingOrdersViewModel"
 @HiltViewModel
 class PendingOrdersViewModel @Inject constructor(
     private val getPendingOrderListUseCase: GetPendingOrderListUseCase,

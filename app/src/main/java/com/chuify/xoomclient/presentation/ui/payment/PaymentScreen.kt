@@ -28,10 +28,11 @@ import com.chuify.xoomclient.presentation.components.PaymentItem
 import com.chuify.xoomclient.presentation.components.SecondaryBar
 import com.chuify.xoomclient.presentation.ui.checkout.CheckoutIntent
 import com.chuify.xoomclient.presentation.ui.checkout.CheckoutViewModel
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 
+private const val TAG = "PaymentScreen"
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @ExperimentalPagerApi

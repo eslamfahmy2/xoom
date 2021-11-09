@@ -28,7 +28,7 @@ import com.chuify.xoomclient.presentation.ui.accessoryDetails.AccessoryDetailsIn
 import com.chuify.xoomclient.presentation.ui.accessoryDetails.AccessoryDetailsState
 import com.chuify.xoomclient.presentation.ui.accessoryDetails.AccessoryDetailsViewModel
 import com.chuify.xoomclient.presentation.ui.accessoryDetails.component.AccessoryPref
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+
 import com.chuify.xoomclient.presentation.ui.vendors.VendorIntent
 import com.chuify.xoomclient.presentation.ui.vendors.VendorState
 import com.chuify.xoomclient.presentation.ui.vendors.VendorViewModel
@@ -36,6 +36,8 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
+
+private const val TAG = "VendorScreen"
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @ExperimentalAnimationApi

@@ -1,7 +1,5 @@
 package com.chuify.xoomclient.presentation.ui.editProfile
 
-import com.chuify.xoomclient.presentation.ui.signup.SignUpIntent
-
 
 sealed class EditProfileIntent {
     object LoadProfile : EditProfileIntent()

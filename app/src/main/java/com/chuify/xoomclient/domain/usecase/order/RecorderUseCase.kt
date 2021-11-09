@@ -7,13 +7,14 @@ import com.chuify.xoomclient.domain.model.Order
 import com.chuify.xoomclient.domain.repository.OrderRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.flow
 import java.util.*
 import javax.inject.Inject
 
+private const val TAG = "RecorderUseCase"
 
 class RecorderUseCase @Inject constructor(
     private val orderRepo: OrderRepo,

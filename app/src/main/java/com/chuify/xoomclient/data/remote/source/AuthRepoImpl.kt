@@ -79,7 +79,7 @@ class AuthRepoImpl @Inject constructor(
         phone: String,
     ): ResponseState<UserDto> = try {
         val response = apiInterface.register(
-            firstname = String(),
+            firstname = firstname,
             lastname = lastname,
             email = email,
             phone = phone
@@ -89,7 +89,7 @@ class AuthRepoImpl @Inject constructor(
                 ResponseState.Success(it)
             } ?: ResponseState.Error("api : body is empty")
         } else {
-            val jObjError = JSONObject(response.errorBody()!!.toString())
+            val jObjError = JSONObject(response.errorBody()!!.string())
             val message = jObjError.getString("error")
             ResponseState.Error(message)
         }

@@ -47,7 +47,8 @@
     <string name="cancelled">Cancelled</string>
     <string name="are_sure">"the order will be cancel ! are you sure? "</string>
     <string name="edit_profile">Edit profile</string>
-    <string name="save_location">Add Address</string> <!--gray-->
+    <string name="save_location">Add Address</string>
+    <string name="enter_your_mobile_number">Enter your mobile number</string> <!--gray-->
 
 
 </resources>

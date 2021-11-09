@@ -12,7 +12,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,16 +30,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
-import com.chuify.xoomclient.presentation.AuthenticationActivity
 import com.chuify.xoomclient.presentation.SplashActivity
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
-import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.components.SolidBar
 import com.chuify.xoomclient.presentation.navigation.Screens
-import com.chuify.xoomclient.presentation.ui.signup.TAG
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+
+private const val TAG = "ProfileScreen"
 
 @ExperimentalFoundationApi
 @ExperimentalCoroutinesApi
@@ -449,9 +451,7 @@ fun ProfileScreen(
                                 SplashActivity::class.java
                             )
                         )
-                        (LocalContext.current as? ComponentActivity)?.let {
-                            it.finish()
-                        }
+                        (LocalContext.current as? ComponentActivity)?.finish()
                     }
                 }
 

@@ -8,7 +8,7 @@ import com.chuify.xoomclient.domain.usecase.profile.GetProfileUseCase
 import com.chuify.xoomclient.domain.usecase.profile.LogOutUseCase
 import com.chuify.xoomclient.domain.usecase.profile.ThemeUseCase
 import com.chuify.xoomclient.domain.utils.DataState
-import com.chuify.xoomclient.presentation.ui.signup.TAG
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "ProfileViewModel"
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
