@@ -102,7 +102,7 @@ fun OrdersScreen(
                         if (it == 0) {
                             PendingOrdersScreen(navHostController = navHostController)
                         } else {
-                            CompletedOrdersScreen(navHostController = navHostController)
+                            CompletedOrdersScreen()
                         }
                     }
 

@@ -31,7 +31,6 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @Composable
 fun CompletedOrdersScreen(
-    navHostController: NavHostController,
     viewModel: CompletedOrdersViewModel = hiltViewModel(),
 ) {
 
