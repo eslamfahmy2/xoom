@@ -7,8 +7,11 @@ import com.chuify.xoomclient.domain.model.Cart
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.presentation.ui.signup.TAG
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class GetCartItemsUseCase @Inject constructor(
@@ -43,5 +46,5 @@ class GetCartItemsUseCase @Inject constructor(
 
 
         }
-    }
+    }.flowOn(Dispatchers.IO).conflate()
 }

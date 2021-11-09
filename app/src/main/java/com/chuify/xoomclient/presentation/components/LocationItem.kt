@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -26,8 +27,8 @@ fun LocationItem(location: Location) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(140.dp)
-            .padding(16.dp)
+            .height(150.dp)
+            .padding(8.dp)
             .border(
                 width = 1.dp,
                 color = Color.Gray,
@@ -36,7 +37,11 @@ fun LocationItem(location: Location) {
     ) {
 
         val brush = Brush.linearGradient(
-            colors = listOf(MaterialTheme.colors.surface, Color.Transparent),
+            colors = listOf(
+                MaterialTheme.colors.surface,
+                Color.Transparent
+            ),
+            tileMode = TileMode.Decal
         )
 
         Image(
@@ -45,7 +50,8 @@ fun LocationItem(location: Location) {
                 .clip(shape = RoundedCornerShape(10)),
             contentScale = ContentScale.Crop,
             painter = painterResource(id = R.drawable.map),
-            contentDescription = null)
+            contentDescription = null
+        )
 
 
 
@@ -57,23 +63,27 @@ fun LocationItem(location: Location) {
                     shape = RoundedCornerShape(10)
                 ),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween)
+            horizontalArrangement = Arrangement.SpaceBetween
+        )
         {
 
             Row {
                 Image(
                     modifier = Modifier.padding(16.dp),
                     painter = painterResource(id = R.drawable.ic_address),
-                    contentDescription = null)
+                    contentDescription = null
+                )
 
                 Column {
-                    Text(modifier = Modifier.padding(4.dp),
+                    Text(
+                        modifier = Modifier.padding(4.dp),
                         text = location.title.toString(),
                         color = MaterialTheme.colors.onSurface
 
                     )
 
-                    Text(modifier = Modifier.padding(4.dp),
+                    Text(
+                        modifier = Modifier.padding(4.dp),
                         text = location.details.toString(),
                         color = MaterialTheme.colors.secondaryVariant
                     )
@@ -85,7 +95,8 @@ fun LocationItem(location: Location) {
             Image(
                 modifier = Modifier.padding(16.dp),
                 painter = painterResource(id = R.drawable.ic_location),
-                contentDescription = null)
+                contentDescription = null
+            )
 
 
         }

@@ -32,7 +32,8 @@ fun LocationItemPicker(
                 modifier = Modifier
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween) {
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
 
                 Text(
                     text = stringResource(id = R.string.delivery_address),
@@ -41,11 +42,13 @@ fun LocationItemPicker(
                         .padding(16.dp),
                 )
 
-                Checkbox(checked = location.selected, onCheckedChange = {
-                    onPick(location)
-                }, enabled = false,
+                Checkbox(
+                    checked = location.selected, onCheckedChange = {
+                        onPick(location)
+                    }, enabled = true,
 
-                    modifier = Modifier.padding(16.dp))
+                    modifier = Modifier.padding(16.dp)
+                )
 
             }
 

@@ -2,7 +2,9 @@ package com.chuify.xoomclient.domain.di
 
 
 import com.chuify.xoomclient.domain.mapper.OrderDtoMapper
+import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.repository.OrderRepo
+import com.chuify.xoomclient.domain.usecase.cart.SubmitOrderUseCase
 import com.chuify.xoomclient.domain.usecase.order.GetCompletedOrderListUseCase
 import com.chuify.xoomclient.domain.usecase.order.GetPendingOrderListUseCase
 import com.chuify.xoomclient.domain.usecase.order.TrackOrderUseCase
@@ -36,5 +38,13 @@ object OrderUseCasesModule {
     fun provideTrackOrderUseCase(
         repository: OrderRepo,
     ) = TrackOrderUseCase(orderRepo = repository)
+
+
+    @Singleton
+    @Provides
+    fun provideSubmitOrderUseCaseUseCase(
+        repository: OrderRepo,
+        cartRepo: CartRepo
+    ) = SubmitOrderUseCase(orderRepo = repository, cartRepo = cartRepo)
 
 }

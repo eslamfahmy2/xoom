@@ -75,9 +75,11 @@ fun CartScreen(
             elevation = 20.dp
         )
         {
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+            ) {
 
                 Text(
                     modifier = Modifier.padding(8.dp),
@@ -103,12 +105,15 @@ fun CartScreen(
                     }
                     is CartState.Success -> {
 
-                        Box(modifier = Modifier
-                            .fillMaxSize()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                        ) {
 
                             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                                 items((state as CartState.Success).orders) {
-                                    CartItem(order = it,
+                                    CartItem(
+                                        order = it,
                                         increaseCartItem = {
                                             coroutineScope.launch {
                                                 viewModel.userIntent.send(CartIntent.IncreaseItem(it))
@@ -133,7 +138,8 @@ fun CartScreen(
                             CartPreview(
                                 modifier = Modifier.align(Alignment.BottomCenter),
                                 quantity = cartPreview.totalQuantity.toString(),
-                                price = cartPreview.totalPrice.toString()) {
+                                price = cartPreview.totalPrice.toString()
+                            ) {
                                 navHostController.navigate(Screens.Checkout.route)
                             }
 

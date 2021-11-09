@@ -4,7 +4,10 @@ import com.chuify.xoomclient.domain.mapper.CartEntityMapper
 import com.chuify.xoomclient.domain.model.Cart
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class DeleteOrderUs @Inject constructor(
@@ -20,5 +23,5 @@ class DeleteOrderUs @Inject constructor(
         } catch (e: Exception) {
             emit(DataState.Error(e.message))
         }
-    }
+    }.flowOn(Dispatchers.IO).conflate()
 }

@@ -2,6 +2,7 @@ package com.chuify.xoomclient.data.remote.source
 
 import android.util.Log
 import com.chuify.xoomclient.data.remote.dto.OrderListDto
+import com.chuify.xoomclient.data.remote.dto.StatusBooleanDto
 import com.chuify.xoomclient.data.remote.dto.StatusDto
 import com.chuify.xoomclient.data.remote.dto.TrackDto
 import com.chuify.xoomclient.data.remote.network.ApiInterface
@@ -55,8 +56,8 @@ class OrderRepoImpl @Inject constructor(
     }
 
     override suspend fun trackOrder(id: String): ResponseState<TrackDto> = try {
-        val trackOrders  = apiInterface.trackOrders(id)
-        Log.d("ofdfodkfod", "trackOrder: ofdfodkfod "+trackOrders)
+        val trackOrders = apiInterface.trackOrders(id)
+        Log.d("ofdfodkfod", "trackOrder: ofdfodkfod " + trackOrders)
         val response = apiInterface.trackOrder(id)
         if (response.isSuccessful) {
             response.body()?.let {
@@ -69,7 +70,7 @@ class OrderRepoImpl @Inject constructor(
         ResponseState.Error(e.message)
     }
 
-    override suspend fun submitOrder(body: String): ResponseState<StatusDto> = try {
+    override suspend fun submitOrder(body: String): ResponseState<StatusBooleanDto> = try {
         val response = apiInterface.saveOrder(body)
         if (response.isSuccessful) {
             response.body()?.let {

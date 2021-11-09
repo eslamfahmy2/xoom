@@ -2,7 +2,6 @@ package com.chuify.xoomclient.presentation.ui.main
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
@@ -14,7 +13,6 @@ import com.chuify.xoomclient.presentation.ui.notification.NotificationIntent
 import com.chuify.xoomclient.presentation.ui.notification.NotificationScreen
 import com.chuify.xoomclient.presentation.ui.notification.NotificationViewModel
 import com.chuify.xoomclient.presentation.ui.order.OrdersScreen
-import com.chuify.xoomclient.presentation.ui.profile.ProfileIntent
 import com.chuify.xoomclient.presentation.ui.profile.ProfileScreen
 import com.chuify.xoomclient.presentation.ui.vendors.component.VendorScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -68,10 +66,7 @@ fun MainScreen(navHostController: NavHostController) {
                     OrdersScreen(navHostController = navHostController)
                 }
                 2 -> {
-                    NotificationScreen(
-                        navHostController = navHostController,
-                        viewModel = notificationViewModel
-                    )
+                    NotificationScreen(viewModel = notificationViewModel)
                 }
                 else -> {
                     ProfileScreen(navHostController = navHostController)

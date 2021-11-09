@@ -55,7 +55,7 @@ interface ApiInterface {
     //----------------------------------------------------------------------------------------------------
     @Headers("authorized:true", "userid:true")
     @POST("orders/user_id")
-    suspend fun saveOrder(@Body body: String): Response<StatusDto>
+    suspend fun saveOrder(@Body body: String): Response<StatusBooleanDto>
 
     //----------------------------------------------------------------------------------------------------
     @Headers("authorized:true")

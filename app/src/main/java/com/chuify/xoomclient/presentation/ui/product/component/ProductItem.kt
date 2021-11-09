@@ -28,11 +28,12 @@ fun ProductItem(
 
     Surface(
         modifier = Modifier
-            .padding(8.dp),
-        ) {
+
+    ) {
 
         Card(
             modifier = Modifier
+                .padding(8.dp)
                 .fillMaxWidth(),
             elevation = 15.dp,
         ) {

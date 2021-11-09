@@ -9,8 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,9 +46,7 @@ fun PaymentScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val paymentMethod by remember {
-        viewModel.paymentMethod
-    }
+    val paymentMethod = viewModel.paymentMethod.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -94,7 +91,7 @@ fun PaymentScreen(
 
                 item {
 
-                    Card(elevation = 2.dp, modifier = Modifier.padding(16.dp)) {
+                    Card(elevation = 8.dp, modifier = Modifier.padding(8.dp)) {
 
                         Column {
 
@@ -105,35 +102,47 @@ fun PaymentScreen(
                                     .padding(16.dp),
                             )
 
-                            Row(modifier = Modifier.fillMaxWidth(),
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween) {
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
 
-                                PaymentItem(modifier = Modifier.fillMaxWidth(0.9f),
-                                    paymentMethod = Payments.Mpesa)
+                                PaymentItem(
+                                    modifier = Modifier.fillMaxWidth(0.9f),
+                                    paymentMethod = Payments.MPESA
+                                )
 
                                 Checkbox(modifier = Modifier
                                     .fillMaxWidth()
                                     .align(Alignment.CenterVertically)
                                     .padding(end = 16.dp),
-                                    checked = paymentMethod is Payments.Mpesa,
+                                    checked = paymentMethod is Payments.MPESA,
                                     onCheckedChange = {
                                         Log.d(TAG, "PaymentScreen: ")
                                         coroutineScope.launch {
-                                            viewModel.userIntent.send(CheckoutIntent.ChangePayment(
-                                                Payments.Mpesa))
+                                            viewModel.userIntent.send(
+                                                CheckoutIntent.ChangePayment(
+                                                    Payments.MPESA
+                                                )
+                                            )
+                                            navHostController.popBackStack()
                                         }
                                     })
 
                             }
 
 
-                            Row(modifier = Modifier.fillMaxWidth(),
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween) {
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
 
-                                PaymentItem(modifier = Modifier.fillMaxWidth(0.9f),
-                                    paymentMethod = Payments.Points)
+                                PaymentItem(
+                                    modifier = Modifier.fillMaxWidth(0.9f),
+                                    paymentMethod = Payments.CashOnDelivery
+                                )
 
                                 Checkbox(modifier = Modifier
                                     .fillMaxWidth()
@@ -142,20 +151,28 @@ fun PaymentScreen(
                                     checked = paymentMethod is Payments.CashOnDelivery,
                                     onCheckedChange = {
                                         coroutineScope.launch {
-                                            viewModel.userIntent.send(CheckoutIntent.ChangePayment(
-                                                Payments.CashOnDelivery))
+                                            viewModel.userIntent.send(
+                                                CheckoutIntent.ChangePayment(
+                                                    Payments.CashOnDelivery
+                                                )
+                                            )
+                                            navHostController.popBackStack()
                                         }
                                     })
 
                             }
 
 
-                            Row(modifier = Modifier.fillMaxWidth(),
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween) {
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
 
-                                PaymentItem(modifier = Modifier.fillMaxWidth(0.9f),
-                                    paymentMethod = Payments.CashOnDelivery)
+                                PaymentItem(
+                                    modifier = Modifier.fillMaxWidth(0.9f),
+                                    paymentMethod = Payments.Points
+                                )
 
                                 Checkbox(modifier = Modifier
                                     .fillMaxWidth()
@@ -164,8 +181,12 @@ fun PaymentScreen(
                                     checked = paymentMethod is Payments.Points,
                                     onCheckedChange = {
                                         coroutineScope.launch {
-                                            viewModel.userIntent.send(CheckoutIntent.ChangePayment(
-                                                Payments.Points))
+                                            viewModel.userIntent.send(
+                                                CheckoutIntent.ChangePayment(
+                                                    Payments.Points
+                                                )
+                                            )
+                                            navHostController.popBackStack()
                                         }
                                     })
 
@@ -192,7 +213,8 @@ fun PaymentScreen(
                             modifier = Modifier
                                 .padding(8.dp)
                                 .align(Alignment.CenterVertically),
-                            text = stringResource(id = R.string.next))
+                            text = stringResource(id = R.string.next)
+                        )
                     }
                 }
 

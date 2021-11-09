@@ -14,6 +14,7 @@ sealed class CheckoutIntent {
 
     data class IncreaseItem(val order: Cart) : CheckoutIntent()
     data class DecreaseItem(val order: Cart) : CheckoutIntent()
+    data class ChangeStatus(val state: CheckoutState) : CheckoutIntent()
 
 
 }

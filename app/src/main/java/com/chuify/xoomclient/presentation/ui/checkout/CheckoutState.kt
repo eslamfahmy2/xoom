@@ -5,7 +5,9 @@ import com.chuify.xoomclient.domain.model.Cart
 
 
 sealed class CheckoutState {
-    data class Success(val orders: List<Cart>, val cartPreview: CartPreview) : CheckoutState()
+    object Success : CheckoutState()
     data class Error(val message: String? = null) : CheckoutState()
     object Loading : CheckoutState()
+    object LoadingSubmit : CheckoutState()
+    object OrderSubmitted : CheckoutState()
 }

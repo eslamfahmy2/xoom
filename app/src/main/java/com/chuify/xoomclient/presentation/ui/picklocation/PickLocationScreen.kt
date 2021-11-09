@@ -9,10 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -72,9 +69,7 @@ fun PickLocationScreen(
             elevation = 20.dp
         )
         {
-            val locations by remember {
-                viewModel.location
-            }
+            val locations = viewModel.location.collectAsState().value
 
 
             LazyColumn(modifier = Modifier

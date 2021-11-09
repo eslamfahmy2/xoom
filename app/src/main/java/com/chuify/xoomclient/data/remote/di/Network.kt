@@ -5,6 +5,7 @@ import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.data.remote.network.ApiInterface
 import com.chuify.xoomclient.data.remote.network.RequestAuthenticationInterceptor
 import com.chuify.xoomclient.data.remote.network.RequestUserIdInterceptor
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +14,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -26,8 +28,12 @@ object Network {
     @Singleton
     @Provides
     fun provideRetrofit(okHttp: OkHttpClient): Retrofit {
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
         return Retrofit.Builder().apply {
-            addConverterFactory(GsonConverterFactory.create())
+            addConverterFactory(ScalarsConverterFactory.create())
+            addConverterFactory(GsonConverterFactory.create(gson))
             client(okHttp)
             baseUrl(BASE_URL)
         }.build()

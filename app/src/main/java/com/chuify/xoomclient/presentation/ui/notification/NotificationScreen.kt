@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.domain.model.Notification
@@ -37,7 +36,6 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @Composable
 fun NotificationScreen(
-    navHostController: NavHostController,
     viewModel: NotificationViewModel,
 ) {
 
@@ -95,7 +93,7 @@ fun NotificationScreen(
                     }
                     NotificationState.Loading -> {
                         LoadingListScreen(
-                            count = 3,
+                            count = 5,
                             height = 100.dp
                         )
                     }
@@ -146,9 +144,11 @@ fun NotificationItem(
         backgroundColor = if (notification.open) MaterialTheme.colors.surface else Color.Gray
     ) {
 
-        Column(modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        ) {
             Text(text = notification.title, modifier = Modifier.padding(8.dp))
             Text(text = notification.description, modifier = Modifier.padding(start = 8.dp))
             Text(

@@ -1,14 +1,12 @@
 package com.chuify.xoomclient.presentation.ui.cart
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberImagePainter
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.domain.model.Cart
@@ -39,21 +36,14 @@ fun CartItem(
             .padding(8.dp),
         elevation = 4.dp
     ) {
-        ConstraintLayout(modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            val guideline = createGuidelineFromStart(0.3f)
-            val guideline2 = createGuidelineFromStart(0.7f)
-            val (image, content, third) = createRefs()
 
-            Row(modifier = Modifier.constrainAs(image) {
-                start.linkTo(parent.start)
-                end.linkTo(guideline)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            },
+            Row(
+                modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -67,119 +57,99 @@ fun CartItem(
                             .clickable {
                                 delete(order)
                             }
-                            .padding(16.dp),
+                            .padding(8.dp),
                         tint = Color.Red
                     )
                 }
 
-
                 Image(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp))
-                        .size(80.dp, 80.dp),
+                        .padding(8.dp)
+                        .size(80.dp, 80.dp)
+                        .clip(RoundedCornerShape(15)),
                     painter = rememberImagePainter(order.image),
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )
-            }
-
-            Column(
-                modifier = Modifier.constrainAs(content) {
-                    start.linkTo(guideline)
-                    end.linkTo(guideline2)
-                },
-            ) {
-
-                Text(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(8.dp)
-                        .align(Alignment.Start),
-                    text = order.name,
-                    color = MaterialTheme.colors.onSurface,
-                )
 
 
-                Row(modifier = Modifier.padding(8.dp)) {
+                Column(
+                    modifier = Modifier,
+                ) {
 
-                    Button(
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                    Text(
                         modifier = Modifier
-                            .size(30.dp, 30.dp)
-                            .border(
+                            .wrapContentSize()
+                            .padding(8.dp)
+                            .align(Alignment.Start),
+                        text = order.name,
+                        color = MaterialTheme.colors.onSurface,
+                    )
+
+
+                    Row(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(start = 8.dp)
+                    ) {
+                        Text(
+                            text = order.price.toString(),
+                            color = MaterialTheme.colors.primary,
+                            modifier = Modifier.padding(2.dp)
+
+                        )
+                        Text(
+
+                            text = stringResource(R.string.currency),
+                            color = MaterialTheme.colors.primary,
+                            modifier = Modifier.padding(2.dp)
+                        )
+
+                    }
+
+
+                    Row(
+                        modifier = Modifier.padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        OutlinedButton(
+                            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                            border = BorderStroke(
                                 width = 1.dp,
-                                shape = RoundedCornerShape(5.dp),
                                 color = Color.Gray,
                             ),
-                        onClick = {
-                            decreaseCartItem(order)
-                        },
+                            onClick = {
+                                decreaseCartItem(order)
+                            },
 
-                        ) {
-                        Icon(Icons.Filled.AddShoppingCart,
-                            contentDescription = "Localized description")
+                            ) {
+                            Text(text = "-")
+                        }
 
+                        Text(modifier = Modifier.padding(6.dp), text = order.quantity.toString())
+
+                        Button(
+                            onClick = {
+                                increaseCartItem(order)
+                            }) {
+                            Text(text = "+")
+                        }
                     }
 
-                    Text(modifier = Modifier.padding(4.dp), text = order.quantity.toString())
 
-                    Button(
-                        modifier = Modifier.size(28.dp, 28.dp),
-                        onClick = {
-                            increaseCartItem(order)
-                        }) {
-                        Icon(
-                            Icons.Filled.Add, contentDescription = null,
-                            modifier = Modifier.size(28.dp, 28.dp),
-                        )
-                    }
                 }
-
-
             }
 
-            Column(
+
+            Text(
+                text = "X ${order.quantity}",
+                color = MaterialTheme.colors.onSurface,
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .constrainAs(third) {
-                        start.linkTo(content.end)
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                    },
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.Center
-
-            ) {
-
-                Text(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(end = 16.dp, top = 8.dp)
-                        .align(Alignment.End),
-                    text = "X ${order.quantity}",
-                    color = MaterialTheme.colors.onSurface,
-
-                    )
-                Row(modifier = Modifier
                     .wrapContentSize()
-                    .padding(start = 8.dp, bottom = 8.dp, end = 8.dp , top = 32.dp)) {
-                    Text(
-                        text = order.price.toString(),
-                        color = MaterialTheme.colors.primary,
-                        modifier = Modifier.padding(2.dp)
+                    .padding(end = 16.dp, top = 8.dp)
 
-                    )
-                    Text(
-
-                        text = stringResource(R.string.currency),
-                        color = MaterialTheme.colors.primary,
-                        modifier = Modifier.padding(2.dp)
-                    )
-
-                }
-
-
-            }
+            )
 
         }
 

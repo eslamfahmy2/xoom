@@ -13,3 +13,14 @@ data class StatusDto(
     val msg: String?,
 
     )
+
+data class StatusBooleanDto(
+    @Expose
+    @SerializedName(value = "Status")
+    val status: Boolean = false,
+
+    @Expose
+    @SerializedName(value = "Msg")
+    val msg: String?,
+
+    )

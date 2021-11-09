@@ -1,9 +1,7 @@
 package com.chuify.xoomclient.presentation.navigation
 
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
@@ -41,23 +39,10 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
 
     AnimatedNavHost(navController = navHostController, startDestination = Screens.Main.route) {
 
-        composable(route = Screens.Main.fullRoute() ,) {
-            MainScreen(navHostController = navHostController)
-        }
-
         composable(
-            route = Screens.Vendors.route,
-            enterTransition = { _, _ ->
-                slideInVertically(initialOffsetY = { 5000 }, animationSpec = tween(500))
-            },
-            exitTransition = { _, _ ->
-                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
-            },
-            popExitTransition = { _, _ ->
-                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
-            }
+            route = Screens.Main.fullRoute(),
         ) {
-            VendorScreen(navHostController = navHostController)
+            MainScreen(navHostController = navHostController)
         }
 
         composable(
@@ -74,7 +59,7 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
             popExitTransition = { _, _ ->
                 slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
             }
-            ) { backStackEntry ->
+        ) { backStackEntry ->
             backStackEntry.arguments?.getString(Screens.VendorDetails.vendorArg)?.let {
                 Gson().fromJson(it, Vendor::class.java)?.let { vendor ->
                     VendorDetailsScreen(
@@ -83,28 +68,76 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
                     )
                 }
             }
-
         }
 
 
         composable(
             route = Screens.Cart.fullRoute(),
+            enterTransition = { _, _ ->
+                slideInVertically(initialOffsetY = { 5000 }, animationSpec = tween(500))
+            },
+            exitTransition = { _, _ ->
+                slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(1000))
+            },
+            popEnterTransition = { _, _ ->
+                slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(1000))
+            },
+            popExitTransition = { _, _ ->
+                slideOutVertically(targetOffsetY = { 5000 }, animationSpec = tween(1000))
+            }
         ) {
             CartScreen(navHostController = navHostController)
         }
 
         composable(
             route = Screens.Checkout.fullRoute(),
-
-            ) {
+            enterTransition = { _, _ ->
+                slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(1000))
+            },
+            exitTransition = { _, _ ->
+                slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(1000))
+            },
+            popEnterTransition = { _, _ ->
+                slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(1000))
+            },
+            popExitTransition = { _, _ ->
+                slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(1000))
+            }
+        ) {
             CheckoutScreen(navHostController = navHostController, viewModel = viewModel)
         }
 
-        composable(route = Screens.PaymentMethod.fullRoute()) {
+        composable(route = Screens.PaymentMethod.fullRoute(),
+            enterTransition = { _, _ ->
+                slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(1000))
+            },
+            exitTransition = { _, _ ->
+                slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(1000))
+            },
+            popEnterTransition = { _, _ ->
+                slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(1000))
+            },
+            popExitTransition = { _, _ ->
+                slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(1000))
+            }
+        ) {
             PaymentScreen(navHostController = navHostController, viewModel = viewModel)
         }
 
-        composable(route = Screens.PickLocation.fullRoute()) {
+        composable(route = Screens.PickLocation.fullRoute(),
+            enterTransition = { _, _ ->
+                slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(1000))
+            },
+            exitTransition = { _, _ ->
+                slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(1000))
+            },
+            popEnterTransition = { _, _ ->
+                slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(1000))
+            },
+            popExitTransition = { _, _ ->
+                slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(1000))
+            }
+        ) {
             PickLocationScreen(navHostController = navHostController, viewModel = viewModel)
         }
 

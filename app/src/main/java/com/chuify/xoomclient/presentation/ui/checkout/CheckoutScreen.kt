@@ -10,8 +10,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,14 +45,12 @@ fun CheckoutScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val state by remember {
-        viewModel.state
-    }
+    val state = viewModel.state.collectAsState().value
 
 
     Scaffold(
         topBar = {
-            SecondaryBar() {
+            SecondaryBar {
                 navHostController.popBackStack()
             }
         },
@@ -77,188 +77,180 @@ fun CheckoutScreen(
         )
         {
 
-            when (state) {
-                is CheckoutState.Error -> {
-                    (state as CheckoutState.Error).message?.let {
-                        coroutineScope.launch {
-                            scaffoldState.snackbarHostState.showSnackbar(
-                                message = it,
-                                actionLabel = "Dismiss",
-                            )
-                        }
-                    }
-                }
-                CheckoutState.Loading -> {
-                    LoadingListScreen(
-                        count = 3,
-                        height = 250.dp
-                    )
-                }
+            Box(Modifier.fillMaxSize()) {
 
 
-                is CheckoutState.Success -> {
+                val orders = viewModel.orders.collectAsState().value.first
 
-                    val orders = (state as CheckoutState.Success).orders
+                val total = viewModel.orders.collectAsState().value.second.totalPrice
 
-                    val total = (state as CheckoutState.Success).cartPreview.totalPrice
+                val paymentMethod = viewModel.paymentMethod.collectAsState().value
 
-                    val paymentMethod by remember {
-                        viewModel.paymentMethod
+                val location = viewModel.location.collectAsState().value
+
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+
+                    item {
+                        Text(
+                            modifier = Modifier.padding(16.dp),
+                            text = stringResource(id = R.string.checkout),
+                            style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                        )
                     }
 
-                    val location by remember {
-                        viewModel.location
-                    }
+                    item {
 
 
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        Card(elevation = 8.dp, modifier = Modifier.padding(16.dp)) {
 
-                        item {
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = stringResource(id = R.string.checkout),
-                                style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
-                            )
-                        }
+                            Column(modifier = Modifier.fillMaxWidth()) {
 
-                        item {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    verticalAlignment = CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
 
-
-                            Card(elevation = 8.dp, modifier = Modifier.padding(16.dp)) {
-
-                                Column(modifier = Modifier.fillMaxWidth()) {
-
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween) {
-
-                                        Text(
-                                            text = stringResource(id = R.string.delivery_address),
-                                            modifier = Modifier
-                                                .wrapContentSize()
-                                                .padding(16.dp),
-                                        )
-
-
-                                        Text(
-                                            text = stringResource(id = R.string.change),
-                                            color = MaterialTheme.colors.primary,
-                                            modifier = Modifier
-                                                .wrapContentSize()
-                                                .padding(16.dp)
-                                                .clickable {
-                                                    navHostController.navigate(Screens.PickLocation.route)
-                                                }
-                                        )
-
-                                    }
-                                    location.firstOrNull { it.selected }?.let {
-                                        LocationItem(location = it)
-                                    }
-
-
-                                }
-
-
-                            }
-
-
-                        }
-
-                        item {
-
-                            Card(elevation = 8.dp, modifier = Modifier.padding(16.dp)) {
-
-                                Column(modifier = Modifier.fillMaxWidth()) {
-
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween) {
-
-                                        Text(
-                                            text = stringResource(id = R.string.select_payment_methid),
-                                            modifier = Modifier
-                                                .wrapContentSize()
-                                                .padding(16.dp)
-                                        )
-
-                                        Text(
-                                            text = stringResource(id = R.string.change),
-                                            color = MaterialTheme.colors.primary,
-                                            modifier = Modifier
-                                                .wrapContentSize()
-                                                .padding(16.dp)
-                                                .clickable {
-                                                    navHostController.navigate(Screens.PaymentMethod.route)
-                                                }
-                                        )
-
-                                    }
-
-                                    PaymentItem(paymentMethod = paymentMethod)
-
-
-                                }
-
-
-                            }
-
-                        }
-
-                        item {
-                            Card(elevation = 8.dp, modifier = Modifier.padding(16.dp)) {
-
-                                Column {
                                     Text(
-                                        modifier = Modifier.padding(16.dp),
-                                        text = stringResource(id = R.string.order_details),
+                                        text = stringResource(id = R.string.delivery_address),
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .padding(16.dp),
                                     )
-                                    LazyRow(modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp)) {
-                                        items(orders) {
-                                            CartItem(
-                                                order = it,
-                                                increaseCartItem = {
-                                                    coroutineScope.launch {
-                                                        viewModel.userIntent.send(CheckoutIntent.IncreaseItem(
-                                                            it))
-                                                    }
-                                                },
-                                                decreaseCartItem = {
-                                                    coroutineScope.launch {
-                                                        viewModel.userIntent.send(CheckoutIntent.DecreaseItem(
-                                                            it))
-                                                    }
-                                                },
-                                                delete = {}
-                                            )
-                                        }
-                                    }
 
+
+                                    Text(
+                                        text = stringResource(id = R.string.change),
+                                        color = MaterialTheme.colors.primary,
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .padding(16.dp)
+                                            .clickable {
+
+                                                navHostController.navigate(Screens.PickLocation.route)
+                                            }
+                                    )
+
+                                }
+                                location.firstOrNull { it.selected }?.let {
+                                    LocationItem(location = it)
                                 }
 
 
                             }
+
+
                         }
 
-                        item {
+
+                    }
+
+                    item {
+
+                        Card(elevation = 8.dp, modifier = Modifier.padding(16.dp)) {
+
+                            Column(modifier = Modifier.fillMaxWidth()) {
+
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    verticalAlignment = CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+
+                                    Text(
+                                        text = stringResource(id = R.string.select_payment_methid),
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .padding(16.dp)
+                                    )
+
+                                    Text(
+                                        text = stringResource(id = R.string.change),
+                                        color = MaterialTheme.colors.primary,
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .padding(16.dp)
+                                            .clickable {
+                                                navHostController.navigate(Screens.PaymentMethod.route)
+                                            }
+                                    )
+
+                                }
+
+                                PaymentItem(paymentMethod = paymentMethod)
 
 
-                            Column(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp)) {
+                            }
+
+
+                        }
+
+                    }
+
+                    item {
+                        Card(elevation = 8.dp, modifier = Modifier.padding(16.dp)) {
+
+                            Column {
+                                Text(
+                                    modifier = Modifier.padding(16.dp),
+                                    text = stringResource(id = R.string.order_details),
+                                )
+                                LazyRow(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp)
+                                ) {
+                                    items(orders) {
+                                        CartItem(
+                                            order = it,
+                                            increaseCartItem = {
+                                                coroutineScope.launch {
+                                                    viewModel.userIntent.send(
+                                                        CheckoutIntent.IncreaseItem(
+                                                            it
+                                                        )
+                                                    )
+                                                }
+                                            },
+                                            decreaseCartItem = {
+                                                coroutineScope.launch {
+                                                    viewModel.userIntent.send(
+                                                        CheckoutIntent.DecreaseItem(
+                                                            it
+                                                        )
+                                                    )
+                                                }
+                                            },
+                                            delete = {}
+                                        )
+                                    }
+                                }
+
+                            }
+
+
+                        }
+                    }
+
+                    item {
+                        Card(elevation = 8.dp, modifier = Modifier.padding(16.dp)) {
+
+
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(12.dp)
+                            ) {
 
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(8.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween) {
+                                    verticalAlignment = CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
 
                                     Text(
                                         text = stringResource(id = R.string.sub_total),
@@ -289,8 +281,9 @@ fun CheckoutScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(8.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween) {
+                                    verticalAlignment = CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
 
                                     Text(
                                         text = stringResource(id = R.string.total)
@@ -314,35 +307,63 @@ fun CheckoutScreen(
 
                                 }
 
-                            }
 
-
-                        }
-
-                        item {
-                            Button(
-                                onClick = {
-                                    navHostController.navigate(Screens.Main.route)
-
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                shape = RoundedCornerShape(50)
-                            ) {
-                                Text(
+                                Button(
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            viewModel.userIntent.send(CheckoutIntent.ConfirmOrder)
+                                        }
+                                    },
                                     modifier = Modifier
-                                        .padding(8.dp)
-                                        .align(CenterVertically),
-                                    text = stringResource(id = R.string.confirm_order))
-                            }
-                        }
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    shape = RoundedCornerShape(50)
+                                ) {
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .align(CenterVertically),
+                                        text = stringResource(id = R.string.confirm_order)
+                                    )
+                                }
 
+                            }
+
+                        }
                     }
 
 
                 }
 
+                when (state) {
+                    is CheckoutState.Error -> {
+                        state.message?.let {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = it,
+                                    actionLabel = "Dismiss",
+                                )
+                                viewModel.userIntent.send(CheckoutIntent.ChangeStatus(CheckoutState.Success))
+                            }
+                        }
+                    }
+                    CheckoutState.Loading -> {
+                        LoadingListScreen(
+                            count = 3,
+                            height = 250.dp
+                        )
+                    }
+
+                    is CheckoutState.Success -> {
+
+                    }
+                    CheckoutState.OrderSubmitted -> {
+                        navHostController.navigate(Screens.Main.route)
+                    }
+                    CheckoutState.LoadingSubmit -> {
+                        LoadingDialog()
+                    }
+                }
 
             }
         }

@@ -63,7 +63,8 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadOrders() {
+    private suspend fun loadOrders() = viewModelScope.launch {
+        (Dispatchers.IO)
 
         getCartItemsUseCase().collect { dataState ->
             when (dataState) {
