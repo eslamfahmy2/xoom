@@ -35,7 +35,7 @@ class SplashActivity : AppCompatActivity() {
         if (token.isEmpty()) {
             startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
         } else {
-            startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
+            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
         }
         finish()
 

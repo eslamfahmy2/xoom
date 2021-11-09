@@ -1,7 +1,6 @@
 package com.chuify.xoomclient.domain.usecase.auth
 
 import com.chuify.xoomclient.data.prefrences.SharedPrefs
-import com.chuify.xoomclient.domain.mapper.UserDtoMapper
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
@@ -27,11 +26,12 @@ class SignInUseCase @Inject constructor(
     ) = flow<DataState<LoginResult>> {
         try {
             emit(DataState.Loading())
-            if (!Validator.isValidPhone(phone)) {
+            val phoneNumber = "+254$phone"
+            if (!Validator.isValidPhone(phoneNumber)) {
                 throw Exception("phone not valid")
             }
             val response = repo.login(
-                phone = phone
+                phone = phoneNumber
             )
 
             when (response) {

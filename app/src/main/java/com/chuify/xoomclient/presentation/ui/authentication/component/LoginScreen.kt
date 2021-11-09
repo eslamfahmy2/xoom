@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.login.component
+package com.chuify.xoomclient.presentation.ui.authentication.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

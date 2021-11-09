@@ -33,9 +33,6 @@ fun MainScreen(navHostController: NavHostController) {
 
     val coroutineScope = rememberCoroutineScope()
 
-    val currentScreen = remember {
-        mutableStateOf(pagerState.currentPage)
-    }
     val notificationViewModel: NotificationViewModel = hiltViewModel()
     val count = notificationViewModel.notReadCount.collectAsState().value
 
@@ -45,11 +42,10 @@ fun MainScreen(navHostController: NavHostController) {
                 notificationBadge = count,
                 action = {
                     coroutineScope.launch {
-                        currentScreen.value = it
                         pagerState.animateScrollToPage(it)
                     }
                 },
-                selected = currentScreen.value
+                selected = pagerState.currentPage
             )
         }
     ) { innerPadding ->

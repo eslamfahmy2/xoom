@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.login
+package com.chuify.xoomclient.presentation.ui.authentication
 
 
 sealed class AuthenticationIntent {

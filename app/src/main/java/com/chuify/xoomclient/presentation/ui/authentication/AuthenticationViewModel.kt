@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.login
+package com.chuify.xoomclient.presentation.ui.authentication
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -28,7 +28,7 @@ class LoginViewModel @Inject constructor(
 
     val userIntent = Channel<AuthenticationIntent>(Channel.UNLIMITED)
 
-    private val _phone: MutableStateFlow<String> = MutableStateFlow(String())
+    private val _phone: MutableStateFlow<String> = MutableStateFlow("703894372")
     val phone get() = _phone.asStateFlow()
 
     private val _firstName: MutableStateFlow<String> = MutableStateFlow(String())

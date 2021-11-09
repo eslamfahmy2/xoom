@@ -16,8 +16,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.log
 
-private const val TAG = "ProfileViewModel"
+private const val TAG = "ProfileScreen"
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
@@ -73,7 +74,8 @@ class ProfileViewModel @Inject constructor(
                     is DataState.Loading -> {
                     }
                     is DataState.Success -> {
-                        _state.value = ProfileState.LoggedOut
+                        Log.d(TAG, "logOut: $dataSate")
+                        _state.value = ProfileState.Success(logged = true)
                     }
                 }
             }
@@ -124,14 +126,14 @@ class ProfileViewModel @Inject constructor(
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
-                    _state.value = ProfileState.Error(dataState.message)
+          //          _state.value = ProfileState.MyError(dataState.message)
                 }
                 is DataState.Loading -> {
                     _state.value = ProfileState.Loading
                 }
                 is DataState.Success -> {
                     dataState.data?.let {
-                        _state.value = ProfileState.Success(dataState.data)
+                        _state.value = ProfileState.Success(user = it)
                     }
 
                 }

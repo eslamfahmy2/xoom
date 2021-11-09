@@ -25,9 +25,10 @@ class SignUpUseCase @Inject constructor(
         phone: String,
     ) = flow<DataState<LoginResult>> {
         try {
+            //a01147449874
             emit(DataState.Loading())
             val phoneNumber = "+254$phone"
-            if (!Validator.isValidName(phoneNumber)) {
+            if (!Validator.isValidPhone(phoneNumber)) {
                 throw Exception("phone not valid")
             }
             if (!Validator.isValidName(firstname)) {

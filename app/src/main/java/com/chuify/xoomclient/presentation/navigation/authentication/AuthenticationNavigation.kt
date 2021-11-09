@@ -5,7 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import com.chuify.xoomclient.presentation.navigation.Screens
-import com.chuify.xoomclient.presentation.ui.login.component.AuthenticationScreen
+import com.chuify.xoomclient.presentation.ui.authentication.component.AuthenticationScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController

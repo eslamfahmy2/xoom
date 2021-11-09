@@ -1,4 +1,4 @@
-package com.chuify.xoomclient.presentation.ui.login.component
+package com.chuify.xoomclient.presentation.ui.authentication.component
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -27,15 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.chuify.xoomclient.R
 import com.chuify.xoomclient.domain.usecase.auth.LoginResult
 import com.chuify.xoomclient.presentation.MainActivity
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.SolidBar
-import com.chuify.xoomclient.presentation.ui.login.AuthenticationIntent
-import com.chuify.xoomclient.presentation.ui.login.AuthenticationState
-import com.chuify.xoomclient.presentation.ui.login.LoginViewModel
+import com.chuify.xoomclient.presentation.ui.authentication.AuthenticationIntent
+import com.chuify.xoomclient.presentation.ui.authentication.AuthenticationState
+import com.chuify.xoomclient.presentation.ui.authentication.LoginViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState

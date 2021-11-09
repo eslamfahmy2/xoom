@@ -7,7 +7,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.collectAsState
-import com.chuify.xoomclient.data.prefrences.SharedPrefs
 import com.chuify.xoomclient.data.prefrences.flow.FlowSharedPreferences
 import com.chuify.xoomclient.presentation.navigation.MainNavigation
 import com.chuify.xoomclient.presentation.theme.XoomGasClientTheme
