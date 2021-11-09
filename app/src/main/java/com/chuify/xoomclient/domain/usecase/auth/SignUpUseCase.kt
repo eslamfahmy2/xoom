@@ -2,7 +2,6 @@ package com.chuify.xoomclient.domain.usecase.auth
 
 
 import com.chuify.xoomclient.data.prefrences.SharedPrefs
-import com.chuify.xoomclient.domain.mapper.UserDtoMapper
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
