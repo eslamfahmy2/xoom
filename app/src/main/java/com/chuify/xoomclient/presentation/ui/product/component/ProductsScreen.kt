@@ -1,10 +1,12 @@
 package com.chuify.xoomclient.presentation.ui.product.component
 
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
@@ -23,9 +25,7 @@ fun ProductsScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val state by remember {
-        viewModel.state
-    }
+    val state = viewModel.state.collectAsState().value
 
     val scaffoldState = rememberScaffoldState()
 
@@ -42,7 +42,7 @@ fun ProductsScreen(
 
         when (state) {
             is ProductState.Error -> {
-                (state as ProductState.Error).message?.let {
+                state.message?.let {
                     coroutineScope.launch {
                         scaffoldState.snackbarHostState.showSnackbar(
                             message = it,
@@ -60,7 +60,7 @@ fun ProductsScreen(
             is ProductState.Success -> {
 
                 ProductDataScreen(
-                    data = (state as ProductState.Success).data,
+                    data = state.data,
                     onIncrease = {
                         coroutineScope.launch {
                             viewModel.userIntent.send(ProductIntent.Insert(it))

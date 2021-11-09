@@ -1,9 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.product
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Product
@@ -11,10 +8,11 @@ import com.chuify.xoomclient.domain.usecase.cart.DecreaseOrderUseCase
 import com.chuify.xoomclient.domain.usecase.cart.IncreaseOrderUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListProductsUseCase
 import com.chuify.xoomclient.domain.utils.DataState
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
@@ -32,8 +30,8 @@ class ProductViewModel @Inject constructor(
 
     val userIntent = Channel<ProductIntent>(Channel.UNLIMITED)
 
-    private val _state: MutableState<ProductState> = mutableStateOf(ProductState.Loading)
-    val state get() = _state
+    private val _state: MutableStateFlow<ProductState> = MutableStateFlow(ProductState.Loading)
+    val state get() = _state.asStateFlow()
 
 
     init {

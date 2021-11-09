@@ -1,8 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.vendors
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Accessory
@@ -11,7 +9,6 @@ import com.chuify.xoomclient.domain.usecase.cart.CartPreviewUC
 import com.chuify.xoomclient.domain.usecase.home.ListAccessoriesUseCase
 import com.chuify.xoomclient.domain.usecase.home.ListVendorsUseCase
 import com.chuify.xoomclient.domain.utils.DataState
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -34,21 +31,21 @@ class VendorViewModel @Inject constructor(
 
     val userIntent = Channel<VendorIntent>(Channel.UNLIMITED)
 
-    private val _state: MutableState<VendorState> = mutableStateOf(VendorState.Loading)
-    val state get() = _state
+    private val _state: MutableStateFlow<VendorState> = MutableStateFlow(VendorState.Loading)
+    val state get() = _state.asStateFlow()
 
 
-    private val _searchText: MutableState<String> = mutableStateOf(String())
+    private val _searchText: MutableStateFlow<String> = MutableStateFlow(String())
 
-    private val _vendors: MutableState<List<Vendor>> = mutableStateOf(listOf())
+    private val _vendors: MutableStateFlow<List<Vendor>> = MutableStateFlow(listOf())
 
-    private val _accessories: MutableState<List<Accessory>> = mutableStateOf(listOf())
-    private val _accessoriesFilter: MutableState<List<Accessory>> = mutableStateOf(listOf())
-    val accessories get() = _accessories
+    private val _accessories: MutableStateFlow<List<Accessory>> = MutableStateFlow(listOf())
+    private val _accessoriesFilter: MutableStateFlow<List<Accessory>> = MutableStateFlow(listOf())
+    val accessories get() = _accessories.asStateFlow()
 
 
-    private val _cartCount: MutableState<Int> = mutableStateOf(0)
-    val cartCount get() = _cartCount
+    private val _cartCount: MutableStateFlow<Int> = MutableStateFlow(0)
+    val cartCount get() = _cartCount.asStateFlow()
 
     private val _refreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val refreshing get() = _refreshing.asStateFlow()

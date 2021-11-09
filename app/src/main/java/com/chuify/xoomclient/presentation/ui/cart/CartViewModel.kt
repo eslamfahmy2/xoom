@@ -1,8 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.cart
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.model.Cart
@@ -11,10 +9,11 @@ import com.chuify.xoomclient.domain.usecase.cart.GetCartItemsUseCase
 import com.chuify.xoomclient.domain.usecase.cart.OrderITemAction
 import com.chuify.xoomclient.domain.usecase.cart.UpdateOrderUs
 import com.chuify.xoomclient.domain.utils.DataState
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
@@ -31,9 +30,9 @@ class CartViewModel @Inject constructor(
 
     val userIntent = Channel<CartIntent>(Channel.UNLIMITED)
 
-    private val _state: MutableState<CartState> =
-        mutableStateOf(CartState.Loading)
-    val state get() = _state
+    private val _state: MutableStateFlow<CartState> =
+        MutableStateFlow(CartState.Loading)
+    val state get() = _state.asStateFlow()
 
     init {
         handleIntent()

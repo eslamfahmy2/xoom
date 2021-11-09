@@ -4,7 +4,10 @@ import com.chuify.xoomclient.data.remote.dto.TrackDto
 import com.chuify.xoomclient.domain.repository.OrderRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 
@@ -27,5 +30,5 @@ class TrackOrderUseCase @Inject constructor(
         } catch (e: Exception) {
             emit(DataState.Error(e.message))
         }
-    }
+    }.flowOn(Dispatchers.IO).conflate()
 }

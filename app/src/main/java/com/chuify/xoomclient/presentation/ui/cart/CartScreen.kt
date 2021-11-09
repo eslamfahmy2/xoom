@@ -8,8 +8,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,13 +43,11 @@ fun CartScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val state by remember {
-        viewModel.state
-    }
+    val state = viewModel.state.collectAsState().value
 
     Scaffold(
         topBar = {
-            SecondaryBar() {
+            SecondaryBar {
                 navHostController.popBackStack()
             }
         },
@@ -88,7 +86,7 @@ fun CartScreen(
                 )
                 when (state) {
                     is CartState.Error -> {
-                        (state as CartState.Error).message?.let {
+                        state.message?.let {
                             coroutineScope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar(
                                     message = it,
@@ -111,7 +109,7 @@ fun CartScreen(
                         ) {
 
                             LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                                items((state as CartState.Success).orders) {
+                                items(state.orders) {
                                     CartItem(
                                         order = it,
                                         increaseCartItem = {
@@ -134,7 +132,7 @@ fun CartScreen(
                                 }
                             }
 
-                            val cartPreview = (state as CartState.Success).cartPreview
+                            val cartPreview = state.cartPreview
                             CartPreview(
                                 modifier = Modifier.align(Alignment.BottomCenter),
                                 quantity = cartPreview.totalQuantity.toString(),
@@ -155,6 +153,10 @@ fun CartScreen(
         }
 
 
+    }
+
+    LaunchedEffect(true) {
+        viewModel.userIntent.send(CartIntent.LoadCart)
     }
 
 

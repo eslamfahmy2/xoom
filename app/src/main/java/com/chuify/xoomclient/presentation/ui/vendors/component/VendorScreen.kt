@@ -51,9 +51,9 @@ fun VendorScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val state by remember { viewModel.state }
+    val state = viewModel.state.collectAsState().value
 
-    val cartCount by remember { viewModel.cartCount }
+    val cartCount = viewModel.cartCount.collectAsState().value
 
     val stateAccessoryPref by remember { accessoryDetailsViewModel.state }
 
@@ -105,7 +105,7 @@ fun VendorScreen(
 
                 when (state) {
                     is VendorState.Error -> {
-                        (state as VendorState.Error).message?.let {
+                        state.message?.let {
                             coroutineScope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar(
                                     message = it,
@@ -132,7 +132,7 @@ fun VendorScreen(
                             },
                         ) {
                             VendorIdlScreen(
-                                data = (state as VendorState.Success).data,
+                                data = state.data,
                                 accessories = viewModel.accessories.value,
                                 onItemClicked = {
                                     Gson().toJson(it.copy(image = String()))?.let { json ->
@@ -143,7 +143,7 @@ fun VendorScreen(
                                         )
                                     }
                                 },
-                                searchText = (state as VendorState.Success).searchText,
+                                searchText = state.searchText,
                                 onTextChange = {
                                     coroutineScope.launch {
                                         viewModel.userIntent.send(VendorIntent.Filter(it))

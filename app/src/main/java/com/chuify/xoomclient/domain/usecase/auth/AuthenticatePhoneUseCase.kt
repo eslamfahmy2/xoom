@@ -5,7 +5,10 @@ import com.chuify.xoomclient.data.remote.source.PhoneAuthResult
 import com.chuify.xoomclient.domain.repository.AuthRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.Validator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class AuthenticatePhoneUseCase @Inject constructor(
@@ -39,5 +42,5 @@ class AuthenticatePhoneUseCase @Inject constructor(
         } catch (e: Exception) {
             emit(DataState.Error(e.message))
         }
-    }
+    }.flowOn(Dispatchers.IO).conflate()
 }

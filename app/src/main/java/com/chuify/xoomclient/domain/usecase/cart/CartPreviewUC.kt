@@ -3,8 +3,11 @@ package com.chuify.xoomclient.domain.usecase.cart
 import com.chuify.xoomclient.domain.model.CartPreview
 import com.chuify.xoomclient.domain.repository.CartRepo
 import com.chuify.xoomclient.domain.utils.DataState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class CartPreviewUC @Inject constructor(
@@ -34,6 +37,6 @@ class CartPreviewUC @Inject constructor(
         } catch (e: Exception) {
             emit(DataState.Error(e.message))
         }
-    }
+    }.flowOn(Dispatchers.IO).conflate()
 }
 

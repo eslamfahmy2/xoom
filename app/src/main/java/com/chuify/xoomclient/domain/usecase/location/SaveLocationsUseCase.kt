@@ -3,8 +3,10 @@ package com.chuify.xoomclient.domain.usecase.location
 import com.chuify.xoomclient.domain.repository.LocationRepo
 import com.chuify.xoomclient.domain.utils.DataState
 import com.chuify.xoomclient.domain.utils.ResponseState
-import com.chuify.xoomclient.domain.utils.Validator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 
@@ -47,5 +49,5 @@ class SaveLocationsUseCase @Inject constructor(
         } catch (e: Exception) {
             emit(DataState.Error(e.message))
         }
-    }
+    }.flowOn(Dispatchers.IO).conflate()
 }

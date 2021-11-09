@@ -1,15 +1,15 @@
 package com.chuify.xoomclient.presentation.ui.vendorDetails
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.usecase.cart.CartPreviewUC
 import com.chuify.xoomclient.domain.utils.DataState
-
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
@@ -24,15 +24,12 @@ class VendorDetailsViewModel @Inject constructor(
 
     val userIntent = Channel<VendorDetailsIntent>(Channel.UNLIMITED)
 
-    private val _state: MutableState<VendorDetailsState> =
-        mutableStateOf(VendorDetailsState.Loading)
-    val state get() = _state
+    private val _state: MutableStateFlow<VendorDetailsState> =
+        MutableStateFlow(VendorDetailsState.Loading)
+    val state get() = _state.asStateFlow()
 
     init {
         handleIntent()
-        viewModelScope.launch {
-            loadVendors()
-        }
     }
 
     private fun handleIntent() {
@@ -49,7 +46,7 @@ class VendorDetailsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadVendors() {
+    private suspend fun loadVendors() = viewModelScope.launch(Dispatchers.IO) {
         useCase().collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {

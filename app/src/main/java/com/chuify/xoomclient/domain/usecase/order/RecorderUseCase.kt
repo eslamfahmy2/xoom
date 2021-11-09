@@ -10,7 +10,10 @@ import com.chuify.xoomclient.domain.utils.ResponseState
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import java.util.*
 import javax.inject.Inject
 
@@ -71,5 +74,5 @@ class RecorderUseCase @Inject constructor(
             } catch (e: Exception) {
                 emit(DataState.Error(e.message))
             }
-        }
+        }.flowOn(Dispatchers.IO).conflate()
 }

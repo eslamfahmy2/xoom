@@ -23,6 +23,7 @@ import com.chuify.xoomclient.domain.model.Vendor
 import com.chuify.xoomclient.presentation.components.CartPreview
 import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.SecondaryBar
+import com.chuify.xoomclient.presentation.navigation.Screens
 import com.chuify.xoomclient.presentation.ui.accessory.component.AccessoryScreen
 import com.chuify.xoomclient.presentation.ui.product.component.ProductsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -50,14 +51,12 @@ fun VendorDetailsScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val state by remember {
-        viewModel.state
-    }
+    val state = viewModel.state.collectAsState().value
 
 
     Scaffold(
         topBar = {
-            SecondaryBar() {
+            SecondaryBar {
                 navHostController.popBackStack()
             }
         },
@@ -184,13 +183,13 @@ fun VendorDetailsScreen(
                         }
                         is VendorDetailsState.Success -> {
 
-                            val data = (state as VendorDetailsState.Success).data
+                            val data = state.data
                             CartPreview(
                                 modifier = Modifier.align(Alignment.BottomCenter),
                                 quantity = data.totalQuantity.toString(),
                                 price = data.totalPrice.toString()
                             ) {
-
+                                navHostController.navigate(Screens.Cart.fullRoute())
                             }
 
                         }
@@ -203,6 +202,10 @@ fun VendorDetailsScreen(
         }
 
 
+    }
+
+    LaunchedEffect(true) {
+        viewModel.userIntent.send(VendorDetailsIntent.LoadVendorDetails)
     }
 
 
