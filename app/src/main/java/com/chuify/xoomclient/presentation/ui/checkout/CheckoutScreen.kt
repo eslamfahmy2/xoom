@@ -343,7 +343,6 @@ fun CheckoutScreen(
                                     message = it,
                                     actionLabel = "Dismiss",
                                 )
-                                viewModel.userIntent.send(CheckoutIntent.ChangeStatus(CheckoutState.Success))
                             }
                         }
                     }

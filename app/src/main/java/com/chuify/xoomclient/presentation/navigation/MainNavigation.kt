@@ -19,7 +19,6 @@ import com.chuify.xoomclient.presentation.ui.payment.PaymentScreen
 import com.chuify.xoomclient.presentation.ui.picklocation.PickLocationScreen
 import com.chuify.xoomclient.presentation.ui.track.TrackOrderScreen
 import com.chuify.xoomclient.presentation.ui.vendorDetails.VendorDetailsScreen
-import com.chuify.xoomclient.presentation.ui.vendors.component.VendorScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -41,6 +40,9 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
 
         composable(
             route = Screens.Main.fullRoute(),
+            enterTransition = { _, _ ->
+                slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(1000))
+            },
         ) {
             MainScreen(navHostController = navHostController)
         }

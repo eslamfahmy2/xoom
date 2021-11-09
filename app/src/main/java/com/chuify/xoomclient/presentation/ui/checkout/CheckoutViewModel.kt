@@ -150,6 +150,7 @@ class CheckoutViewModel @Inject constructor(
                     _state.value = CheckoutState.LoadingSubmit
                 }
                 is DataState.Success -> {
+                    Log.d(TAG, "submitOrder: $dataState")
                     _state.value = CheckoutState.OrderSubmitted
                 }
             }
@@ -161,7 +162,7 @@ class CheckoutViewModel @Inject constructor(
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
-                    _state.value = CheckoutState.Error(dataState.message)
+                    //  _state.value = CheckoutState.Error(dataState.message)
                 }
                 is DataState.Loading -> {
                     _state.value = CheckoutState.Loading
@@ -189,7 +190,7 @@ class CheckoutViewModel @Inject constructor(
                 when (dataState) {
                     is DataState.Error -> {
                         Log.d(TAG, "Error: " + dataState.message)
-                        _state.value = CheckoutState.Error(dataState.message)
+                        // _state.value = CheckoutState.Error(dataState.message)
                     }
                     is DataState.Loading -> {
 
@@ -209,7 +210,7 @@ class CheckoutViewModel @Inject constructor(
                 when (dataState) {
                     is DataState.Error -> {
                         Log.d(TAG, "Error: " + dataState.message)
-                        _state.value = CheckoutState.Error(dataState.message)
+                        //   _state.value = CheckoutState.Error(dataState.message)
                     }
                     is DataState.Loading -> {
 

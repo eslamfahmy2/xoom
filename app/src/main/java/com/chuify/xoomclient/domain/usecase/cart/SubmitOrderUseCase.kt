@@ -69,8 +69,8 @@ class SubmitOrderUseCase @Inject constructor(
                         emit(DataState.Error(response.message))
                     }
                     is ResponseState.Success -> {
-                        cartRepo.clear()
                         emit(DataState.Success(true))
+                        cartRepo.clear()
                     }
                 }
 
