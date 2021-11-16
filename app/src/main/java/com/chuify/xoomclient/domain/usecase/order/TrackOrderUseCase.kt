@@ -23,7 +23,10 @@ class TrackOrderUseCase @Inject constructor(
                     emit(DataState.Error(response.message))
                 }
                 is ResponseState.Success -> {
-                    emit(DataState.Success(response.data))
+                    if (response.data.error.equals("400")) {
+                        emit(DataState.Error(response.data.msg))
+                    } else
+                        emit(DataState.Success(response.data))
                 }
             }
 

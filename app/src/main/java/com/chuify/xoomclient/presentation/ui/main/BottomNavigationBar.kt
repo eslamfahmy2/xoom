@@ -1,8 +1,6 @@
 package com.chuify.xoomclient.presentation.ui.main
 
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -11,7 +9,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BottomNavigationBar(
     action: (Int) -> Unit,
-    selected: Int = 0,
+    selected: Int,
     notificationBadge: Int,
 ) {
     val items = listOf(
@@ -31,7 +29,7 @@ fun BottomNavigationBar(
                     if (item is NavigationItem.Notification && notificationBadge > 0) {
 
                         BadgedBox(badge = {
-                            Badge() {
+                            Badge {
                                 Text(text = notificationBadge.toString())
                             }
                         }) {

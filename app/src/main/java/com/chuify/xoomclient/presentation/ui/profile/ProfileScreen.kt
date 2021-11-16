@@ -91,7 +91,7 @@ fun ProfileScreen(
                     text = stringResource(id = R.string.profile),
                     style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 )
-                Log.d(TAG, "ProfileScreen: state " + state)
+
                 when (state) {
                     is ProfileState.MyError -> {
                         state.message?.let {

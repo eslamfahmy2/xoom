@@ -40,9 +40,6 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
 
         composable(
             route = Screens.Main.fullRoute(),
-            enterTransition = { _, _ ->
-                slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(1000))
-            },
         ) {
             MainScreen(navHostController = navHostController)
         }

@@ -5,12 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.xoomclient.domain.usecase.order.TrackOrderUseCase
 import com.chuify.xoomclient.domain.utils.DataState
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
@@ -27,7 +26,8 @@ class TrackOrderViewModel @Inject constructor(
 
     private val _state: MutableStateFlow<TrackOrderState> =
         MutableStateFlow(TrackOrderState.Loading)
-    val state get(): StateFlow<TrackOrderState> = _state
+    val state get() = _state.asStateFlow()
+
 
     init {
         handleIntent()

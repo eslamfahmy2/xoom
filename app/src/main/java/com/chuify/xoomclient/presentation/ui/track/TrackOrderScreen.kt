@@ -12,7 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +32,6 @@ import com.chuify.xoomclient.presentation.components.DefaultSnackBar
 import com.chuify.xoomclient.presentation.components.LoadingListScreen
 import com.chuify.xoomclient.presentation.components.SecondaryBar
 import com.google.accompanist.pager.ExperimentalPagerApi
-import kotlinx.coroutines.launch
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @ExperimentalAnimationApi
@@ -48,14 +47,12 @@ fun TrackOrderScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val state = remember {
-        viewModel.state
-    }
+    val state = viewModel.state.collectAsState().value
 
 
     Scaffold(
         topBar = {
-            SecondaryBar() {
+            SecondaryBar {
                 navHostController.popBackStack()
             }
         },
@@ -82,322 +79,339 @@ fun TrackOrderScreen(
             elevation = 20.dp
         )
         {
-            Column(modifier = Modifier.padding(8.dp)) {
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    Text(
-                        modifier = Modifier.padding(8.dp),
-                        text = stringResource(id = R.string.track_order),
-                        style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
-                    )
-
-                    Icon(
-                        modifier = Modifier.padding(8.dp),
-                        imageVector = Icons.Filled.QrCode,
-                        contentDescription = null,
-                        tint = Color.Green
-                    )
+            when (state) {
+                is TrackOrderState.Error -> {
+                    state.message?.let {
+                        Text(
+                            modifier = Modifier.padding(8.dp),
+                            text = it,
+                            style = TextStyle(fontSize = 18.sp)
+                        )
+                    }
+                }
+                TrackOrderState.Loading -> {
+                    LoadingListScreen(count = 5, height = 240.dp)
 
                 }
+                is TrackOrderState.Success -> {
+                    Column(modifier = Modifier.padding(8.dp)) {
 
-
-
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-
-                    item {
-                        Card(
-                            elevation = 4.dp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(Color.LightGray)
-                                    .padding(4.dp)
-                                    .clip(RoundedCornerShape(4))
-                            ) {
 
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .align(Alignment.CenterEnd)
-                                ) {
-                                    Image(
-                                        modifier = Modifier
-                                            .align(Alignment.CenterEnd)
-                                            .padding(32.dp),
-                                        painter = painterResource(
-                                            id = R.drawable.driver
-                                        ),
-                                        contentDescription = null,
-                                        contentScale = ContentScale.Crop,
+                            Text(
+                                modifier = Modifier.padding(8.dp),
+                                text = stringResource(id = R.string.track_order),
+                                style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                            )
 
-                                        )
-                                }
-                                Column(Modifier.align(Alignment.CenterStart)) {
-                                    Text(
-                                        modifier = Modifier
-                                            .padding(4.dp)
-                                            .padding(start = 24.dp),
-                                        text = "Get it by",
-                                        color = Color.Black
-                                    )
-                                    Text(
-                                        modifier = Modifier
-                                            .padding(4.dp)
-                                            .padding(start = 24.dp),
-                                        text = "12/5",
-                                        color = Color.Black
-                                    )
-                                }
-
-
-                            }
-                        }
-                    }
-
-                    item {
-
-                        Card(
-                            elevation = 4.dp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.Top
-                            ) {
-
-
-                                Icon(
-                                    modifier = Modifier.padding(8.dp),
-                                    imageVector = Icons.Filled.DarkMode,
-                                    contentDescription = null,
-                                    tint = Color.Green
-                                )
-                                Surface(
-                                    modifier = Modifier.size(4.dp, 50.dp),
-                                    color = Color.Green
-                                ) {}
-
-                                Text(
-                                    modifier = Modifier.padding(8.dp),
-                                    text = "Submitted"
-                                )
-                            }
+                            Icon(
+                                modifier = Modifier.padding(8.dp),
+                                imageVector = Icons.Filled.QrCode,
+                                contentDescription = null,
+                                tint = Color.Green
+                            )
 
                         }
 
-                    }
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
 
-                    item {
-                        Card(
-                            elevation = 4.dp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.Top
-                            ) {
-
-
-                                Icon(
-                                    modifier = Modifier.padding(8.dp),
-                                    imageVector = Icons.Filled.Book,
-                                    contentDescription = null,
-                                    tint = Color.Green
-                                )
-                                Surface(
-                                    modifier = Modifier.size(4.dp, 50.dp),
-                                    color = Color.LightGray
-                                ) {}
-
-                                Text(
-                                    modifier = Modifier.padding(8.dp),
-                                    text = "Accepted"
-                                )
-                            }
-                        }
-                    }
-
-                    item {
-                        Card(
-                            elevation = 4.dp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.Top
-                            ) {
-
-
-                                Icon(
-                                    modifier = Modifier.padding(8.dp),
-                                    imageVector = Icons.Filled.Motorcycle,
-                                    contentDescription = null,
-                                    tint = Color.Green
-                                )
-                                Surface(
-                                    modifier = Modifier.size(4.dp, 50.dp),
-                                    color = Color.LightGray
-                                ) {}
-
-                                Text(
-                                    modifier = Modifier.padding(8.dp),
-                                    text = "On Transit"
-                                )
-                            }
-                        }
-                    }
-
-                    item {
-                        Card(
-                            elevation = 4.dp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-
-                        ) {
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.Top
-                            ) {
-
-
-                                Icon(
-                                    modifier = Modifier.padding(8.dp),
-                                    imageVector = Icons.Filled.DeliveryDining,
-                                    contentDescription = null,
-                                    tint = Color.Green
-                                )
-                                Surface(
-                                    modifier = Modifier.size(4.dp, 50.dp),
-                                    color = Color.LightGray
-                                ) {}
-
-                                Text(
-                                    modifier = Modifier.padding(8.dp),
-                                    text = "Delivered"
-                                )
-                            }
-
-                        }
-                    }
-
-                    item {
-
-                        Card(
-                            elevation = 4.dp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-                        ) {
-
-                            Column {
-                                Row(
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically,
+                            item {
+                                Card(
+                                    elevation = 4.dp,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(8.dp)
                                 ) {
-
-                                    Text(
-                                        modifier = Modifier.padding(8.dp),
-                                        text = stringResource(id = R.string.track_order),
-                                        style = TextStyle(
-                                            fontSize = 25.sp,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    )
-
-                                    Icon(
-                                        modifier = Modifier.padding(8.dp),
-                                        imageVector = Icons.Filled.Phone,
-                                        contentDescription = null,
-                                        tint = Color.Green
-                                    )
-
-
-                                }
-
-
-                                Row(
-                                    horizontalArrangement = Arrangement.Start,
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(8.dp)
-                                ) {
-
-                                    Image(
+                                    Box(
                                         modifier = Modifier
-                                            .padding(8.dp)
-                                            .size(80.dp, 80.dp)
-                                            .clip(RoundedCornerShape(10)),
-                                        painter = painterResource(id = R.drawable.driver),
-                                        contentDescription = null,
-                                        contentScale = ContentScale.Crop
-                                    )
-
-                                    Column(
-                                        modifier = Modifier.padding(start = 8.dp),
+                                            .fillMaxWidth()
+                                            .background(Color.LightGray)
+                                            .padding(4.dp)
+                                            .clip(RoundedCornerShape(4))
                                     ) {
 
-                                        Text(
+                                        Box(
                                             modifier = Modifier
-                                                .wrapContentSize()
-                                                .padding(8.dp)
-                                                .align(Alignment.Start),
-                                            text = "Name",
-                                            color = MaterialTheme.colors.onSurface,
+                                                .fillMaxWidth()
+                                                .align(Alignment.CenterEnd)
+                                        ) {
+                                            Image(
+                                                modifier = Modifier
+                                                    .align(Alignment.CenterEnd)
+                                                    .padding(32.dp),
+                                                painter = painterResource(
+                                                    id = R.drawable.driver
+                                                ),
+                                                contentDescription = null,
+                                                contentScale = ContentScale.Crop,
 
-                                            )
-
-                                        Text(
-                                            modifier = Modifier
-                                                .wrapContentSize()
-                                                .padding(
-                                                    start = 8.dp,
-                                                    bottom = 8.dp,
-                                                    end = 8.dp
                                                 )
-                                                .align(Alignment.Start),
-                                            text = "Phone",
-                                            color = MaterialTheme.colors.onSurface,
-                                        )
+                                        }
+                                        Column(Modifier.align(Alignment.CenterStart)) {
+                                            Text(
+                                                modifier = Modifier
+                                                    .padding(4.dp)
+                                                    .padding(start = 24.dp),
+                                                text = "Get it by",
+                                                color = Color.Black
+                                            )
+                                            Text(
+                                                modifier = Modifier
+                                                    .padding(4.dp)
+                                                    .padding(start = 24.dp),
+                                                text = "12/5",
+                                                color = Color.Black
+                                            )
+                                        }
 
+
+                                    }
+                                }
+                            }
+
+                            item {
+
+                                Card(
+                                    elevation = 4.dp,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+
+                                ) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.Start,
+                                        verticalAlignment = Alignment.Top
+                                    ) {
+
+
+                                        Icon(
+                                            modifier = Modifier.padding(8.dp),
+                                            imageVector = Icons.Filled.DarkMode,
+                                            contentDescription = null,
+                                            tint = Color.Green
+                                        )
+                                        Surface(
+                                            modifier = Modifier.size(4.dp, 50.dp),
+                                            color = Color.Green
+                                        ) {}
+
+                                        Text(
+                                            modifier = Modifier.padding(8.dp),
+                                            text = "Submitted"
+                                        )
                                     }
 
                                 }
 
                             }
 
+                            item {
+                                Card(
+                                    elevation = 4.dp,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+
+                                ) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.Start,
+                                        verticalAlignment = Alignment.Top
+                                    ) {
+
+
+                                        Icon(
+                                            modifier = Modifier.padding(8.dp),
+                                            imageVector = Icons.Filled.Book,
+                                            contentDescription = null,
+                                            tint = Color.Green
+                                        )
+                                        Surface(
+                                            modifier = Modifier.size(4.dp, 50.dp),
+                                            color = Color.LightGray
+                                        ) {}
+
+                                        Text(
+                                            modifier = Modifier.padding(8.dp),
+                                            text = "Accepted"
+                                        )
+                                    }
+                                }
+                            }
+
+                            item {
+                                Card(
+                                    elevation = 4.dp,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+
+                                ) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.Start,
+                                        verticalAlignment = Alignment.Top
+                                    ) {
+
+
+                                        Icon(
+                                            modifier = Modifier.padding(8.dp),
+                                            imageVector = Icons.Filled.Motorcycle,
+                                            contentDescription = null,
+                                            tint = Color.Green
+                                        )
+                                        Surface(
+                                            modifier = Modifier.size(4.dp, 50.dp),
+                                            color = Color.LightGray
+                                        ) {}
+
+                                        Text(
+                                            modifier = Modifier.padding(8.dp),
+                                            text = "On Transit"
+                                        )
+                                    }
+                                }
+                            }
+
+                            item {
+                                Card(
+                                    elevation = 4.dp,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+
+                                ) {
+
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.Start,
+                                        verticalAlignment = Alignment.Top
+                                    ) {
+
+
+                                        Icon(
+                                            modifier = Modifier.padding(8.dp),
+                                            imageVector = Icons.Filled.DeliveryDining,
+                                            contentDescription = null,
+                                            tint = Color.Green
+                                        )
+                                        Surface(
+                                            modifier = Modifier.size(4.dp, 50.dp),
+                                            color = Color.LightGray
+                                        ) {}
+
+                                        Text(
+                                            modifier = Modifier.padding(8.dp),
+                                            text = "Delivered"
+                                        )
+                                    }
+
+                                }
+                            }
+
+                            item {
+
+                                Card(
+                                    elevation = 4.dp,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                ) {
+
+                                    Column {
+                                        Row(
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(8.dp)
+                                        ) {
+
+                                            Text(
+                                                modifier = Modifier.padding(8.dp),
+                                                text = stringResource(id = R.string.track_order),
+                                                style = TextStyle(
+                                                    fontSize = 25.sp,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            )
+
+                                            Icon(
+                                                modifier = Modifier.padding(8.dp),
+                                                imageVector = Icons.Filled.Phone,
+                                                contentDescription = null,
+                                                tint = Color.Green
+                                            )
+
+
+                                        }
+
+
+                                        Row(
+                                            horizontalArrangement = Arrangement.Start,
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .padding(8.dp)
+                                        ) {
+
+                                            Image(
+                                                modifier = Modifier
+                                                    .padding(8.dp)
+                                                    .size(80.dp, 80.dp)
+                                                    .clip(RoundedCornerShape(10)),
+                                                painter = painterResource(id = R.drawable.driver),
+                                                contentDescription = null,
+                                                contentScale = ContentScale.Crop
+                                            )
+
+                                            Column(
+                                                modifier = Modifier.padding(start = 8.dp),
+                                            ) {
+
+                                                Text(
+                                                    modifier = Modifier
+                                                        .wrapContentSize()
+                                                        .padding(8.dp)
+                                                        .align(Alignment.Start),
+                                                    text = "Name",
+                                                    color = MaterialTheme.colors.onSurface,
+
+                                                    )
+
+                                                Text(
+                                                    modifier = Modifier
+                                                        .wrapContentSize()
+                                                        .padding(
+                                                            start = 8.dp,
+                                                            bottom = 8.dp,
+                                                            end = 8.dp
+                                                        )
+                                                        .align(Alignment.Start),
+                                                    text = "Phone",
+                                                    color = MaterialTheme.colors.onSurface,
+                                                )
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+                            }
                         }
+
                     }
                 }
-
             }
+
 
         }
 
@@ -405,7 +419,7 @@ fun TrackOrderScreen(
     }
 
     LaunchedEffect(true) {
-        viewModel.userIntent.send(TrackOrderIntent.TrackOrder("25414"))
+        viewModel.userIntent.send(TrackOrderIntent.TrackOrder("25944"))
     }
 
 

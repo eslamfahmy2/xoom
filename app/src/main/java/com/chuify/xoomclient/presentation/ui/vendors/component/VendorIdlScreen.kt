@@ -8,10 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
@@ -27,6 +24,7 @@ import com.chuify.xoomclient.domain.model.Accessory
 import com.chuify.xoomclient.domain.model.Vendor
 
 
+@ExperimentalMaterialApi
 @Composable
 fun VendorIdlScreen(
     data: List<Vendor>,
@@ -37,18 +35,22 @@ fun VendorIdlScreen(
     onAccessoryClicked: (Accessory) -> Unit,
 ) {
 
-    Column() {
+    Column {
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp, end = 8.dp,
-                    bottom = 8.dp),
+                .padding(
+                    start = 8.dp, end = 8.dp,
+                    bottom = 8.dp
+                ),
             value = searchText,
             onValueChange = { onTextChange(it) },
             leadingIcon = {
-                Icon(imageVector = Icons.Filled.Search,
+                Icon(
+                    imageVector = Icons.Filled.Search,
                     tint = MaterialTheme.colors.primary,
-                    contentDescription = "Localized description")
+                    contentDescription = "Localized description"
+                )
             },
             label = {
                 Text(text = stringResource(R.string.search_on_xoom))
@@ -66,7 +68,7 @@ fun VendorIdlScreen(
         )
         Spacer(modifier = Modifier.padding(top = 8.dp))
 
-        LazyRow() {
+        LazyRow {
             items(accessories) {
                 AccessoryChip(accessory = it) { accessory ->
                     onAccessoryClicked(accessory)

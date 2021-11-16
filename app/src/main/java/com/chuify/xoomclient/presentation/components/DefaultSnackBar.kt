@@ -1,15 +1,11 @@
 package com.chuify.xoomclient.presentation.components
 
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.chuify.xoomclient.presentation.theme.backgroundDark
 
 @ExperimentalMaterialApi
 @Composable
@@ -26,7 +22,7 @@ fun DefaultSnackBar(
                 content = {
                     Text(
                         text = data.message,
-                        color =  MaterialTheme.colors.surface
+                        color = MaterialTheme.colors.surface
                     )
                 },
                 action = {
@@ -38,7 +34,7 @@ fun DefaultSnackBar(
                         ) {
                             Text(
                                 text = actionLabel,
-                                color =  MaterialTheme.colors.surface
+                                color = MaterialTheme.colors.surface
                             )
                         }
                     }

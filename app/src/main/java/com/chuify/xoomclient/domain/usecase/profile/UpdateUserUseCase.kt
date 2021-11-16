@@ -28,13 +28,13 @@ class UpdateUserUseCase @Inject constructor(
         try {
             emit(DataState.Loading())
             if (!Validator.isValidName(firstName)) {
-                throw Exception("first name not valid")
+           //     throw Exception("first name not valid")
             }
             if (!Validator.isValidName(lastName)) {
-                throw Exception("last name not valid")
+                //         throw Exception("last name not valid")
             }
             if (!Validator.isValidEmail(email)) {
-                throw Exception("email not valid")
+                //           throw Exception("email not valid")
             }
             when (val response = profileRepo.updateUser(
                 firstName = firstName,
