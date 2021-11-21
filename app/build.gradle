@@ -9,7 +9,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdk 31
     defaultConfig {
-        applicationId "com.chuify.xoomclient"
+        applicationId "com.chuify.cleanxoomclient"
         minSdk 21
         targetSdk 31
         versionCode 1
@@ -83,11 +83,15 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.7.1'
     //Hilt
     implementation 'com.google.dagger:hilt-android:2.37'
-    implementation 'com.google.firebase:firebase-auth:19.2.0'
-    implementation 'com.google.firebase:firebase-messaging-ktx:22.0.0'
     kapt 'com.google.dagger:hilt-compiler:2.37'
-
-
+    //FireBase
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
+    implementation platform('com.google.firebase:firebase-bom:29.0.0')
+    // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
     // ViewModel utilities for Compose
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0"
 
@@ -106,10 +110,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
     //CCP
     implementation 'com.sinaukoding:cccp:1.0.3'
-    //FireBase
-    implementation platform('com.google.firebase:firebase-bom:28.4.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-auth-ktx'
+
     //Coil
     implementation("io.coil-kt:coil-compose:1.4.0")
     //Room
@@ -124,6 +125,8 @@ dependencies {
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
     //Swipe to refresh
     implementation "com.google.accompanist:accompanist-swiperefresh:0.21.0-beta"
+    //QR
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
 
 

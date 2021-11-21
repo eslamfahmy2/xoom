@@ -8,6 +8,45 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:958735187527:android:b09a3f4c3dc2bb33ed7b62",
+        "android_client_info": {
+          "package_name": "com.chuify.cleanxoomclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "958735187527-jvfgnvo5uflotruau5nca35mdol4et4n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlImPKiLObyODXWUQ7tAQDUb4pF3rkKkY"
+        },
+        {
+          "current_key": "AIzaSyAhZV87RiOBP1lHo0Puq6JxHZ24sEX_4fc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "958735187527-jvfgnvo5uflotruau5nca35mdol4et4n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "958735187527-063gomhoqac2t620gapv2s8434b03tsc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pbdev.xoom.user"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:958735187527:android:d4523d9e68a794f4ed7b62",
         "android_client_info": {
           "package_name": "com.chuify.xoomclient"
