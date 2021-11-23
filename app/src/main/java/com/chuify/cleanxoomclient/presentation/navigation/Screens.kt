@@ -106,4 +106,10 @@ sealed class Screens(val route: String) {
             return route
         }
     }
+
+    object Success : Screens("sucess") {
+        fun fullRoute(): String {
+            return route
+        }
+    }
 }

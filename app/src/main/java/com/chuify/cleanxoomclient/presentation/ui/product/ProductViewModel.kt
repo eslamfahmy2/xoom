@@ -47,9 +47,6 @@ class ProductViewModel @Inject constructor(
                     is ProductIntent.InitLoad -> {
                         loadProducts(intent.id)
                     }
-                    is ProductIntent.IncreaseCartItem -> {
-
-                    }
                     is ProductIntent.DecreaseOrRemove -> {
                         decreaseOrRemove(intent.product)
                     }

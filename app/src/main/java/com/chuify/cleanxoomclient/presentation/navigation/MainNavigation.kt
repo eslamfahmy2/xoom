@@ -3,8 +3,11 @@ package com.chuify.cleanxoomclient.presentation.navigation
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -13,6 +16,7 @@ import com.chuify.cleanxoomclient.domain.model.Vendor
 import com.chuify.cleanxoomclient.presentation.ui.cart.CartScreen
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutScreen
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutViewModel
+import com.chuify.cleanxoomclient.presentation.ui.checkout.SuccessScreen
 import com.chuify.cleanxoomclient.presentation.ui.editProfile.EditProfileScreen
 import com.chuify.cleanxoomclient.presentation.ui.locations.LocationsScreen
 import com.chuify.cleanxoomclient.presentation.ui.main.MainScreen
@@ -38,7 +42,11 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
 
     val navHostController = rememberAnimatedNavController()
 
-    AnimatedNavHost(navController = navHostController, startDestination = Screens.Main.route) {
+    AnimatedNavHost(
+        modifier = Modifier.background(MaterialTheme.colors.primary),
+        navController = navHostController,
+        startDestination = Screens.Main.route
+    ) {
 
         composable(
             route = Screens.Main.fullRoute(),
@@ -221,6 +229,12 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
             }
         ) {
             LocationsScreen(navHostController = navHostController)
+        }
+
+        composable(
+            route = Screens.Success.fullRoute(),
+        ) {
+            SuccessScreen(navHostController = navHostController)
         }
 
     }

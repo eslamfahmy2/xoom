@@ -10,16 +10,21 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -316,8 +321,8 @@ fun CheckoutScreen(
                                     },
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(16.dp),
-                                    shape = RoundedCornerShape(50)
+                                        .padding(8.dp),
+                                    shape = RoundedCornerShape(30)
                                 ) {
                                     Text(
                                         modifier = Modifier
@@ -357,7 +362,7 @@ fun CheckoutScreen(
 
                     }
                     CheckoutState.OrderSubmitted -> {
-                        navHostController.navigate(Screens.Main.route)
+                        navHostController.navigate(Screens.Success.route)
                     }
                     CheckoutState.LoadingSubmit -> {
                         LoadingDialog()
@@ -375,3 +380,64 @@ fun CheckoutScreen(
 
 }
 
+@Composable
+fun SuccessScreen(navHostController: NavHostController) {
+    navHostController.enableOnBackPressed(false)
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.primary),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Icon(
+            Icons.Filled.Check,
+            contentDescription = null,
+            modifier = Modifier
+                .size(150.dp, 150.dp)
+                .padding(8.dp)
+        )
+
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        Text(
+            text = "Your Gas is on it’s way",
+            color = Color.Black,
+            modifier = Modifier.padding(8.dp)
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        Text(
+            text = "Thank you for placing your order with us! You can track the delivery from the “Orders” section",
+            color = Color.Black,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center,
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+
+        Button(
+            onClick = {
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+            shape = RoundedCornerShape(30)
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(CenterVertically),
+                text = "Continue Shopping",
+            )
+        }
+
+    }
+}
