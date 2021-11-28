@@ -46,6 +46,11 @@ class SharedPrefs @Inject constructor(
 
     }
 
+
+    fun getPoints(): String {
+        return get(USER_POINTS, String::class.java)
+    }
+
     fun getToken(): String {
         return get(USER_TOKEN, String::class.java)
     }

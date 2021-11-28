@@ -58,6 +58,7 @@ fun ProfileScreen(
 
     val state = viewModel.state.collectAsState().value
     val isDark = viewModel.isDark.collectAsState().value
+    val points = viewModel.points.collectAsState().value
 
     Scaffold(
         topBar = { SolidBar() },
@@ -385,38 +386,34 @@ fun ProfileScreen(
                                                 )
                                             }
 
-
-                                            if (state.user.points.isNotEmpty() && state.user.points != "0") {
-
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(8.dp),
+                                                horizontalArrangement = Arrangement.SpaceBetween,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
                                                 Row(
-                                                    modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(8.dp),
-                                                    horizontalArrangement = Arrangement.SpaceBetween,
                                                     verticalAlignment = Alignment.CenterVertically
                                                 ) {
-                                                    Row(
-                                                        verticalAlignment = Alignment.CenterVertically
-                                                    ) {
-                                                        Icon(
-                                                            modifier = Modifier.padding(8.dp),
-                                                            imageVector = Icons.Filled.Money,
-                                                            contentDescription = null,
-                                                            tint = Color.Green
-                                                        )
-                                                        Text(
-                                                            text = "Total points  " + state.user.points,
-                                                            fontSize = 16.sp,
-                                                            modifier = Modifier.padding(4.dp),
-                                                        )
-                                                    }
                                                     Icon(
-                                                        modifier = Modifier,
-                                                        imageVector = Icons.Filled.KeyboardArrowRight,
+                                                        modifier = Modifier.padding(8.dp),
+                                                        imageVector = Icons.Filled.Money,
                                                         contentDescription = null,
-                                                        tint = Color.LightGray
+                                                        tint = Color.Green
+                                                    )
+                                                    Text(
+                                                        text = "Total points  $points",
+                                                        fontSize = 16.sp,
+                                                        modifier = Modifier.padding(4.dp),
                                                     )
                                                 }
+                                                Icon(
+                                                    modifier = Modifier,
+                                                    imageVector = Icons.Filled.KeyboardArrowRight,
+                                                    contentDescription = null,
+                                                    tint = Color.LightGray
+                                                )
                                             }
 
 

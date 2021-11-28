@@ -38,6 +38,9 @@ class ProfileViewModel @Inject constructor(
     private val _isDark: MutableStateFlow<Boolean> = MutableStateFlow(true)
     val isDark get() = _isDark.asStateFlow()
 
+    private val _points: MutableStateFlow<String> = MutableStateFlow("0")
+    val points get() = _points.asStateFlow()
+
 
     init {
         handleIntent()
@@ -127,7 +130,7 @@ class ProfileViewModel @Inject constructor(
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
-          //          _state.value = ProfileState.MyError(dataState.message)
+                    //          _state.value = ProfileState.MyError(dataState.message)
                 }
                 is DataState.Loading -> {
                     _state.value = ProfileState.Loading
@@ -143,7 +146,23 @@ class ProfileViewModel @Inject constructor(
     }
 
     private suspend fun getLoyaltyPoints() = viewModelScope.launch(Dispatchers.IO) {
-        getLoyaltyPointsUseCase().collect()
+        getLoyaltyPointsUseCase().collect { dataState ->
+            when (dataState) {
+                is DataState.Error -> {
+                    Log.d(TAG, "Error: " + dataState.message)
+                    //          _state.value = ProfileState.MyError(dataState.message)
+                }
+                is DataState.Loading -> {
+                    //   _state.value = ProfileState.Loading
+                }
+                is DataState.Success -> {
+                    dataState.data?.let { it ->
+                        _points.value = it.substringBefore(".")
+                    }
+
+                }
+            }
+        }
     }
 
 }

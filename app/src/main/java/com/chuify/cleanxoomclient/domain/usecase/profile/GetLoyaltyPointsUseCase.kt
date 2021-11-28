@@ -19,6 +19,7 @@ class GetLoyaltyPointsUseCase @Inject constructor(
     suspend operator fun invoke() = flow<DataState<String>> {
         try {
             emit(DataState.Loading())
+            emit(DataState.Success(sharedPrefs.getPoints()))
             when (val response = profileRepo.getLoyaltyPoints()) {
                 is ResponseState.Error -> {
                     emit(DataState.Error(response.message))

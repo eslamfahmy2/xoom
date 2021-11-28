@@ -512,7 +512,8 @@ fun TrackOrderScreen(
     }
 
     LaunchedEffect(true) {
-        viewModel.userIntent.send(TrackOrderIntent.TrackOrder("25514"))
+        viewModel.userIntent.send(TrackOrderIntent.TrackOrder(order.id))
+        // viewModel.userIntent.send(TrackOrderIntent.TrackOrder("25514"))
     }
 
 

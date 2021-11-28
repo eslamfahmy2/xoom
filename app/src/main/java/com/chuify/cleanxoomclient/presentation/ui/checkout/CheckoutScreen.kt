@@ -399,7 +399,6 @@ fun SuccessScreen(navHostController: NavHostController) {
                 .padding(8.dp)
         )
 
-
         Spacer(modifier = Modifier.padding(8.dp))
 
         Text(
