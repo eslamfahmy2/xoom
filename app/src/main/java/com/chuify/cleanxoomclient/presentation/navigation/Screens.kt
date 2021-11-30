@@ -112,4 +112,18 @@ sealed class Screens(val route: String) {
             return route
         }
     }
+
+    object Fail : Screens("fail") {
+
+        const val arg = "msg"
+
+        fun fullRoute(): String {
+            return "$route/{$arg}"
+        }
+
+        fun routeWithArgs(input: String): String {
+            return "$route/$input"
+        }
+
+    }
 }

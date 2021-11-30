@@ -16,6 +16,7 @@ import com.chuify.cleanxoomclient.domain.model.Vendor
 import com.chuify.cleanxoomclient.presentation.ui.cart.CartScreen
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutScreen
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutViewModel
+import com.chuify.cleanxoomclient.presentation.ui.checkout.FailScreen
 import com.chuify.cleanxoomclient.presentation.ui.checkout.SuccessScreen
 import com.chuify.cleanxoomclient.presentation.ui.editProfile.EditProfileScreen
 import com.chuify.cleanxoomclient.presentation.ui.locations.LocationsScreen
@@ -122,23 +123,7 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
             CartScreen(navHostController = navHostController)
         }
 
-        composable(
-            route = Screens.Checkout.fullRoute(),
-            enterTransition = { _, _ ->
-                slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(1000))
-            },
-            exitTransition = { _, _ ->
-                slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(1000))
-            },
-            popEnterTransition = { _, _ ->
-                slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(1000))
-            },
-            popExitTransition = { _, _ ->
-                slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(1000))
-            }
-        ) {
-            CheckoutScreen(navHostController = navHostController, viewModel = viewModel)
-        }
+
 
         composable(route = Screens.PaymentMethod.fullRoute(),
             enterTransition = { _, _ ->
@@ -231,10 +216,47 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
             LocationsScreen(navHostController = navHostController)
         }
 
+
+        //-----------------------------------------------------------------------------------
+        //checkout
+
+
+        composable(
+            route = Screens.Checkout.fullRoute(),
+            enterTransition = { _, _ ->
+                slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(1000))
+            },
+            exitTransition = { _, _ ->
+                slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(1000))
+            },
+            popEnterTransition = { _, _ ->
+                slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(1000))
+            },
+            popExitTransition = { _, _ ->
+                slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(1000))
+            }
+        ) {
+            CheckoutScreen(navHostController = navHostController, viewModel = viewModel)
+        }
+
+
         composable(
             route = Screens.Success.fullRoute(),
         ) {
             SuccessScreen(navHostController = navHostController)
+        }
+
+        composable(
+            route = Screens.Fail.fullRoute(),
+            arguments = listOf(navArgument(Screens.Fail.arg) {
+                type = NavType.StringType
+            }
+            )
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getString(Screens.Fail.arg)?.let {
+                FailScreen(navHostController = navHostController, msg = it, viewModel = viewModel)
+            }
+
         }
 
     }

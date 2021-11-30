@@ -6,7 +6,6 @@ import com.chuify.cleanxoomclient.domain.model.Location
 import com.chuify.cleanxoomclient.domain.model.Payments
 import com.chuify.cleanxoomclient.domain.repository.CartRepo
 import com.chuify.cleanxoomclient.domain.repository.OrderRepo
-import com.chuify.cleanxoomclient.domain.utils.DataState
 import com.chuify.cleanxoomclient.domain.utils.ResponseState
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -27,9 +26,9 @@ class SubmitOrderUseCase @Inject constructor(
         payment: Payments,
         locations: List<Location>,
         items: List<Cart>,
-    ) = flow<DataState<Boolean>> {
+    ) = flow<SubmitOrderStatus> {
         try {
-            emit(DataState.Loading())
+            emit(SubmitOrderStatus.Loading())
             locations.firstOrNull { it.selected }?.let { location ->
 
                 val totalPrice = items.sumOf { item -> item.basePrice * item.quantity }
@@ -63,14 +62,29 @@ class SubmitOrderUseCase @Inject constructor(
                 orderJson.add("products", array)
                 val body = orderJson.toString()
 
+                val response = orderRepo.submitOrder(body)
 
-                when (val response = orderRepo.submitOrder(body)) {
+                when (response) {
                     is ResponseState.Error -> {
-                        emit(DataState.Error(response.message))
+                        throw Exception(response.message)
                     }
                     is ResponseState.Success -> {
-                        emit(DataState.Success(true))
-                        cartRepo.clear()
+
+                        emit(SubmitOrderStatus.OrderSubmitted(response.toString()))
+
+                        val payment = response.data.Order?.order_id?.let {
+                            orderRepo.confirmPayment(it)
+                        }
+                        when (payment) {
+                            is ResponseState.Error -> {
+                                emit(SubmitOrderStatus.PaymentFail(payment.message))
+                            }
+                            is ResponseState.Success -> {
+                                cartRepo.clear()
+                                emit(SubmitOrderStatus.PaymentSuccess(payment.toString()))
+                            }
+                        }
+
                     }
                 }
 
@@ -78,7 +92,14 @@ class SubmitOrderUseCase @Inject constructor(
 
 
         } catch (e: Exception) {
-            emit(DataState.Error(e.message))
+            emit(SubmitOrderStatus.PaymentFail(e.message))
         }
     }.flowOn(Dispatchers.IO).conflate()
+}
+
+sealed class SubmitOrderStatus {
+    data class Loading(val msg: String? = null) : SubmitOrderStatus()
+    data class OrderSubmitted(val msg: String? = null) : SubmitOrderStatus()
+    data class PaymentSuccess(val msg: String? = null) : SubmitOrderStatus()
+    data class PaymentFail(val msg: String? = null) : SubmitOrderStatus()
 }

@@ -7,10 +7,7 @@ import com.chuify.cleanxoomclient.domain.model.Cart
 import com.chuify.cleanxoomclient.domain.model.CartPreview
 import com.chuify.cleanxoomclient.domain.model.Location
 import com.chuify.cleanxoomclient.domain.model.Payments
-import com.chuify.cleanxoomclient.domain.usecase.cart.DecreaseOrderUseCase
-import com.chuify.cleanxoomclient.domain.usecase.cart.GetCartItemsUseCase
-import com.chuify.cleanxoomclient.domain.usecase.cart.IncreaseOrderUseCase
-import com.chuify.cleanxoomclient.domain.usecase.cart.SubmitOrderUseCase
+import com.chuify.cleanxoomclient.domain.usecase.cart.*
 import com.chuify.cleanxoomclient.domain.usecase.location.GetLocationsUseCase
 import com.chuify.cleanxoomclient.domain.utils.DataState
 
@@ -49,7 +46,7 @@ class CheckoutViewModel @Inject constructor(
     val orders get() = _orders.asStateFlow()
 
     private val _paymentMethod: MutableStateFlow<Payments> =
-        MutableStateFlow(Payments.CashOnDelivery)
+        MutableStateFlow(Payments.MPESA)
     val paymentMethod get() = _paymentMethod.asStateFlow()
 
     private val _location: MutableStateFlow<List<Location>> = MutableStateFlow(listOf())
@@ -98,7 +95,7 @@ class CheckoutViewModel @Inject constructor(
                         _location.value = res
                     }
                     is CheckoutIntent.ChangeStatus -> {
-                        _state.value = CheckoutState.Success
+                        _state.value = CheckoutState.Success.OrderSubmitted()
                     }
                 }
             }
@@ -121,7 +118,7 @@ class CheckoutViewModel @Inject constructor(
                         //    _state.value = CheckoutState.Error(dataState.message)
                     }
                     is DataState.Loading -> {
-                      //  _state.value = CheckoutState.Loading
+                        //  _state.value = CheckoutState.Loading
                     }
                     is DataState.Success -> {
                         Log.d(TAG, "Success: location " + dataState.data)
@@ -142,16 +139,20 @@ class CheckoutViewModel @Inject constructor(
             _orders.value.first,
         ).collect { dataState ->
             when (dataState) {
-                is DataState.Error -> {
-                    Log.d(TAG, "Error: " + dataState.message)
-                    _state.value = CheckoutState.Error(dataState.message)
+                is SubmitOrderStatus.Loading -> {
+                    _state.value = CheckoutState.Loading
                 }
-                is DataState.Loading -> {
-                    _state.value = CheckoutState.LoadingSubmit
+                is SubmitOrderStatus.OrderSubmitted -> {
+                    Log.d(TAG, "Error: " + dataState.msg)
+                    _state.value = CheckoutState.Success.OrderSubmitted(dataState.msg)
                 }
-                is DataState.Success -> {
-                    Log.d(TAG, "submitOrder: $dataState")
-                    _state.value = CheckoutState.OrderSubmitted
+                is SubmitOrderStatus.PaymentFail -> {
+                    _state.value = CheckoutState.Error.PaymentError(dataState.msg)
+                }
+                is SubmitOrderStatus.PaymentSuccess -> {
+                    Log.d(TAG, "Error: " + dataState.msg)
+                    _state.value = CheckoutState.Success.PaymentSuccess(dataState.msg)
+
                 }
             }
         }
@@ -162,16 +163,16 @@ class CheckoutViewModel @Inject constructor(
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
-                    //  _state.value = CheckoutState.Error(dataState.message)
+                    //   _state.value = CheckoutState.Error.SubmitOrderError(dataState.message)
                 }
                 is DataState.Loading -> {
-                    _state.value = CheckoutState.Loading
+                    // _state.value = CheckoutState.Loading
                 }
                 is DataState.Success -> {
                     dataState.data?.let {
                         _orders.value = it
                         _state.value =
-                            CheckoutState.Success
+                            CheckoutState.Success.OrderSubmitted()
                     }
 
                 }
@@ -186,42 +187,13 @@ class CheckoutViewModel @Inject constructor(
                 name = order.name,
                 id = order.id,
                 basePrice = order.basePrice
-            ).collect { dataState ->
-                when (dataState) {
-                    is DataState.Error -> {
-                        Log.d(TAG, "Error: " + dataState.message)
-                        // _state.value = CheckoutState.Error(dataState.message)
-                    }
-                    is DataState.Loading -> {
-
-                    }
-                    is DataState.Success -> {
-                        Log.d(TAG, "Success: $dataState")
-                    }
-                }
-            }
-
+            ).collect()
 
         }
 
     private suspend fun decrease(order: Cart) =
         viewModelScope.launch(Dispatchers.IO) {
-            decreaseOrderUseCase(order.id).collect { dataState ->
-                when (dataState) {
-                    is DataState.Error -> {
-                        Log.d(TAG, "Error: " + dataState.message)
-                        //   _state.value = CheckoutState.Error(dataState.message)
-                    }
-                    is DataState.Loading -> {
-
-                    }
-                    is DataState.Success -> {
-                        Log.d(TAG, "Success: $dataState")
-                    }
-                }
-            }
-
-
+            decreaseOrderUseCase(order.id).collect()
         }
 
 

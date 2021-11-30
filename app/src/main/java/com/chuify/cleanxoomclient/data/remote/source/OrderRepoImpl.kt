@@ -1,9 +1,6 @@
 package com.chuify.cleanxoomclient.data.remote.source
 
-import com.chuify.cleanxoomclient.data.remote.dto.OrderListDto
-import com.chuify.cleanxoomclient.data.remote.dto.StatusBooleanDto
-import com.chuify.cleanxoomclient.data.remote.dto.StatusDto
-import com.chuify.cleanxoomclient.data.remote.dto.TrackDto
+import com.chuify.cleanxoomclient.data.remote.dto.*
 import com.chuify.cleanxoomclient.data.remote.network.ApiInterface
 import com.chuify.cleanxoomclient.domain.repository.OrderRepo
 import com.chuify.cleanxoomclient.domain.utils.ResponseState
@@ -67,7 +64,7 @@ class OrderRepoImpl @Inject constructor(
         ResponseState.Error(e.message)
     }
 
-    override suspend fun submitOrder(body: String): ResponseState<StatusBooleanDto> = try {
+    override suspend fun submitOrder(body: String): ResponseState<SubmitOrderDto> = try {
         val response = apiInterface.saveOrder(body)
         if (response.isSuccessful) {
             response.body()?.let {
@@ -80,4 +77,16 @@ class OrderRepoImpl @Inject constructor(
         ResponseState.Error(e.message)
     }
 
+    override suspend fun confirmPayment(id: String): ResponseState<PaymentDto> = try {
+        val response = apiInterface.confirmOrder(id)
+        if (response.isSuccessful) {
+            response.body()?.let {
+                ResponseState.Success(it)
+            } ?: ResponseState.Error("api : boy is empty")
+        } else {
+            ResponseState.Error(response.errorBody()?.string())
+        }
+    } catch (e: Exception) {
+        ResponseState.Error(e.message)
+    }
 }

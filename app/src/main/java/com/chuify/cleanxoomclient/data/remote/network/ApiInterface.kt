@@ -54,13 +54,18 @@ interface ApiInterface {
     //----------------------------------------------------------------------------------------------------
     @Headers("authorized:true", "userid:true")
     @POST("orders/user_id")
-    suspend fun saveOrder(@Body body: String): Response<StatusBooleanDto>
+    suspend fun saveOrder(@Body body: String): Response<SubmitOrderDto>
 
     //----------------------------------------------------------------------------------------------------
     @Headers("authorized:true")
     @GET("orders/{order_id}/rider")
     suspend fun trackOrder(@Path("order_id") order_id: String): Response<TrackDto>
 
+    @Headers("authorized:true")
+    @GET("payment/{order_id}")
+    suspend fun confirmOrder(@Path("order_id") id: String): Response<PaymentDto>
+
+    //----------------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------------
     @FormUrlEncoded
@@ -99,7 +104,7 @@ interface ApiInterface {
     @Headers("authorized:true", "userid:true")
     @FormUrlEncoded
     @PUT("users/user_id")
-    suspend  fun updateUser(
+    suspend fun updateUser(
         @Field("firstname") firstname: String,
         @Field("lastname") lastname: String,
         @Field("email") email: String

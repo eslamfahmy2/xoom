@@ -14,6 +14,29 @@ data class StatusDto(
 
     )
 
+
+data class SubmitOrderDto(
+    @Expose
+    @SerializedName(value = "Status")
+    val status: Boolean = false,
+
+    @Expose
+    @SerializedName(value = "Msg")
+    val msg: String?,
+
+    @Expose
+    @SerializedName(value = "Order")
+    val Order: OrderEntryDto?,
+
+    )
+
+data class OrderEntryDto(
+
+    @Expose
+    @SerializedName(value = "order_id")
+    val order_id: String?,
+)
+
 data class StatusBooleanDto(
     @Expose
     @SerializedName(value = "Status")

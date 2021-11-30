@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -51,6 +53,7 @@ fun CheckoutScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val state = viewModel.state.collectAsState().value
+
 
 
     Scaffold(
@@ -92,6 +95,7 @@ fun CheckoutScreen(
                 val paymentMethod = viewModel.paymentMethod.collectAsState().value
 
                 val location = viewModel.location.collectAsState().value
+
 
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
 
@@ -340,41 +344,44 @@ fun CheckoutScreen(
 
                 }
 
-                when (state) {
-                    is CheckoutState.Error -> {
-                        state.message?.let {
-                            coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    message = it,
-                                    actionLabel = "Dismiss",
-                                )
-                            }
-                        }
-                    }
-                    CheckoutState.Loading -> {
-                        LoadingListScreen(
-                            count = 3,
-                            height = 250.dp
-                        )
-                    }
-
-                    is CheckoutState.Success -> {
-
-                    }
-                    CheckoutState.OrderSubmitted -> {
-                        navHostController.navigate(Screens.Success.route)
-                    }
-                    CheckoutState.LoadingSubmit -> {
-                        LoadingDialog()
-                    }
-                }
 
             }
         }
 
     }
 
+
+    when (state) {
+
+        is CheckoutState.Error.PaymentError -> {
+            state.message?.let {
+                navHostController.navigate(Screens.Fail.routeWithArgs(it))
+            }
+        }
+        is CheckoutState.Error.SubmitOrderError -> {
+            state.message?.let {
+                coroutineScope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = it,
+                        actionLabel = "Dismiss",
+                    )
+                }
+            }
+        }
+        CheckoutState.Loading -> {
+            LoadingDialog()
+        }
+        is CheckoutState.Success.OrderSubmitted -> {
+
+        }
+        is CheckoutState.Success.PaymentSuccess -> {
+            navHostController.navigate(Screens.Success.route)
+        }
+    }
+
+
     LaunchedEffect(true) {
+
         viewModel.userIntent.send(CheckoutIntent.LoadCart)
     }
 
@@ -382,7 +389,7 @@ fun CheckoutScreen(
 
 @Composable
 fun SuccessScreen(navHostController: NavHostController) {
-    navHostController.enableOnBackPressed(false)
+
     Column(
         Modifier
             .fillMaxSize()
@@ -423,6 +430,9 @@ fun SuccessScreen(navHostController: NavHostController) {
 
         Button(
             onClick = {
+                navHostController.popBackStack(navHostController.graph.startDestinationId, true)
+                navHostController.graph.setStartDestination(Screens.Main.route)
+                navHostController.navigate(Screens.Main.route)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -435,6 +445,88 @@ fun SuccessScreen(navHostController: NavHostController) {
                     .padding(8.dp)
                     .align(CenterVertically),
                 text = "Continue Shopping",
+            )
+        }
+
+    }
+}
+
+
+@Composable
+fun FailScreen(navHostController: NavHostController, msg: String, viewModel: CheckoutViewModel) {
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val shimmerColorShades = listOf(
+        MaterialTheme.colors.primary,
+        MaterialTheme.colors.error
+    )
+
+    val brush = Brush.linearGradient(
+        colors = shimmerColorShades,
+    )
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(
+                brush = brush
+            ),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Icon(
+            Icons.Filled.ErrorOutline,
+            contentDescription = null,
+            modifier = Modifier
+                .size(150.dp, 150.dp)
+                .padding(8.dp),
+            tint = Color.White
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        Text(
+            text = "Error",
+            color = Color.White,
+            modifier = Modifier.padding(8.dp)
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        Text(
+            text = msg,
+            color = Color.White,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center,
+
+            )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    viewModel.userIntent.send(CheckoutIntent.ChangeStatus(CheckoutState.Success.OrderSubmitted()))
+                    navHostController.popBackStack(Screens.Checkout.route, true)
+                }
+
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+            shape = RoundedCornerShape(30)
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(CenterVertically),
+                text = "Try Again",
             )
         }
 
