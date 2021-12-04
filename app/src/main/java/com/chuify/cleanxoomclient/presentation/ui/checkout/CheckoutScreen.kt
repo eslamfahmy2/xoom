@@ -375,7 +375,7 @@ fun CheckoutScreen(
 
         }
         is CheckoutState.Success.PaymentSuccess -> {
-            navHostController.navigate(Screens.Success.route)
+            navHostController.navigate(Screens.Fail.routeWithArgs("error message"))
         }
     }
 
