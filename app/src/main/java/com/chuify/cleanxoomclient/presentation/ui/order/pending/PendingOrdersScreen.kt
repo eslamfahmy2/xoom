@@ -112,6 +112,8 @@ fun PendingOrdersScreen(
                             coroutineScope.launch {
                                 viewModel.userIntent.send(PendingOrdersIntent.ShowCancel(it))
                             }
+                        }, onCheckPayment = {
+                            navHostController.navigate(Screens.CheckPayment.routeWithArgs(it.id))
                         })
                     }
                 }

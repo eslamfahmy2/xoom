@@ -62,28 +62,15 @@ class SubmitOrderUseCase @Inject constructor(
                 orderJson.add("products", array)
                 val body = orderJson.toString()
 
-                val response = orderRepo.submitOrder(body)
-
-                when (response) {
+                when (val response = orderRepo.submitOrder(body)) {
                     is ResponseState.Error -> {
                         throw Exception(response.message)
                     }
                     is ResponseState.Success -> {
 
                         emit(SubmitOrderStatus.OrderSubmitted(response.toString()))
-
-                        val payment = response.data.Order?.order_id?.let {
-                            orderRepo.confirmPayment(it)
-                        }
-                        when (payment) {
-                            is ResponseState.Error -> {
-                                emit(SubmitOrderStatus.PaymentFail(payment.message))
-                            }
-                            is ResponseState.Success -> {
-                                cartRepo.clear()
-                                emit(SubmitOrderStatus.PaymentSuccess(payment.toString()))
-                            }
-                        }
+                        cartRepo.clear()
+                        emit(SubmitOrderStatus.PaymentSuccess(payment.toString()))
 
                     }
                 }

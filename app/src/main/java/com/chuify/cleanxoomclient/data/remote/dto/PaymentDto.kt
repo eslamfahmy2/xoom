@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName
 data class PaymentDto(
 
     @Expose
-    @SerializedName(value = "description")
-    val description: String?,
+    @SerializedName(value = "msg")
+    val msg: String?,
 
     @Expose
     @SerializedName(value = "status")
-    val status: Boolean?,
+    val status: Int,
 )

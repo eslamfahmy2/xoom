@@ -16,12 +16,13 @@ import com.chuify.cleanxoomclient.domain.model.Vendor
 import com.chuify.cleanxoomclient.presentation.ui.cart.CartScreen
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutScreen
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutViewModel
-import com.chuify.cleanxoomclient.presentation.ui.checkout.FailScreen
-import com.chuify.cleanxoomclient.presentation.ui.checkout.SuccessScreen
 import com.chuify.cleanxoomclient.presentation.ui.editProfile.EditProfileScreen
 import com.chuify.cleanxoomclient.presentation.ui.locations.LocationsScreen
 import com.chuify.cleanxoomclient.presentation.ui.main.MainScreen
+import com.chuify.cleanxoomclient.presentation.ui.payment.CheckPaymentScreen
+import com.chuify.cleanxoomclient.presentation.ui.payment.FailScreen
 import com.chuify.cleanxoomclient.presentation.ui.payment.PaymentScreen
+import com.chuify.cleanxoomclient.presentation.ui.payment.SuccessScreen
 import com.chuify.cleanxoomclient.presentation.ui.picklocation.PickLocationScreen
 import com.chuify.cleanxoomclient.presentation.ui.track.QrScreen
 import com.chuify.cleanxoomclient.presentation.ui.track.TrackOrderScreen
@@ -242,8 +243,18 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
 
         composable(
             route = Screens.Success.fullRoute(),
-        ) {
-            SuccessScreen(navHostController = navHostController)
+            arguments = listOf(navArgument(Screens.Success.arg) {
+                type = NavType.StringType
+            }
+            )
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getString(Screens.Success.arg)?.let {
+                SuccessScreen(
+                    navHostController = navHostController,
+                    msg = it,
+                    viewModel = viewModel
+                )
+            }
         }
 
         composable(
@@ -255,6 +266,21 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
         ) { backStackEntry ->
             backStackEntry.arguments?.getString(Screens.Fail.arg)?.let {
                 FailScreen(navHostController = navHostController, msg = it, viewModel = viewModel)
+            }
+        }
+
+        composable(
+            route = Screens.CheckPayment.fullRoute(),
+            arguments = listOf(navArgument(Screens.CheckPayment.arg) {
+                type = NavType.StringType
+            }
+            )
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getString(Screens.CheckPayment.arg)?.let {
+                CheckPaymentScreen(
+                    navHostController = navHostController,
+                    id = it,
+                )
             }
 
         }

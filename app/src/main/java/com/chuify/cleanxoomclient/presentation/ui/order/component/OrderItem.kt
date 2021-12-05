@@ -44,11 +44,13 @@ fun CompleteOrderItem(
         elevation = 4.dp
     ) {
         Column {
-            Row(horizontalArrangement = Arrangement.Start,
+            Row(
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(8.dp)) {
+                    .padding(8.dp)
+            ) {
 
                 Image(
                     modifier = Modifier
@@ -63,7 +65,8 @@ fun CompleteOrderItem(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically) {
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
 
                     Column(
@@ -98,7 +101,7 @@ fun CompleteOrderItem(
                                         .wrapContentSize()
                                         .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
                                         .align(Alignment.Start),
-                                    text = stringResource(id = R.string.submitted),
+                                    text = stringResource(id = R.string.confirm_processing),
                                     color = myGreen,
                                 )
 
@@ -173,9 +176,11 @@ fun CompleteOrderItem(
                             color = MaterialTheme.colors.onSurface,
 
                             )
-                        Row(modifier = Modifier
-                            .wrapContentSize()
-                            .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
+                        Row(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                        ) {
                             Text(
                                 text = order.price,
                                 color = MaterialTheme.colors.primary,
@@ -210,9 +215,12 @@ fun CompleteOrderItem(
                 Image(
                     modifier = Modifier.padding(4.dp),
                     painter = painterResource(id = R.drawable.ic_reorder),
-                    contentDescription = null)
-                Text(modifier = Modifier.padding(4.dp),
-                    text = stringResource(id = R.string.reorder))
+                    contentDescription = null
+                )
+                Text(
+                    modifier = Modifier.padding(4.dp),
+                    text = stringResource(id = R.string.reorder)
+                )
             }
 
         }
@@ -226,6 +234,7 @@ fun CompleteOrderItem(
 fun PendingOrderItem(
     order: Order,
     onTrack: (Order) -> Unit,
+    onCheckPayment: (Order) -> Unit,
     onCancel: (Order) -> Unit,
 ) {
 
@@ -236,11 +245,13 @@ fun PendingOrderItem(
         elevation = 4.dp
     ) {
         Column {
-            Row(horizontalArrangement = Arrangement.Start,
+            Row(
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(8.dp)) {
+                    .padding(8.dp)
+            ) {
 
                 Image(
                     modifier = Modifier
@@ -255,7 +266,8 @@ fun PendingOrderItem(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically) {
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
 
                     Column(
@@ -290,13 +302,14 @@ fun PendingOrderItem(
                                         .wrapContentSize()
                                         .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
                                         .align(Alignment.Start),
-                                    text = stringResource(id = R.string.submitted),
+                                    text = stringResource(id = R.string.confirm_processing),
                                     color = myGreen,
                                 )
 
                             }
 
                             OrderStatus.ORDER_STATUS_PROCESSING.status -> {
+
 
                                 Text(
                                     modifier = Modifier
@@ -365,19 +378,22 @@ fun PendingOrderItem(
                             color = MaterialTheme.colors.onSurface,
 
                             )
-                        Row(modifier = Modifier
-                            .wrapContentSize()
-                            .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)) {
+                        Row(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                        ) {
                             Text(
                                 text = order.price,
                                 color = MaterialTheme.colors.primary,
-                                modifier = Modifier.padding(end = 4.dp)
+                                modifier = Modifier.padding(end = 4.dp),
+                                maxLines = 1
                             )
                             Text(
                                 text = stringResource(R.string.currency),
                                 color = MaterialTheme.colors.primary,
-
-                                )
+                                maxLines = 1
+                            )
 
                         }
 
@@ -388,7 +404,8 @@ fun PendingOrderItem(
 
             }
 
-            Row(modifier = Modifier.fillMaxWidth(),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
@@ -405,35 +422,71 @@ fun PendingOrderItem(
                     Image(
                         modifier = Modifier.padding(4.dp),
                         painter = painterResource(id = R.drawable.ic_cancel),
-                        contentDescription = null)
-                    Text(modifier = Modifier.padding(4.dp),
-                        text = stringResource(id = R.string.cancel))
-                }
-
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(
-                            width = 1.dp,
-                            shape = RoundedCornerShape(bottomEndPercent = 20),
-                            color = Color.Gray
-                        ),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
-                    onClick = { onTrack(order) }) {
-
-                    Image(
+                        contentDescription = null
+                    )
+                    Text(
                         modifier = Modifier.padding(4.dp),
-                        painter = painterResource(id = R.drawable.ic_track_cude),
-                        contentDescription = null)
-
-                    Text(modifier = Modifier.padding(4.dp),
-                        text = stringResource(id = R.string.track_order),
-                        maxLines = 1,
-                        color = MaterialTheme.colors.primary)
+                        text = stringResource(id = R.string.cancel)
+                    )
                 }
 
-            }
+                if (order.status == OrderStatus.ORDER_STATUS_SUBMITTED.status) {
 
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                width = 1.dp,
+                                shape = RoundedCornerShape(bottomEndPercent = 20),
+                                color = Color.Gray
+                            ),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                        onClick = { onCheckPayment(order) }) {
+
+                        Image(
+                            modifier = Modifier.padding(4.dp),
+                            painter = painterResource(id = R.drawable.ic_baseline_add_card_24),
+                            contentDescription = null
+                        )
+
+                        Text(
+                            modifier = Modifier.padding(4.dp),
+                            text = stringResource(id = R.string.check),
+                            maxLines = 1,
+                            color = MaterialTheme.colors.primary
+                        )
+                    }
+
+                } else {
+
+
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                width = 1.dp,
+                                shape = RoundedCornerShape(bottomEndPercent = 20),
+                                color = Color.Gray
+                            ),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                        onClick = { onTrack(order) }) {
+
+                        Image(
+                            modifier = Modifier.padding(4.dp),
+                            painter = painterResource(id = R.drawable.ic_track_cude),
+                            contentDescription = null
+                        )
+
+                        Text(
+                            modifier = Modifier.padding(4.dp),
+                            text = stringResource(id = R.string.track_order),
+                            maxLines = 1,
+                            color = MaterialTheme.colors.primary
+                        )
+                    }
+
+                }
+            }
         }
 
 

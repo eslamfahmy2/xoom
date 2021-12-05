@@ -8,15 +8,22 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,13 +33,14 @@ import com.chuify.cleanxoomclient.domain.model.Payments
 import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
 import com.chuify.cleanxoomclient.presentation.components.PaymentItem
 import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
+import com.chuify.cleanxoomclient.presentation.navigation.Screens
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutIntent
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutViewModel
-
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 
 private const val TAG = "PaymentScreen"
+
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -218,15 +226,242 @@ fun PaymentScreen(
                         )
                     }
                 }
-
-
             }
+        }
+    }
+}
 
+@Composable
+fun CheckPaymentScreen(
+    navHostController: NavHostController,
+    id: String,
+    viewModel: PaymentViewModel = hiltViewModel()
+) {
+
+    val state = viewModel.state.collectAsState().value
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(Color.White),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        CircularProgressIndicator()
+
+        Spacer(modifier = Modifier.padding(8.dp))
+        Spacer(modifier = Modifier.padding(8.dp))
+
+
+        Text(
+            text = "Waiting for payment \n to be confirmed",
+            color = Color.Black,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center,
+        )
+
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        LinearProgressIndicator()
+
+
+        Button(
+            onClick = {
+                navHostController.popBackStack(navHostController.graph.startDestinationId, true)
+                navHostController.graph.setStartDestination(Screens.Main.route)
+                navHostController.navigate(Screens.Main.route)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+            shape = RoundedCornerShape(30)
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.CenterVertically),
+                text = "Ok",
+            )
+        }
+    }
+
+    LaunchedEffect(true) {
+        if (state is CheckPaymentState.Idl)
+            viewModel.userIntent.send(CheckPaymentIntent.Check(id))
+    }
+
+    when (state) {
+        is CheckPaymentState.Error -> {
+            state.message?.let {
+                navHostController.navigate(Screens.Fail.routeWithArgs(it))
+            }
+        }
+        CheckPaymentState.Loading -> {
 
         }
+        is CheckPaymentState.Success -> {
 
+            if (state.method.status == 200) {
+                state.method.msg?.let {
+                    viewModel.idle()
+                    navHostController.navigate(Screens.Success.routeWithArgs(it))
+                }
+            } else if (state.method.status == 300) {
+                state.method.msg?.let {
+                    viewModel.idle()
+                    navHostController.navigate(Screens.Fail.routeWithArgs(it))
+                }
+            }
+        }
+        CheckPaymentState.Idl -> {
+
+        }
+    }
+}
+
+
+@Composable
+fun SuccessScreen(navHostController: NavHostController, msg: String, viewModel: CheckoutViewModel) {
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.primary),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Icon(
+            Icons.Filled.Check,
+            contentDescription = null,
+            modifier = Modifier
+                .size(150.dp, 150.dp)
+                .padding(8.dp)
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        Text(
+            text = msg,
+            color = Color.Black,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center,
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+
+        Button(
+            onClick = {
+                navHostController.popBackStack()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+            shape = RoundedCornerShape(30)
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.CenterVertically),
+                text = "Track order",
+            )
+        }
 
     }
 
+}
+
+
+@Composable
+fun FailScreen(navHostController: NavHostController, msg: String, viewModel: CheckoutViewModel) {
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val shimmerColorShades = listOf(
+        MaterialTheme.colors.primary,
+        MaterialTheme.colors.error
+    )
+
+    val brush = Brush.linearGradient(
+        colors = shimmerColorShades,
+    )
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(
+                brush = brush
+            ),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Icon(
+            Icons.Filled.ErrorOutline,
+            contentDescription = null,
+            modifier = Modifier
+                .size(150.dp, 150.dp)
+                .padding(8.dp),
+            tint = Color.White
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        Text(
+            text = msg,
+            color = Color.White,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center,
+
+            )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+
+        Button(
+            onClick = {
+                navHostController.popBackStack()
+
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+            shape = RoundedCornerShape(30)
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.CenterVertically),
+                text = "Check later",
+            )
+        }
+
+    }
 }
 

@@ -10,23 +10,16 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -375,160 +368,17 @@ fun CheckoutScreen(
 
         }
         is CheckoutState.Success.PaymentSuccess -> {
-            navHostController.navigate(Screens.Fail.routeWithArgs("error message"))
+            val msg =
+                "Thank you for placing your order with us! \n You can continue and track your payment processes \n" +
+                        "and order from the “Orders” section"
+            navHostController.navigate(Screens.Success.routeWithArgs(msg))
         }
     }
 
 
     LaunchedEffect(true) {
-
         viewModel.userIntent.send(CheckoutIntent.LoadCart)
     }
 
 }
 
-@Composable
-fun SuccessScreen(navHostController: NavHostController) {
-
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.primary),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Icon(
-            Icons.Filled.Check,
-            contentDescription = null,
-            modifier = Modifier
-                .size(150.dp, 150.dp)
-                .padding(8.dp)
-        )
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        Text(
-            text = "Your Gas is on it’s way",
-            color = Color.Black,
-            modifier = Modifier.padding(8.dp)
-        )
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        Text(
-            text = "Thank you for placing your order with us! You can track the delivery from the “Orders” section",
-            color = Color.Black,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            textAlign = TextAlign.Center,
-        )
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-
-        Button(
-            onClick = {
-                navHostController.popBackStack(navHostController.graph.startDestinationId, true)
-                navHostController.graph.setStartDestination(Screens.Main.route)
-                navHostController.navigate(Screens.Main.route)
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
-            shape = RoundedCornerShape(30)
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .align(CenterVertically),
-                text = "Continue Shopping",
-            )
-        }
-
-    }
-}
-
-
-@Composable
-fun FailScreen(navHostController: NavHostController, msg: String, viewModel: CheckoutViewModel) {
-
-    val coroutineScope = rememberCoroutineScope()
-
-    val shimmerColorShades = listOf(
-        MaterialTheme.colors.primary,
-        MaterialTheme.colors.error
-    )
-
-    val brush = Brush.linearGradient(
-        colors = shimmerColorShades,
-    )
-
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(
-                brush = brush
-            ),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Icon(
-            Icons.Filled.ErrorOutline,
-            contentDescription = null,
-            modifier = Modifier
-                .size(150.dp, 150.dp)
-                .padding(8.dp),
-            tint = Color.White
-        )
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        Text(
-            text = "Error",
-            color = Color.White,
-            modifier = Modifier.padding(8.dp)
-        )
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        Text(
-            text = msg,
-            color = Color.White,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            textAlign = TextAlign.Center,
-
-            )
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-
-        Button(
-            onClick = {
-                coroutineScope.launch {
-                    viewModel.userIntent.send(CheckoutIntent.ChangeStatus(CheckoutState.Success.OrderSubmitted()))
-                    navHostController.popBackStack(Screens.Checkout.route, true)
-                }
-
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
-            shape = RoundedCornerShape(30)
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .align(CenterVertically),
-                text = "Try Again",
-            )
-        }
-
-    }
-}
