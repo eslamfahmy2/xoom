@@ -28,7 +28,7 @@ class LoginViewModel @Inject constructor(
 
     val userIntent = Channel<AuthenticationIntent>(Channel.UNLIMITED)
 
-    private val _phone: MutableStateFlow<String> = MutableStateFlow("720242046")
+    private val _phone: MutableStateFlow<String> = MutableStateFlow("720242047")
     val phone get() = _phone.asStateFlow()
 
     private val _firstName: MutableStateFlow<String> = MutableStateFlow(String())
@@ -44,6 +44,12 @@ class LoginViewModel @Inject constructor(
     private val _state: MutableStateFlow<AuthenticationState> =
         MutableStateFlow(AuthenticationState.Idl)
     val state get() = _state.asStateFlow()
+
+
+    private val _stateUp: MutableStateFlow<AuthenticationState> =
+        MutableStateFlow(AuthenticationState.Idl)
+    val stateUp get() = _stateUp.asStateFlow()
+
 
     init {
         handleIntent()
@@ -111,18 +117,23 @@ class LoginViewModel @Inject constructor(
             when (result) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + result.message)
-                    _state.value = AuthenticationState.Error(result.message)
+                    _stateUp.value = AuthenticationState.Error(result.message)
                 }
                 is DataState.Loading -> {
                     Log.d(TAG, "Loading: " + result.message)
-                    _state.value = AuthenticationState.Loading
+                    _stateUp.value = AuthenticationState.Loading
                 }
                 is DataState.Success -> {
                     Log.d(TAG, "Success: " + result.data)
-                    _state.value = AuthenticationState.Success(LoginResult.Login)
+                    _stateUp.value = AuthenticationState.Success(LoginResult.Login)
                 }
             }
         }
+    }
+
+    fun idl() {
+        _state.value = AuthenticationState.Idl
+        _stateUp.value = AuthenticationState.Idl
     }
 
 

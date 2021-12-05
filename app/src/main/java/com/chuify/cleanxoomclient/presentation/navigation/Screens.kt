@@ -148,4 +148,6 @@ sealed class Screens(val route: String) {
         }
 
     }
+
+    object SignUp : Screens("SignUp")
 }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -26,17 +27,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.domain.usecase.auth.LoginResult
 import com.chuify.cleanxoomclient.presentation.MainActivity
 import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
 import com.chuify.cleanxoomclient.presentation.components.SolidBar
+import com.chuify.cleanxoomclient.presentation.navigation.Screens
 import com.chuify.cleanxoomclient.presentation.ui.authentication.AuthenticationIntent
 import com.chuify.cleanxoomclient.presentation.ui.authentication.AuthenticationState
 import com.chuify.cleanxoomclient.presentation.ui.authentication.LoginViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -49,20 +50,28 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @Composable
 fun AuthenticationScreen(
-    viewModel: LoginViewModel = hiltViewModel(),
+    navHostController: NavHostController,
+    viewModel: LoginViewModel,
 ) {
 
-
     val scaffoldState = rememberScaffoldState()
-    val bottomScaffoldState = rememberBottomSheetScaffoldState()
+    val bottomScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = BottomSheetState(
+            confirmStateChange = { false },
+            initialValue = BottomSheetValue.Expanded
+        )
+    )
     val pagerState = rememberPagerState()
+    LaunchedEffect(true) {
+        pagerState.scroll {
+
+        }
+    }
     val coroutineScope = rememberCoroutineScope()
 
     val state = viewModel.state.collectAsState().value
     val phone = viewModel.phone.collectAsState().value
-    val firstName = viewModel.firstName.collectAsState().value
-    val lastName = viewModel.lastName.collectAsState().value
-    val email = viewModel.email.collectAsState().value
+
 
     Scaffold(
         topBar = { SolidBar() },
@@ -94,79 +103,23 @@ fun AuthenticationScreen(
                     elevation = 20.dp
                 ) {
 
-                    HorizontalPager(
-                        state = pagerState,
-                        count = 2
-                    ) {
-                        when (it) {
-                            0 -> {
-                                LoginScreen(
-                                    phone = phone,
-                                    onLogin = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(AuthenticationIntent.SignIn)
-                                        }
-                                    },
-                                    onValueChanged = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(
-                                                AuthenticationIntent.PhoneChange(
-                                                    it
-                                                )
-                                            )
-                                        }
-                                    }
+                    LoginScreen(
+                        phone = phone,
+                        onLogin = {
+                            coroutineScope.launch {
+                                viewModel.userIntent.send(AuthenticationIntent.SignIn)
+                            }
+                        },
+                        onValueChanged = {
+                            coroutineScope.launch {
+                                viewModel.userIntent.send(
+                                    AuthenticationIntent.PhoneChange(
+                                        it
+                                    )
                                 )
                             }
-                            1 -> {
-                                SignupScreen(
-                                    firstName = firstName,
-                                    lastName = lastName,
-                                    email = email,
-                                    onEmailNameChange = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(
-                                                AuthenticationIntent.EmailChange(
-                                                    it
-                                                )
-                                            )
-                                        }
-                                    },
-                                    onFirstNameChange = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(
-                                                AuthenticationIntent.FirstNameChange(
-                                                    it
-                                                )
-                                            )
-                                        }
-                                    },
-                                    onLastNameChange = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(
-                                                AuthenticationIntent.LastNameChange(
-                                                    it
-                                                )
-                                            )
-                                        }
-                                    },
-                                    onLogin = {
-                                        coroutineScope.launch {
-                                            pagerState.animateScrollToPage(0)
-                                        }
-                                    },
-                                    onSignup = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(AuthenticationIntent.SignUp)
-                                        }
-                                    }
-                                )
-
-                            }
-
                         }
-                    }
-
+                    )
                 }
 
             }
@@ -192,8 +145,6 @@ fun AuthenticationScreen(
         }
 
     }
-
-
 
 
     when (state) {
@@ -244,15 +195,12 @@ fun AuthenticationScreen(
                     (LocalContext.current as? ComponentActivity)?.finish()
                 }
                 LoginResult.Signup -> {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(1)
-                    }
+                    viewModel.idl()
+                    navHostController.navigate(Screens.SignUp.route)
                 }
             }
-
         }
     }
-
 
 }
 

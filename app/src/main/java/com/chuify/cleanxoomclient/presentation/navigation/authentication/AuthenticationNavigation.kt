@@ -4,8 +4,11 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.chuify.cleanxoomclient.presentation.navigation.Screens
+import com.chuify.cleanxoomclient.presentation.ui.authentication.LoginViewModel
 import com.chuify.cleanxoomclient.presentation.ui.authentication.component.AuthenticationScreen
+import com.chuify.cleanxoomclient.presentation.ui.authentication.component.SignupScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -19,18 +22,24 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
-fun AuthenticationNavigation() {
+fun AuthenticationNavigation(loginViewModel: LoginViewModel = hiltViewModel()) {
 
     val navHostController = rememberAnimatedNavController()
 
     AnimatedNavHost(navController = navHostController, startDestination = Screens.Login.route) {
 
+
         composable(
             route = Screens.Login.fullRoute(),
         ) {
-            AuthenticationScreen()
+            AuthenticationScreen(viewModel = loginViewModel, navHostController = navHostController)
         }
 
+        composable(
+            route = Screens.SignUp.route,
+        ) {
+            SignupScreen(viewModel = loginViewModel, navHostController = navHostController)
+        }
 
     }
 }
