@@ -81,8 +81,9 @@ fun CompleteOrderItem(
                                 .align(Alignment.Start),
                             text = order.name,
                             color = MaterialTheme.colors.onSurface,
+                            maxLines = 1
 
-                            )
+                        )
 
                         Text(
                             modifier = Modifier
@@ -91,6 +92,7 @@ fun CompleteOrderItem(
                                 .align(Alignment.Start),
                             text = order.refill,
                             color = MaterialTheme.colors.onSurface,
+                            maxLines = 1
                         )
 
                         when (order.status) {
@@ -103,6 +105,7 @@ fun CompleteOrderItem(
                                         .align(Alignment.Start),
                                     text = stringResource(id = R.string.confirm_processing),
                                     color = myGreen,
+                                    maxLines = 1
                                 )
 
                             }
@@ -116,6 +119,7 @@ fun CompleteOrderItem(
                                         .align(Alignment.Start),
                                     text = stringResource(id = R.string.accepted),
                                     color = myGreen,
+                                    maxLines = 1
                                 )
 
                             }
@@ -129,6 +133,7 @@ fun CompleteOrderItem(
                                         .align(Alignment.Start),
                                     text = stringResource(id = R.string.on_transit),
                                     color = myGreen,
+                                    maxLines = 1
                                 )
 
                             }
@@ -141,6 +146,7 @@ fun CompleteOrderItem(
                                         .align(Alignment.Start),
                                     text = stringResource(id = R.string.completed),
                                     color = myGreen,
+                                    maxLines = 1
                                 )
 
                             }
@@ -153,6 +159,7 @@ fun CompleteOrderItem(
                                         .align(Alignment.Start),
                                     text = stringResource(id = R.string.cancelled),
                                     color = myRed,
+                                    maxLines = 1
                                 )
 
 
@@ -174,8 +181,8 @@ fun CompleteOrderItem(
                                 .align(Alignment.End),
                             text = order.size + "x",
                             color = MaterialTheme.colors.onSurface,
-
-                            )
+                            maxLines = 1
+                        )
                         Row(
                             modifier = Modifier
                                 .wrapContentSize()
@@ -184,13 +191,15 @@ fun CompleteOrderItem(
                             Text(
                                 text = order.price,
                                 color = MaterialTheme.colors.primary,
-                                modifier = Modifier.padding(end = 4.dp)
+                                modifier = Modifier.padding(end = 4.dp),
+                                maxLines = 1
                             )
                             Text(
                                 text = stringResource(R.string.currency),
                                 color = MaterialTheme.colors.primary,
+                                maxLines = 1
 
-                                )
+                            )
 
                         }
 
@@ -219,7 +228,8 @@ fun CompleteOrderItem(
                 )
                 Text(
                     modifier = Modifier.padding(4.dp),
-                    text = stringResource(id = R.string.reorder)
+                    text = stringResource(id = R.string.reorder),
+                    maxLines = 1
                 )
             }
 
@@ -282,6 +292,7 @@ fun PendingOrderItem(
                                 .align(Alignment.Start),
                             text = order.name,
                             color = MaterialTheme.colors.onSurface,
+                            maxLines = 1
 
                             )
 
@@ -292,6 +303,7 @@ fun PendingOrderItem(
                                 .align(Alignment.Start),
                             text = order.refill,
                             color = MaterialTheme.colors.onSurface,
+                            maxLines = 1
                         )
 
                         when (order.status) {
@@ -304,6 +316,7 @@ fun PendingOrderItem(
                                         .align(Alignment.Start),
                                     text = stringResource(id = R.string.confirm_processing),
                                     color = myGreen,
+                                    maxLines = 1
                                 )
 
                             }
@@ -318,6 +331,7 @@ fun PendingOrderItem(
                                         .align(Alignment.Start),
                                     text = stringResource(id = R.string.accepted),
                                     color = myGreen,
+                                    maxLines = 1
                                 )
 
                             }
@@ -331,6 +345,7 @@ fun PendingOrderItem(
                                         .align(Alignment.Start),
                                     text = stringResource(id = R.string.on_transit),
                                     color = myGreen,
+                                    maxLines = 1
                                 )
 
                             }
@@ -343,6 +358,7 @@ fun PendingOrderItem(
                                         .align(Alignment.Start),
                                     text = stringResource(id = R.string.completed),
                                     color = myGreen,
+                                    maxLines = 1
                                 )
 
                             }
@@ -355,6 +371,7 @@ fun PendingOrderItem(
                                         .align(Alignment.Start),
                                     text = stringResource(id = R.string.cancelled),
                                     color = myRed,
+                                    maxLines = 1
                                 )
 
 
@@ -376,8 +393,9 @@ fun PendingOrderItem(
                                 .align(Alignment.End),
                             text = order.size + "x",
                             color = MaterialTheme.colors.onSurface,
+                            maxLines = 1
 
-                            )
+                        )
                         Row(
                             modifier = Modifier
                                 .wrapContentSize()

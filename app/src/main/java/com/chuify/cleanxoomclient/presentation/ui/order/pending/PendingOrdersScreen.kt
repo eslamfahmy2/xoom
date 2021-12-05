@@ -102,6 +102,9 @@ fun PendingOrdersScreen(
                                     paymentMethod = String(),
                                     price = String(),
                                     totalPrice = String(),
+                                    refill = String(),
+                                    size = String(),
+                                    name = String()
                                 )
                             )?.let { json ->
                                 navHostController.navigate(
