@@ -9,6 +9,7 @@ import com.chuify.cleanxoomclient.domain.model.Location
 import com.chuify.cleanxoomclient.domain.model.Payments
 import com.chuify.cleanxoomclient.domain.usecase.cart.*
 import com.chuify.cleanxoomclient.domain.usecase.location.GetLocationsUseCase
+import com.chuify.cleanxoomclient.domain.usecase.location.SaveLocationsUseCase
 import com.chuify.cleanxoomclient.domain.utils.DataState
 
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +30,8 @@ class CheckoutViewModel @Inject constructor(
     private val decreaseOrderUseCase: DecreaseOrderUseCase,
     private val increaseOrderUseCase: IncreaseOrderUseCase,
     private val getLocationUseCase: GetLocationsUseCase,
-    private val submitOrderUseCase: SubmitOrderUseCase
+    private val submitOrderUseCase: SubmitOrderUseCase,
+    private val saveLocationsUseCase: SaveLocationsUseCase,
 ) : ViewModel() {
 
     val userIntent = Channel<CheckoutIntent>(Channel.UNLIMITED)
@@ -55,6 +57,9 @@ class CheckoutViewModel @Inject constructor(
     private val _totalPrice: MutableStateFlow<Int> = MutableStateFlow(0)
     val totalPrice get() = _totalPrice.asStateFlow()
 
+    val show: MutableStateFlow<Boolean> = MutableStateFlow(false)
+
+    val selectedLocation: MutableStateFlow<Location?> = MutableStateFlow(null)
 
     init {
         handleIntent()
@@ -92,14 +97,52 @@ class CheckoutViewModel @Inject constructor(
                             }
                         }
                         Log.d(TAG, "handleIntent: $res")
-                        _location.value = res
+                        res.firstOrNull { it.selected }?.let {
+                            selectedLocation.value = it
+                        }
                     }
                     is CheckoutIntent.ChangeStatus -> {
                         _state.value = CheckoutState.Success.OrderSubmitted()
                     }
+                    is CheckoutIntent.SaveAddress -> {
+                        saveLocation(intent.title, intent.details, intent.instructions)
+                    }
                 }
             }
         }
+    }
+
+    private suspend fun saveLocation(
+        addressUrl: String,
+        details: String,
+        instructions: String,
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            saveLocationsUseCase(
+                addressUrl = addressUrl,
+                details = details,
+                instructions = instructions,
+                lat = 0.0,
+                lng = 0.0,
+            ).collect { dataState ->
+                when (dataState) {
+                    is DataState.Error -> {
+                        Log.d(TAG, "Error: " + dataState.message)
+
+                    }
+                    is DataState.Loading -> {
+
+                    }
+                    is DataState.Success -> {
+                        Log.d(TAG, "Success: location $dataState")
+                        show.value = false
+                        loadLocations()
+
+                    }
+                }
+            }
+        }
+
     }
 
 
@@ -108,8 +151,6 @@ class CheckoutViewModel @Inject constructor(
     }
 
     private suspend fun loadLocations() {
-        if (_location.value.isNotEmpty())
-            return
         viewModelScope.launch(Dispatchers.IO) {
             getLocationUseCase().collect { dataState ->
                 when (dataState) {
@@ -125,7 +166,6 @@ class CheckoutViewModel @Inject constructor(
                         dataState.data?.let {
                             _location.value = it
                         }
-
                     }
                 }
             }
@@ -135,7 +175,7 @@ class CheckoutViewModel @Inject constructor(
     private suspend fun submitOrder() = viewModelScope.launch(Dispatchers.IO) {
         submitOrderUseCase.invoke(
             _paymentMethod.value,
-            _location.value,
+            selectedLocation.value,
             _orders.value.first,
         ).collect { dataState ->
             when (dataState) {

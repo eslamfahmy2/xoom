@@ -2,7 +2,6 @@ package com.chuify.cleanxoomclient.presentation.ui.payment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chuify.cleanxoomclient.data.remote.dto.PaymentDto
 import com.chuify.cleanxoomclient.domain.repository.OrderRepo
 import com.chuify.cleanxoomclient.domain.utils.ResponseState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,10 +19,9 @@ sealed class CheckPaymentIntent {
 }
 
 sealed class CheckPaymentState {
-    data class Success(val method: PaymentDto) : CheckPaymentState()
+    data class Success(val message: String? = null) : CheckPaymentState()
     data class Error(val message: String? = null) : CheckPaymentState()
-    object Loading : CheckPaymentState()
-    object Idl : CheckPaymentState()
+    data class Loading(val message: String? = null) : CheckPaymentState()
 }
 
 @HiltViewModel
@@ -34,7 +32,7 @@ class PaymentViewModel @Inject constructor(
     val userIntent = Channel<CheckPaymentIntent>(Channel.UNLIMITED)
 
     private val _state: MutableStateFlow<CheckPaymentState> =
-        MutableStateFlow(CheckPaymentState.Idl)
+        MutableStateFlow(CheckPaymentState.Loading())
     val state get() = _state.asStateFlow()
 
     init {
@@ -52,8 +50,8 @@ class PaymentViewModel @Inject constructor(
     }
 
     private suspend fun checkPayment(id: String) {
-
         viewModelScope.launch(Dispatchers.IO) {
+            _state.value = CheckPaymentState.Loading()
             when (val res = orderRepo.confirmPayment(id)) {
                 is ResponseState.Error -> {
                     res.message?.let {
@@ -61,14 +59,21 @@ class PaymentViewModel @Inject constructor(
                     }
                 }
                 is ResponseState.Success -> {
-                    _state.value = CheckPaymentState.Success(res.data)
+                    when (res.data.status) {
+                        300 -> {
+                            _state.value = CheckPaymentState.Loading(res.data.msg)
+                        }
+                        200 -> {
+                            _state.value = CheckPaymentState.Success(res.data.msg)
+                        }
+                        400 -> {
+                            _state.value = CheckPaymentState.Error(res.data.msg)
+                        }
+                    }
                 }
             }
         }
     }
 
-    fun idle() {
-        _state.value = CheckPaymentState.Loading
-    }
 
 }

@@ -56,11 +56,13 @@ fun CartScreen(
         },
         bottomBar = {
 
-            CartPreview(
-                quantity = preview.totalQuantity.toString(),
-                price = preview.totalPrice.toString()
-            ) {
-                navHostController.navigate(Screens.Checkout.route)
+            if (preview.totalQuantity > 0) {
+                CartPreview(
+                    quantity = preview.totalQuantity.toString(),
+                    price = preview.totalPrice.toString()
+                ) {
+                    navHostController.navigate(Screens.Checkout.route)
+                }
             }
         }
     ) {

@@ -34,7 +34,6 @@ enum class VendorDetails {
     ACCESSORIES
 }
 
-
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
@@ -63,12 +62,13 @@ fun VendorDetailsScreen(
             scaffoldState.snackbarHostState
         },
         bottomBar = {
-
-            CartPreview(
-                quantity = preview.totalQuantity.toString(),
-                price = preview.totalPrice.toString()
-            ) {
-                navHostController.navigate(Screens.Cart.fullRoute())
+            if (preview.totalQuantity > 0) {
+                CartPreview(
+                    quantity = preview.totalQuantity.toString(),
+                    price = preview.totalPrice.toString()
+                ) {
+                    navHostController.navigate(Screens.Cart.fullRoute())
+                }
             }
         }
     ) { it ->

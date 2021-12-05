@@ -240,90 +240,75 @@ fun CheckPaymentScreen(
 
     val state = viewModel.state.collectAsState().value
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        CircularProgressIndicator()
-
-        Spacer(modifier = Modifier.padding(8.dp))
-        Spacer(modifier = Modifier.padding(8.dp))
-
-
-        Text(
-            text = "Waiting for payment \n to be confirmed",
-            color = Color.Black,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            textAlign = TextAlign.Center,
-        )
-
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        LinearProgressIndicator()
-
-
-        Button(
-            onClick = {
-                navHostController.popBackStack(navHostController.graph.startDestinationId, true)
-                navHostController.graph.setStartDestination(Screens.Main.route)
-                navHostController.navigate(Screens.Main.route)
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
-            shape = RoundedCornerShape(30)
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .align(Alignment.CenterVertically),
-                text = "Ok",
-            )
-        }
-    }
-
     LaunchedEffect(true) {
-        if (state is CheckPaymentState.Idl)
+        if (state is CheckPaymentState.Loading)
             viewModel.userIntent.send(CheckPaymentIntent.Check(id))
     }
 
     when (state) {
         is CheckPaymentState.Error -> {
-            state.message?.let {
-                navHostController.navigate(Screens.Fail.routeWithArgs(it))
-            }
-        }
-        CheckPaymentState.Loading -> {
 
+            FailScreen(navHostController, state.message ?: "", true)
         }
         is CheckPaymentState.Success -> {
 
-            if (state.method.status == 200) {
-                state.method.msg?.let {
-                    viewModel.idle()
-                    navHostController.navigate(Screens.Success.routeWithArgs(it))
-                }
-            } else if (state.method.status == 400) {
-                state.method.msg?.let {
-                    viewModel.idle()
-                    navHostController.navigate(Screens.Fail.routeWithArgs(it))
+            SuccessScreen(navHostController, state.message ?: "", true)
+
+        }
+        is CheckPaymentState.Loading -> {
+
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.White),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+
+                Spacer(modifier = Modifier.padding(8.dp))
+
+                CircularProgressIndicator()
+
+                Spacer(modifier = Modifier.padding(8.dp))
+                Spacer(modifier = Modifier.padding(8.dp))
+
+
+                Text(
+                    text = "Waiting for payment \n to be confirmed",
+                    color = Color.Black,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    textAlign = TextAlign.Center,
+                )
+
+
+                Spacer(modifier = Modifier.padding(8.dp))
+
+                Spacer(modifier = Modifier.padding(8.dp))
+
+                LinearProgressIndicator()
+
+
+                Button(
+                    onClick = {
+                        navHostController.popBackStack()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                    shape = RoundedCornerShape(30)
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .align(Alignment.CenterVertically),
+                        text = "Ok",
+                    )
                 }
             }
-        }
-        CheckPaymentState.Idl -> {
 
         }
     }
@@ -331,7 +316,11 @@ fun CheckPaymentScreen(
 
 
 @Composable
-fun SuccessScreen(navHostController: NavHostController, msg: String, viewModel: CheckoutViewModel) {
+fun SuccessScreen(
+    navHostController: NavHostController,
+    msg: String,
+    popUp: Boolean? = false
+) {
 
     Column(
         Modifier
@@ -370,7 +359,7 @@ fun SuccessScreen(navHostController: NavHostController, msg: String, viewModel: 
 
         Button(
             onClick = {
-                navHostController.popBackStack()
+                onClick(popUp, navHostController)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -392,7 +381,7 @@ fun SuccessScreen(navHostController: NavHostController, msg: String, viewModel: 
 
 
 @Composable
-fun FailScreen(navHostController: NavHostController, msg: String, viewModel: CheckoutViewModel) {
+fun FailScreen(navHostController: NavHostController, msg: String, popUp: Boolean? = false) {
 
 
     val shimmerColorShades = listOf(
@@ -444,8 +433,7 @@ fun FailScreen(navHostController: NavHostController, msg: String, viewModel: Che
 
         Button(
             onClick = {
-                navHostController.popBackStack()
-
+                onClick(popUp, navHostController)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -464,3 +452,15 @@ fun FailScreen(navHostController: NavHostController, msg: String, viewModel: Che
     }
 }
 
+private fun onClick(popUp: Boolean?, navHostController: NavHostController) {
+
+    if (popUp == true) {
+        navHostController.popBackStack()
+    } else {
+
+        navHostController.popBackStack(navHostController.graph.startDestinationId, true)
+        navHostController.graph.setStartDestination(Screens.Main.route)
+        navHostController.navigate(Screens.Main.route)
+
+    }
+}

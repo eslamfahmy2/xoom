@@ -176,7 +176,7 @@ fun LocationsScreen(
 
 
                     Card(
-                        modifier = Modifier ,
+                        modifier = Modifier,
                         elevation = 20.dp
                     )
                     {
@@ -364,10 +364,10 @@ fun LocationsScreen(
 
 
 @Composable
-fun LocationItem(location: Location) {
+fun LocationItem(location: Location, modifier: Modifier = Modifier) {
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .border(
@@ -401,7 +401,6 @@ fun LocationItem(location: Location) {
                         modifier = Modifier.padding(4.dp),
                         text = location.title.toString(),
                         color = MaterialTheme.colors.onSurface
-
                     )
 
                     Text(
@@ -409,9 +408,7 @@ fun LocationItem(location: Location) {
                         text = location.details.toString(),
                         color = MaterialTheme.colors.secondaryVariant
                     )
-
                 }
-
             }
 
             Icon(

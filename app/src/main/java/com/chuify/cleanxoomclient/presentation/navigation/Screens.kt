@@ -110,13 +110,14 @@ sealed class Screens(val route: String) {
     object Success : Screens("success") {
 
         const val arg = "msg"
+        const val popUp = "pop"
 
         fun fullRoute(): String {
-            return "$route/{$arg}"
+            return "$route/{$arg}/{$popUp}"
         }
 
-        fun routeWithArgs(input: String): String {
-            return "$route/$input"
+        fun routeWithArgs(input: String, pop: Boolean = false): String {
+            return "$route/$input/$pop"
         }
     }
 

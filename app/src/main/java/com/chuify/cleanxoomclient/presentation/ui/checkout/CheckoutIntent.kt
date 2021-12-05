@@ -17,4 +17,8 @@ sealed class CheckoutIntent {
     data class ChangeStatus(val state: CheckoutState) : CheckoutIntent()
 
 
+    data class SaveAddress(val title: String, val details: String, val instructions: String) :
+        CheckoutIntent()
+
+
 }

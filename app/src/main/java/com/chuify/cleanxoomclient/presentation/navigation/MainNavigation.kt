@@ -243,29 +243,30 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
 
         composable(
             route = Screens.Success.fullRoute(),
-            arguments = listOf(navArgument(Screens.Success.arg) {
-                type = NavType.StringType
-            }
+            arguments = listOf(
+                navArgument(Screens.Success.arg) { type = NavType.StringType },
+                navArgument(Screens.Success.popUp) { type = NavType.BoolType },
             )
         ) { backStackEntry ->
+            val pop = backStackEntry.arguments?.getBoolean(Screens.Success.popUp)
             backStackEntry.arguments?.getString(Screens.Success.arg)?.let {
                 SuccessScreen(
                     navHostController = navHostController,
                     msg = it,
-                    viewModel = viewModel
+                    popUp = pop
+
                 )
             }
         }
 
         composable(
             route = Screens.Fail.fullRoute(),
-            arguments = listOf(navArgument(Screens.Fail.arg) {
-                type = NavType.StringType
-            }
+            arguments = listOf(
+                navArgument(Screens.Fail.arg) { type = NavType.StringType },
             )
         ) { backStackEntry ->
             backStackEntry.arguments?.getString(Screens.Fail.arg)?.let {
-                FailScreen(navHostController = navHostController, msg = it, viewModel = viewModel)
+                FailScreen(navHostController = navHostController, msg = it)
             }
         }
 

@@ -1,6 +1,7 @@
 package com.chuify.cleanxoomclient.domain.usecase.cart
 
 import android.text.format.DateFormat
+import android.util.Log
 import com.chuify.cleanxoomclient.domain.model.Cart
 import com.chuify.cleanxoomclient.domain.model.Location
 import com.chuify.cleanxoomclient.domain.model.Payments
@@ -24,12 +25,12 @@ class SubmitOrderUseCase @Inject constructor(
 
     suspend operator fun invoke(
         payment: Payments,
-        locations: List<Location>,
+        locations: Location?,
         items: List<Cart>,
     ) = flow<SubmitOrderStatus> {
         try {
             emit(SubmitOrderStatus.Loading())
-            locations.firstOrNull { it.selected }?.let { location ->
+            locations?.let { location ->
 
                 val totalPrice = items.sumOf { item -> item.basePrice * item.quantity }
                 val orderJson = JsonObject()
@@ -61,7 +62,7 @@ class SubmitOrderUseCase @Inject constructor(
                 }
                 orderJson.add("products", array)
                 val body = orderJson.toString()
-
+                Log.d("okhttp", "order body  $body")
                 when (val response = orderRepo.submitOrder(body)) {
                     is ResponseState.Error -> {
                         throw Exception(response.message)

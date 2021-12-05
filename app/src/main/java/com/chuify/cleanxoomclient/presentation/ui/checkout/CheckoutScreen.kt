@@ -89,6 +89,8 @@ fun CheckoutScreen(
 
                 val location = viewModel.location.collectAsState().value
 
+                val selectedLocation = viewModel.selectedLocation.collectAsState().value
+
 
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
 
@@ -135,7 +137,7 @@ fun CheckoutScreen(
                                     )
 
                                 }
-                                location.firstOrNull { it.selected }?.let {
+                                selectedLocation?.let {
                                     LocationItem(location = it)
                                 }
 
