@@ -50,4 +50,19 @@ class LocationRepoImpl @Inject constructor(
         ResponseState.Error(e.message)
     }
 
+    override suspend fun deleteAddress(id: String): ResponseState<StatusDto> = try {
+        val response = apiInterface.deleteAddress(
+            id = id
+        )
+        if (response.isSuccessful) {
+            response.body()?.let {
+                ResponseState.Success(it)
+            } ?: ResponseState.Error("api : boy is empty")
+        } else {
+            ResponseState.Error(response.errorBody()?.string())
+        }
+    } catch (e: Exception) {
+        ResponseState.Error(e.message)
+    }
+
 }

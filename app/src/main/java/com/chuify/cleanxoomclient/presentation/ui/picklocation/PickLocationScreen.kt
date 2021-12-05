@@ -29,6 +29,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
+import com.chuify.cleanxoomclient.presentation.components.LoadingDialog
 import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutIntent
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutViewModel
@@ -51,6 +52,7 @@ fun PickLocationScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val showDialog = viewModel.show.collectAsState()
+    val loading = viewModel.loading.collectAsState()
 
     Scaffold(
         topBar = {
@@ -81,7 +83,6 @@ fun PickLocationScreen(
         )
         {
             val locations = viewModel.location.collectAsState().value
-
 
             LazyColumn(
                 modifier = Modifier
@@ -123,7 +124,11 @@ fun PickLocationScreen(
                                 }
                             }
                         }
-                    )
+                    ) { location ->
+                        location.id?.let {
+                            viewModel.delete(location.id)
+                        }
+                    }
                 }
             }
 
@@ -280,6 +285,10 @@ fun PickLocationScreen(
                         }
                     }
                 }
+            }
+
+            if (loading.value) {
+                LoadingDialog()
             }
         }
     }

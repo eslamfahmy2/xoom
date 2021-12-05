@@ -7,11 +7,12 @@ import com.chuify.cleanxoomclient.domain.model.Cart
 import com.chuify.cleanxoomclient.domain.model.CartPreview
 import com.chuify.cleanxoomclient.domain.model.Location
 import com.chuify.cleanxoomclient.domain.model.Payments
+import com.chuify.cleanxoomclient.domain.repository.LocationRepo
 import com.chuify.cleanxoomclient.domain.usecase.cart.*
 import com.chuify.cleanxoomclient.domain.usecase.location.GetLocationsUseCase
 import com.chuify.cleanxoomclient.domain.usecase.location.SaveLocationsUseCase
 import com.chuify.cleanxoomclient.domain.utils.DataState
-
+import com.chuify.cleanxoomclient.domain.utils.ResponseState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -32,6 +33,7 @@ class CheckoutViewModel @Inject constructor(
     private val getLocationUseCase: GetLocationsUseCase,
     private val submitOrderUseCase: SubmitOrderUseCase,
     private val saveLocationsUseCase: SaveLocationsUseCase,
+    private val locationRepo: LocationRepo
 ) : ViewModel() {
 
     val userIntent = Channel<CheckoutIntent>(Channel.UNLIMITED)
@@ -58,6 +60,7 @@ class CheckoutViewModel @Inject constructor(
     val totalPrice get() = _totalPrice.asStateFlow()
 
     val show: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val loading: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     val selectedLocation: MutableStateFlow<Location?> = MutableStateFlow(null)
 
@@ -112,12 +115,33 @@ class CheckoutViewModel @Inject constructor(
         }
     }
 
+    fun delete(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            loading.value = true
+            when (val res = locationRepo.deleteAddress(id)) {
+                is ResponseState.Error -> {
+                    loading.value = false
+                    // _state.value = LocationsState.Error(res.message)
+                }
+                is ResponseState.Success -> {
+                    loading.value = false
+                    loadLocations()
+                }
+
+            }
+        }
+
+    }
+
+
     private suspend fun saveLocation(
         addressUrl: String,
         details: String,
         instructions: String,
     ) {
+
         viewModelScope.launch(Dispatchers.IO) {
+            loading.value = true
             saveLocationsUseCase(
                 addressUrl = addressUrl,
                 details = details,
@@ -125,6 +149,8 @@ class CheckoutViewModel @Inject constructor(
                 lat = 0.0,
                 lng = 0.0,
             ).collect { dataState ->
+                loading.value = false
+                show.value = false
                 when (dataState) {
                     is DataState.Error -> {
                         Log.d(TAG, "Error: " + dataState.message)
@@ -135,7 +161,7 @@ class CheckoutViewModel @Inject constructor(
                     }
                     is DataState.Success -> {
                         Log.d(TAG, "Success: location $dataState")
-                        show.value = false
+
                         loadLocations()
 
                     }

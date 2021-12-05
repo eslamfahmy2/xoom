@@ -15,4 +15,6 @@ interface LocationRepo {
         lat: Double,
         lng: Double,
     ): ResponseState<StatusDto>
+
+    suspend fun deleteAddress(id: String): ResponseState<StatusDto>
 }

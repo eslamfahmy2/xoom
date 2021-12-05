@@ -99,6 +99,13 @@ interface ApiInterface {
         @Field("longitude") longitude: Double,
     ): Response<StatusDto>
 
+    //----------------------------------------------------------------------------------------------------
+    @Headers("authorized:true")
+    @DELETE("address/{id}/delete")
+    suspend fun deleteAddress(
+        @Path("id") id: String,
+    ): Response<StatusDto>
+
 
     //----------------------------------------------------------------------------------------------------
     @Headers("authorized:true", "userid:true")

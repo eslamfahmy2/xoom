@@ -4,6 +4,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -118,8 +120,12 @@ fun LocationsScreen(
                                 .padding(8.dp)
                         ) {
 
-                            items(state.locations) {
-                                LocationItem(it)
+                            items(state.locations) { it ->
+                                LocationItem(it) { location ->
+                                    location.id?.let {
+                                        viewModel.delete(it)
+                                    }
+                                }
                             }
 
                             item {
@@ -341,19 +347,12 @@ fun LocationsScreen(
 
                             }
 
-
                         }
                     }
-
-
                 }
-
-
             }
 
-
         }
-
 
     }
     LaunchedEffect(true) {
@@ -364,7 +363,7 @@ fun LocationsScreen(
 
 
 @Composable
-fun LocationItem(location: Location, modifier: Modifier = Modifier) {
+fun LocationItem(location: Location, modifier: Modifier = Modifier, onDelete: (Location) -> Unit) {
 
     Box(
         modifier = modifier
@@ -412,10 +411,14 @@ fun LocationItem(location: Location, modifier: Modifier = Modifier) {
             }
 
             Icon(
-                modifier = Modifier.padding(16.dp),
-                painter = painterResource(id = R.drawable.ic_location),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable {
+                        onDelete(location)
+                    },
+                imageVector = Icons.Filled.Delete,
                 contentDescription = null,
-                tint = Color.Green
+                tint = Color.Red
             )
 
 

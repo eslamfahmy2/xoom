@@ -3,10 +3,11 @@ package com.chuify.cleanxoomclient.presentation.ui.locations
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.chuify.cleanxoomclient.domain.repository.LocationRepo
 import com.chuify.cleanxoomclient.domain.usecase.location.GetLocationsUseCase
 import com.chuify.cleanxoomclient.domain.usecase.location.SaveLocationsUseCase
 import com.chuify.cleanxoomclient.domain.utils.DataState
-
+import com.chuify.cleanxoomclient.domain.utils.ResponseState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -23,6 +24,7 @@ private const val TAG = "LocationsViewModel"
 class LocationsViewModel @Inject constructor(
     private val getLocationUseCase: GetLocationsUseCase,
     private val saveLocationsUseCase: SaveLocationsUseCase,
+    private val locationRepo: LocationRepo
 ) : ViewModel() {
 
     val userIntent = Channel<LocationsIntent>(Channel.UNLIMITED)
@@ -137,6 +139,21 @@ class LocationsViewModel @Inject constructor(
                         }
 
                     }
+                }
+            }
+        }
+
+    }
+
+    fun delete(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val res = locationRepo.deleteAddress(id)) {
+                is ResponseState.Error -> {
+                    Log.d(TAG, "Error: " + res.message)
+                    _state.value = LocationsState.Error(res.message)
+                }
+                is ResponseState.Success -> {
+                    loadLocations()
                 }
             }
         }
