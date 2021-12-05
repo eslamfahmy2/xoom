@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberImagePainter
 import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.domain.model.Product
@@ -37,111 +36,99 @@ fun ProductItem(
                 .fillMaxWidth(),
             elevation = 15.dp,
         ) {
-            ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row {
 
-                val guideline = createGuidelineFromStart(0.3f)
-                val guideline2 = createGuidelineFromStart(0.7f)
-                val (image, content, third) = createRefs()
-
-                Image(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(80.dp, 80.dp)
-                        .clip(RoundedCornerShape(15))
-                        .constrainAs(image) {
-                            start.linkTo(parent.start)
-                            end.linkTo(guideline)
-                            top.linkTo(parent.top)
-                        },
-                    painter = rememberImagePainter(product.image),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-
-                Column(
-                    modifier = Modifier.constrainAs(content) {
-                        start.linkTo(guideline)
-                        end.linkTo(guideline2)
-                    },
-                ) {
-
-                    Text(
+                    Image(
                         modifier = Modifier
-                            .wrapContentSize()
                             .padding(8.dp)
-                            .align(Alignment.Start),
-                        text = product.name,
-                        color = MaterialTheme.colors.onSurface,
-
-                        )
-
-                    Text(
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
-                            .align(Alignment.Start),
-                        text = product.refill,
-                        color = MaterialTheme.colors.onSurface,
+                            .size(80.dp, 80.dp)
+                            .clip(RoundedCornerShape(15)),
+                        painter = rememberImagePainter(product.image),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
                     )
 
-                    if (product.quantity > 0) {
+                    Column(
+                        modifier = Modifier,
+                    ) {
 
-                        Row(
-                            modifier = Modifier.padding(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                        Text(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(8.dp)
+                                .align(Alignment.Start),
+                            text = product.name,
+                            color = MaterialTheme.colors.onSurface,
 
-                            OutlinedButton(
-                                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
-                                border = BorderStroke(
-                                    width = 1.dp,
-                                    color = Color.Gray,
-                                ),
-                                onClick = {
-                                    decreaseCartItem(product)
-                                },
-
-                                ) {
-                                Text(text = "-")
-
-
-                            }
-
-                            Text(
-                                modifier = Modifier.padding(6.dp),
-                                text = product.quantity.toString()
                             )
 
-                            Button(
-                                onClick = {
-                                    increaseCartItem(product)
-                                }) {
-                                Text(text = "+")
+                        Text(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+                                .align(Alignment.Start),
+                            text = product.refill,
+                            color = MaterialTheme.colors.onSurface,
+                        )
 
+                        if (product.quantity > 0) {
+
+                            Row(
+                                modifier = Modifier.padding(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+
+                                OutlinedButton(
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                                    border = BorderStroke(
+                                        width = 1.dp,
+                                        color = Color.Gray,
+                                    ),
+                                    onClick = {
+                                        decreaseCartItem(product)
+                                    },
+
+                                    ) {
+                                    Text(text = "-")
+
+
+                                }
+
+                                Text(
+                                    modifier = Modifier.padding(6.dp),
+                                    text = product.quantity.toString()
+                                )
+
+                                Button(
+                                    onClick = {
+                                        increaseCartItem(product)
+                                    }) {
+                                    Text(text = "+")
+
+                                }
+                            }
+                        } else {
+
+                            Box(modifier = Modifier.padding(8.dp)) {
+                                Button(
+                                    onClick = {
+                                        increaseCartItem(product)
+                                    }) {
+                                    Text(text = "+")
+                                }
                             }
                         }
-                    } else {
 
-                        Box(modifier = Modifier.padding(8.dp)) {
-                            Button(
-                                onClick = {
-                                    increaseCartItem(product)
-                                }) {
-                                Text(text = "+")
-                            }
-                        }
                     }
 
                 }
-
                 Column(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .constrainAs(third) {
-                            start.linkTo(guideline2)
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                        },
+                        .fillMaxHeight(),
                     horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.SpaceEvenly
                 ) {
