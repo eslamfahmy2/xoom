@@ -142,11 +142,21 @@ fun ProfileScreen(
 
                                                     )
 
-                                                Text(
-                                                    text = state.user.firstname,
-                                                    fontSize = 16.sp,
-                                                    modifier = Modifier.padding(8.dp)
-                                                )
+                                                Column {
+
+                                                    Text(
+                                                        text = state.user.firstname,
+                                                        fontSize = 16.sp,
+                                                        modifier = Modifier.padding(8.dp)
+                                                    )
+                                                    Text(
+                                                        text = state.user.phone,
+                                                        fontSize = 16.sp,
+                                                        modifier = Modifier.padding(start = 8.dp),
+                                                    )
+
+                                                }
+
                                             }
 
                                             Divider(
@@ -356,35 +366,6 @@ fun ProfileScreen(
                                                 )
                                             }
 
-                                            Row(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(8.dp),
-                                                horizontalArrangement = Arrangement.SpaceBetween,
-                                                verticalAlignment = Alignment.CenterVertically
-                                            ) {
-                                                Row(
-                                                    verticalAlignment = Alignment.CenterVertically
-                                                ) {
-                                                    Icon(
-                                                        modifier = Modifier.padding(8.dp),
-                                                        imageVector = Icons.Filled.Phone,
-                                                        contentDescription = null,
-                                                        tint = Color.Green
-                                                    )
-                                                    Text(
-                                                        text = "Phone number " + state.user.phone,
-                                                        fontSize = 16.sp,
-                                                        modifier = Modifier.padding(4.dp),
-                                                    )
-                                                }
-                                                Icon(
-                                                    modifier = Modifier,
-                                                    imageVector = Icons.Filled.KeyboardArrowRight,
-                                                    contentDescription = null,
-                                                    tint = Color.LightGray
-                                                )
-                                            }
 
                                             Row(
                                                 modifier = Modifier

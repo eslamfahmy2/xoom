@@ -316,7 +316,7 @@ fun CheckPaymentScreen(
                     viewModel.idle()
                     navHostController.navigate(Screens.Success.routeWithArgs(it))
                 }
-            } else if (state.method.status == 300) {
+            } else if (state.method.status == 400) {
                 state.method.msg?.let {
                     viewModel.idle()
                     navHostController.navigate(Screens.Fail.routeWithArgs(it))
@@ -394,7 +394,6 @@ fun SuccessScreen(navHostController: NavHostController, msg: String, viewModel: 
 @Composable
 fun FailScreen(navHostController: NavHostController, msg: String, viewModel: CheckoutViewModel) {
 
-    val coroutineScope = rememberCoroutineScope()
 
     val shimmerColorShades = listOf(
         MaterialTheme.colors.primary,

@@ -241,7 +241,8 @@ fun LocationsScreen(
                                     textStyle = TextStyle(
                                         color = MaterialTheme.colors.secondaryVariant,
                                         fontSize = 16.sp
-                                    )
+                                    ),
+                                    singleLine = true
 
                                 )
 
@@ -274,7 +275,8 @@ fun LocationsScreen(
                                     textStyle = TextStyle(
                                         color = MaterialTheme.colors.secondaryVariant,
                                         fontSize = 16.sp
-                                    )
+                                    ),
+                                    singleLine = true
 
                                 )
 
@@ -307,7 +309,8 @@ fun LocationsScreen(
                                     textStyle = TextStyle(
                                         color = MaterialTheme.colors.secondaryVariant,
                                         fontSize = 16.sp
-                                    )
+                                    ),
+                                    singleLine = true
 
                                 )
 

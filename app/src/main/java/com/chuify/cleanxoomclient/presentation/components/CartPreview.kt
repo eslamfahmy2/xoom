@@ -16,7 +16,7 @@ import com.chuify.cleanxoomclient.R
 @ExperimentalMaterialApi
 @Composable
 fun CartPreview(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     quantity: String,
     price: String,
     onClick: () -> Unit,

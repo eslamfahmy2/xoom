@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -21,7 +20,6 @@ import androidx.navigation.NavHostController
 import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.domain.model.Vendor
 import com.chuify.cleanxoomclient.presentation.components.CartPreview
-import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
 import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
 import com.chuify.cleanxoomclient.presentation.navigation.Screens
 import com.chuify.cleanxoomclient.presentation.ui.accessory.component.AccessoryScreen
@@ -51,7 +49,7 @@ fun VendorDetailsScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val state = viewModel.state.collectAsState().value
+    val preview = viewModel.preview.collectAsState().value
 
 
     Scaffold(
@@ -65,17 +63,19 @@ fun VendorDetailsScreen(
             scaffoldState.snackbarHostState
         },
         bottomBar = {
-            DefaultSnackBar(
-                snackHostState = scaffoldState.snackbarHostState,
-                onDismiss = {
-                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                },
-            )
+
+            CartPreview(
+                quantity = preview.totalQuantity.toString(),
+                price = preview.totalPrice.toString()
+            ) {
+                navHostController.navigate(Screens.Cart.fullRoute())
+            }
         }
-    ) {
+    ) { it ->
         Card(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(bottom = it.calculateBottomPadding())
                 .background(MaterialTheme.colors.primary)
                 .clip(RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp))
                 .background(MaterialTheme.colors.background),
@@ -174,24 +174,6 @@ fun VendorDetailsScreen(
                             ProductsScreen(id = vendor.id)
                         } else {
                             AccessoryScreen(viewModel = hiltViewModel())
-                        }
-                    }
-                    when (state) {
-                        is VendorDetailsState.Error -> {
-                        }
-                        VendorDetailsState.Loading -> {
-                        }
-                        is VendorDetailsState.Success -> {
-
-                            val data = state.data
-                            CartPreview(
-                                modifier = Modifier.align(Alignment.BottomCenter),
-                                quantity = data.totalQuantity.toString(),
-                                price = data.totalPrice.toString()
-                            ) {
-                                navHostController.navigate(Screens.Cart.fullRoute())
-                            }
-
                         }
                     }
                 }

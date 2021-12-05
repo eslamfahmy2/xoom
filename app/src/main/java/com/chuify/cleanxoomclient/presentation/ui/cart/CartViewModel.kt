@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chuify.cleanxoomclient.domain.model.Cart
+import com.chuify.cleanxoomclient.domain.model.CartPreview
 import com.chuify.cleanxoomclient.domain.usecase.cart.DeleteOrderUs
 import com.chuify.cleanxoomclient.domain.usecase.cart.GetCartItemsUseCase
 import com.chuify.cleanxoomclient.domain.usecase.cart.OrderITemAction
@@ -34,6 +35,8 @@ class CartViewModel @Inject constructor(
         MutableStateFlow(CartState.Loading)
     val state get() = _state.asStateFlow()
 
+    val preview: MutableStateFlow<CartPreview> = MutableStateFlow(CartPreview())
+
     init {
         handleIntent()
         viewModelScope.launch {
@@ -63,8 +66,7 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadOrders() = viewModelScope.launch {
-        (Dispatchers.IO)
+    private suspend fun loadOrders() = viewModelScope.launch((Dispatchers.IO)) {
 
         getCartItemsUseCase().collect { dataState ->
             when (dataState) {
@@ -77,6 +79,7 @@ class CartViewModel @Inject constructor(
                 }
                 is DataState.Success -> {
                     dataState.data?.let {
+                        preview.value = it.second
                         _state.value = CartState.Success(orders = it.first, cartPreview = it.second)
                     }
 

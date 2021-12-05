@@ -37,7 +37,10 @@ class UpdateOrderUs @Inject constructor(
                         val result = model.copy(quantity = model.quantity - 1)
                         repo.update(result)
                         emit(DataState.Success())
-                    } 
+                    } else {
+                        repo.delete(model)
+                        emit(DataState.Success())
+                    }
                 }
             }
 

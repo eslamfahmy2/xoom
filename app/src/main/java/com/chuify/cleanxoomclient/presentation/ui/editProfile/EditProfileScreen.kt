@@ -1,5 +1,6 @@
 package com.chuify.cleanxoomclient.presentation.ui.editProfile
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -23,12 +24,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
-import com.chuify.cleanxoomclient.presentation.components.LoadingDialog
 import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalCoroutinesApi
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -212,7 +213,6 @@ fun EditProfileScreen(
                                 )
                             )
                         }
-
                     }
 
                     when (state) {
@@ -227,14 +227,21 @@ fun EditProfileScreen(
                             }
                         }
                         EditProfileState.Loading -> {
-                            LoadingDialog()
+
                         }
                         is EditProfileState.Success -> {
 
                         }
                         EditProfileState.ProfileUpdated -> {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = "Profile updated successfully",
+                                    actionLabel = "Dismiss",
+                                )
+                            }
 
-                            navHostController.popBackStack()
+
+                            //    navHostController.popBackStack()
                         }
                     }
 

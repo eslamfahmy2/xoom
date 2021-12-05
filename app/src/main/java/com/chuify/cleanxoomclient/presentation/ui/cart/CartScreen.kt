@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -23,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.presentation.components.CartPreview
-import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
 import com.chuify.cleanxoomclient.presentation.components.LoadingListScreen
 import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
 import com.chuify.cleanxoomclient.presentation.navigation.Screens
@@ -44,6 +42,7 @@ fun CartScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val state = viewModel.state.collectAsState().value
+    val preview = viewModel.preview.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -56,17 +55,19 @@ fun CartScreen(
             scaffoldState.snackbarHostState
         },
         bottomBar = {
-            DefaultSnackBar(
-                snackHostState = scaffoldState.snackbarHostState,
-                onDismiss = {
-                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                },
-            )
+
+            CartPreview(
+                quantity = preview.totalQuantity.toString(),
+                price = preview.totalPrice.toString()
+            ) {
+                navHostController.navigate(Screens.Checkout.route)
+            }
         }
     ) {
         Card(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(bottom = it.calculateBottomPadding())
                 .background(MaterialTheme.colors.primary)
                 .clip(RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp))
                 .background(MaterialTheme.colors.background),
@@ -131,16 +132,6 @@ fun CartScreen(
                                     )
                                 }
                             }
-
-                            val cartPreview = state.cartPreview
-                            CartPreview(
-                                modifier = Modifier.align(Alignment.BottomCenter),
-                                quantity = cartPreview.totalQuantity.toString(),
-                                price = cartPreview.totalPrice.toString()
-                            ) {
-                                navHostController.navigate(Screens.Checkout.route)
-                            }
-
 
                         }
 

@@ -3,6 +3,7 @@ package com.chuify.cleanxoomclient.presentation.ui.editProfile
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.chuify.cleanxoomclient.domain.model.User
 import com.chuify.cleanxoomclient.domain.usecase.profile.GetProfileUseCase
 import com.chuify.cleanxoomclient.domain.usecase.profile.UpdateUserUseCase
 import com.chuify.cleanxoomclient.domain.utils.DataState
@@ -29,7 +30,6 @@ class EditProfileViewModel @Inject constructor(
 
     val userIntent = Channel<EditProfileIntent>(Channel.UNLIMITED)
 
-
     private val _firstName: MutableStateFlow<String> = MutableStateFlow(String())
     val firstName get() = _firstName.asStateFlow()
 
@@ -39,10 +39,11 @@ class EditProfileViewModel @Inject constructor(
     private val _email: MutableStateFlow<String> = MutableStateFlow(String())
     val email get() = _email.asStateFlow()
 
-
     private val _state: MutableStateFlow<EditProfileState> =
         MutableStateFlow(EditProfileState.Loading)
     val state get() = _state.asStateFlow()
+
+    lateinit var user: User
 
 
     init {
@@ -58,7 +59,13 @@ class EditProfileViewModel @Inject constructor(
                         loadProfile()
                     }
                     EditProfileIntent.EditProfile -> {
-                        updateUser(_firstName.value, _lastName.value, _email.value)
+                        if (user.firstname == _firstName.value &&
+                            user.lastname == _lastName.value &&
+                            user.email == _email.value
+                        ) {
+                            _state.value = EditProfileState.Error("No changes")
+                        } else
+                            updateUser(_firstName.value, _lastName.value, _email.value)
                     }
                     is EditProfileIntent.EmailChange -> {
                         _email.value = intent.data
@@ -91,9 +98,7 @@ class EditProfileViewModel @Inject constructor(
                         _state.value = EditProfileState.Loading
                     }
                     is DataState.Success -> {
-                        dataSate.data?.let {
-                            _state.value = EditProfileState.ProfileUpdated
-                        }
+                        _state.value = EditProfileState.ProfileUpdated
 
                     }
                 }
@@ -106,17 +111,18 @@ class EditProfileViewModel @Inject constructor(
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
-                    _state.value = EditProfileState.Error(dataState.message)
+                    //   _state.value = EditProfileState.Error(dataState.message)
                 }
                 is DataState.Loading -> {
-                    _state.value = EditProfileState.Loading
+                    //  _state.value = EditProfileState.Loading
                 }
                 is DataState.Success -> {
                     dataState.data?.let {
+                        user = dataState.data
                         _firstName.value = dataState.data.firstname
                         _lastName.value = dataState.data.lastname
                         _email.value = dataState.data.email
-                        _state.value = EditProfileState.Success(it)
+                        // _state.value = EditProfileState.Success(it)
                     }
 
                 }
