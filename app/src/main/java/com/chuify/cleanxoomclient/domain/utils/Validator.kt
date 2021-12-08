@@ -5,7 +5,7 @@ class Validator {
     companion object Validator {
 
         const val PHONE_LENGTH = 9
-        private const val NAME_REGEX = "[a-zA-Z]+"
+        private const val NAME_REGEX = "[a-zA-Z ]+"
         private const val EMAIL_REGEX = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
 
         private const val PHONE_REGEX = "[+][254][0-9]{11}"

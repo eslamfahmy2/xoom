@@ -127,10 +127,8 @@ class CheckoutViewModel @Inject constructor(
                     loading.value = false
                     loadLocations()
                 }
-
             }
         }
-
     }
 
 
