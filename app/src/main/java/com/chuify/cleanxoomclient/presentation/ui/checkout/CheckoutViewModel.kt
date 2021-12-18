@@ -261,5 +261,28 @@ class CheckoutViewModel @Inject constructor(
             decreaseOrderUseCase(order.id).collect()
         }
 
+    fun loadLocationsAgain() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getLocationUseCase().collect { dataState ->
+                when (dataState) {
+                    is DataState.Error -> {
+                        Log.d(TAG, "Error: " + dataState.message)
+                        //    _state.value = CheckoutState.Error(dataState.message)
+                    }
+                    is DataState.Loading -> {
+                        //  _state.value = CheckoutState.Loading
+                    }
+                    is DataState.Success -> {
+                        Log.d(TAG, "Success: location " + dataState.data)
+                        dataState.data?.let {
+                            _location.value = it
+                            selectedLocation.value = it.firstOrNull()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
 }

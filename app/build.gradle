@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
 }
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
@@ -19,7 +20,9 @@ android {
             useSupportLibrary true
         }
     }
-
+    dataBinding {
+        enabled = true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -39,6 +42,7 @@ android {
     }
     buildFeatures {
         compose true
+        viewBinding true
     }
     composeOptions {
         //kotlinCompilerVersion "1.5.10"
@@ -81,6 +85,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.7.1'
     //Hilt
     implementation 'com.google.dagger:hilt-android:2.40.5'
+    implementation 'com.google.android.gms:play-services-maps:18.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     kapt 'com.google.dagger:hilt-compiler:2.40.5'
     //FireBase
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
@@ -99,6 +105,7 @@ dependencies {
     //navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    //noinspection GradleDependency
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha03'
     //Constraint Layout
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02"

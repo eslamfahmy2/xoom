@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+@ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @AndroidEntryPoint
 class OTPFragment : Fragment() {
@@ -41,7 +42,6 @@ class OTPFragment : Fragment() {
     lateinit var application: BaseApplication
 
 
-    @ExperimentalMaterialApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

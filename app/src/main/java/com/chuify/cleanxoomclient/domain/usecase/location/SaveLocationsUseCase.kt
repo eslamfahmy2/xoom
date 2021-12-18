@@ -30,7 +30,7 @@ class SaveLocationsUseCase @Inject constructor(
                 throw Exception("details required")
             }
             if (instructions.isEmpty()) {
-                throw Exception("instructions required")
+                throw Exception("Building & details required")
             }
             when (val response = locationRepo.saveAddress(
                 addressUrl = addressUrl,

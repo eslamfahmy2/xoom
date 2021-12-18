@@ -12,7 +12,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -59,15 +58,11 @@ fun VendorScreen(
 
     val scaffoldState = rememberScaffoldState()
 
-    val context = LocalContext.current.applicationContext
-
-
     Scaffold(
         topBar = {
             HomeBar(
                 action = {
-                    // context.startActivity(Intent(context, MapsActivity::class.java))
-                    // navHostController.navigate(Screens.Cart.route)
+                  navHostController.navigate(Screens.Cart.route)
                 },
                 cartCount = cartCount
             )

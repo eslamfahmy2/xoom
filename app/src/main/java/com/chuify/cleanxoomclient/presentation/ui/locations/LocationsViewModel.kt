@@ -120,6 +120,19 @@ class LocationsViewModel @Inject constructor(
 
     }
 
+    fun saveCustomLocation(
+        addressUrl: String,
+        details: String,
+        instructions: String,
+        lat: Double,
+        lng: Double
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+        }
+
+    }
+
 
     private suspend fun loadLocations() {
         viewModelScope.launch(Dispatchers.IO) {

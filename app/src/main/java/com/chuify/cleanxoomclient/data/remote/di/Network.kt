@@ -54,6 +54,8 @@ object Network {
             writeTimeout(60, TimeUnit.SECONDS)
             addInterceptor(requestInterceptor)
             addInterceptor(requestUserIdInterceptor)
+            addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+            addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
             addInterceptor(logger)
         }.build()
     }
@@ -63,6 +65,7 @@ object Network {
     @Provides
     fun provideLoggerInterceptor() =
         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
 
     @Singleton
     @Provides
