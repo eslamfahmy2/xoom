@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,7 +29,6 @@ import com.chuify.cleanxoomclient.presentation.ui.accessoryDetails.AccessoryDeta
 import com.chuify.cleanxoomclient.presentation.ui.accessoryDetails.AccessoryDetailsState
 import com.chuify.cleanxoomclient.presentation.ui.accessoryDetails.AccessoryDetailsViewModel
 import com.chuify.cleanxoomclient.presentation.ui.accessoryDetails.component.AccessoryPref
-
 import com.chuify.cleanxoomclient.presentation.ui.vendors.VendorIntent
 import com.chuify.cleanxoomclient.presentation.ui.vendors.VendorState
 import com.chuify.cleanxoomclient.presentation.ui.vendors.VendorViewModel
@@ -59,14 +59,15 @@ fun VendorScreen(
 
     val scaffoldState = rememberScaffoldState()
 
-
+    val context = LocalContext.current.applicationContext
 
 
     Scaffold(
         topBar = {
             HomeBar(
                 action = {
-                    navHostController.navigate(Screens.Cart.route)
+                    // context.startActivity(Intent(context, MapsActivity::class.java))
+                    // navHostController.navigate(Screens.Cart.route)
                 },
                 cartCount = cartCount
             )

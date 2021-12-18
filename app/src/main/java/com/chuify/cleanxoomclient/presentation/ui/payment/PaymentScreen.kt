@@ -239,6 +239,7 @@ fun CheckPaymentScreen(
 ) {
 
     val state = viewModel.state.collectAsState().value
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(true) {
         if (state is CheckPaymentState.Loading)
@@ -293,19 +294,21 @@ fun CheckPaymentScreen(
 
                 Button(
                     onClick = {
-                        navHostController.popBackStack()
+                        coroutineScope.launch {
+                            viewModel.userIntent.send(CheckPaymentIntent.Check(id))
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary),
                     shape = RoundedCornerShape(30)
                 ) {
                     Text(
                         modifier = Modifier
                             .padding(8.dp)
                             .align(Alignment.CenterVertically),
-                        text = "Ok",
+                        text = "Check again...",
                     )
                 }
             }

@@ -1,5 +1,6 @@
 package com.chuify.cleanxoomclient.presentation.ui.checkout
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -31,6 +32,7 @@ import com.chuify.cleanxoomclient.presentation.ui.cart.CartItem
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -125,7 +127,8 @@ fun CheckoutScreen(
 
 
                                     Text(
-                                        text = stringResource(id = R.string.change),
+                                        text = if (selectedLocation == null) stringResource(id = R.string.save_location)
+                                        else stringResource(id = R.string.change),
                                         color = MaterialTheme.colors.primary,
                                         modifier = Modifier
                                             .wrapContentSize()
@@ -321,7 +324,7 @@ fun CheckoutScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(8.dp),
-                                    shape = RoundedCornerShape(30)
+                                    shape = RoundedCornerShape(15)
                                 ) {
                                     Text(
                                         modifier = Modifier
@@ -370,10 +373,24 @@ fun CheckoutScreen(
 
         }
         is CheckoutState.Success.PaymentSuccess -> {
+            state.message?.let {
+
+                navHostController.popBackStack(navHostController.graph.startDestinationId, true)
+                navHostController.graph.setStartDestination(Screens.Main.route)
+                navHostController.navigate(Screens.Main.route)
+                navHostController.navigate(Screens.CheckPayment.routeWithArgs(it))
+            }
+            coroutineScope.launch {
+                viewModel.userIntent.send(CheckoutIntent.ChangeStatus(CheckoutState.Success.OrderSubmitted()))
+            }
+
+
+            /*
             val msg =
                 "Thank you for placing your order with us! \n You can continue and track your payment processes \n" +
                         "and order from the “Orders” section"
             navHostController.navigate(Screens.Success.routeWithArgs(msg))
+            */
         }
     }
 

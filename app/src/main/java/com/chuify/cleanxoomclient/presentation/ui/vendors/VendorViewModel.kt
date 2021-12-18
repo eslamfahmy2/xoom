@@ -44,8 +44,8 @@ class VendorViewModel @Inject constructor(
     val accessories get() = _accessories.asStateFlow()
 
 
-    private val _cartCount: MutableStateFlow<Int> = MutableStateFlow(0)
-    val cartCount get() = _cartCount.asStateFlow()
+    val cartCount: MutableStateFlow<Int> = MutableStateFlow(0)
+
 
     private val _refreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val refreshing get() = _refreshing.asStateFlow()
@@ -104,12 +104,13 @@ class VendorViewModel @Inject constructor(
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
+                    cartCount.value = 0
                 }
                 is DataState.Loading -> {
                 }
                 is DataState.Success -> {
                     dataState.data?.let {
-                        _cartCount.value = it.totalQuantity
+                        cartCount.value = it.totalQuantity
                     }
 
                 }

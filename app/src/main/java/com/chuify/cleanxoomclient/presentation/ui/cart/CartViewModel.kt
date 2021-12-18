@@ -72,6 +72,7 @@ class CartViewModel @Inject constructor(
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
+                    preview.value = CartPreview()
                     _state.value = CartState.Error(dataState.message)
                 }
                 is DataState.Loading -> {

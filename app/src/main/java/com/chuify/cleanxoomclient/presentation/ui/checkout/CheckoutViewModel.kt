@@ -189,6 +189,7 @@ class CheckoutViewModel @Inject constructor(
                         Log.d(TAG, "Success: location " + dataState.data)
                         dataState.data?.let {
                             _location.value = it
+                            selectedLocation.value = it.firstOrNull()
                         }
                     }
                 }

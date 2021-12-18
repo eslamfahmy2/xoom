@@ -1,5 +1,6 @@
 package com.chuify.cleanxoomclient.presentation.ui.cart
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -28,6 +29,7 @@ import com.chuify.cleanxoomclient.presentation.navigation.Screens
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 
+private const val TAG = "CartScreen"
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
@@ -56,6 +58,7 @@ fun CartScreen(
         },
         bottomBar = {
 
+            Log.d(TAG, "CartScreen: " + preview)
             if (preview.totalQuantity > 0) {
                 CartPreview(
                     quantity = preview.totalQuantity.toString(),

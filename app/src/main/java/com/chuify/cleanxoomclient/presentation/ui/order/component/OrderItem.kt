@@ -79,7 +79,7 @@ fun CompleteOrderItem(
                                 .wrapContentSize()
                                 .padding(8.dp)
                                 .align(Alignment.Start),
-                            text = order.name,
+                            text = "#${order.id} " + order.name,
                             color = MaterialTheme.colors.onSurface,
                             maxLines = 1
 
@@ -290,11 +290,11 @@ fun PendingOrderItem(
                                 .wrapContentSize()
                                 .padding(8.dp)
                                 .align(Alignment.Start),
-                            text = order.name,
+                            text = "#${order.id} " + order.name,
                             color = MaterialTheme.colors.onSurface,
                             maxLines = 1
 
-                            )
+                        )
 
                         Text(
                             modifier = Modifier

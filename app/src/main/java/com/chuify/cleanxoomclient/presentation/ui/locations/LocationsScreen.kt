@@ -387,9 +387,10 @@ fun LocationItem(location: Location, modifier: Modifier = Modifier, onDelete: (L
         )
         {
 
-            Row {
+            Row(Modifier.weight(1f, true)) {
                 Icon(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier
+                        .padding(16.dp),
                     painter = painterResource(id = R.drawable.ic_address),
                     contentDescription = null,
                     tint = Color.Green

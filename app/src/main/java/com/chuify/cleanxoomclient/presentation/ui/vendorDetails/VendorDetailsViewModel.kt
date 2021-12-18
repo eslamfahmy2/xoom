@@ -50,6 +50,7 @@ class VendorDetailsViewModel @Inject constructor(
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
+                    preview.value = CartPreview()
                     //  _state.value = VendorDetailsState.Error(dataState.message)
                 }
                 is DataState.Loading -> {

@@ -12,6 +12,6 @@ data class Location(
 
     val longitude: String?,
 
-    val selected: Boolean = false,
+    var selected: Boolean = false,
 
     )

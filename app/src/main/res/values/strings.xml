@@ -33,7 +33,7 @@
     <string name="change">Change</string>
     <string name="select_payment_methid">Select payment method</string>
     <string name="delivery_address">Delivery address</string>
-    <string name="confirm_order">Confirm order</string>
+    <string name="confirm_order">Submit order</string>
     <string name="payment_method">Payment Method</string>
     <string name="next">Next</string>
     <string name="cancel">Cancel</string>
@@ -41,9 +41,9 @@
     <string name="reorder">Reorder</string>
 
     <string name="submitted">Submitted</string>
-    <string name="accepted">Accepted</string>
-    <string name="on_transit">On transit</string>
-    <string name="completed">Completed</string>
+    <string name="accepted">Payment Received</string>
+    <string name="on_transit">Out for Delivery</string>
+    <string name="completed">Delivered</string>
     <string name="cancelled">Cancelled</string>
     <string name="are_sure">"the order will be cancel ! are you sure? "</string>
     <string name="edit_profile">Edit profile</string>
@@ -52,8 +52,9 @@
     <string name="default_notification_channel_id">11</string>
     <string name="driver_details">Driver details</string>
     <string name="scan_by_driver">Show the code to the driver to confirm your order delivery</string>
-    <string name="confirm_processing">Payment processing</string>
-    <string name="check">check</string> <!--gray-->
+    <string name="confirm_processing">Order Submitted</string>
+    <string name="check">check payment</string>
+    <string name="title_activity_maps">MapsActivity</string> <!--gray-->
 
 
 </resources>

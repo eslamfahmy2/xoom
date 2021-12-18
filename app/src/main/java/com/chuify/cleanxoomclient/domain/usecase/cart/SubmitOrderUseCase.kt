@@ -71,7 +71,7 @@ class SubmitOrderUseCase @Inject constructor(
 
                         emit(SubmitOrderStatus.OrderSubmitted(response.toString()))
                         cartRepo.clear()
-                        emit(SubmitOrderStatus.PaymentSuccess(payment.toString()))
+                        emit(SubmitOrderStatus.PaymentSuccess(response.data.Order?.order_id))
 
                     }
                 }
