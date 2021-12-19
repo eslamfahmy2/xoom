@@ -135,7 +135,7 @@ fun PendingOrdersScreen(
                         },
                         title = {
                             Text(
-                                text = stringResource(id = R.string.cancel),
+                                text = "Order cancellation",
                                 fontSize = 20.sp,
                                 modifier = Modifier.padding(8.dp)
                             )
@@ -173,7 +173,7 @@ fun PendingOrdersScreen(
                                         modifier = Modifier
                                             .weight(0.9f, true)
                                             .padding(8.dp),
-                                        color = Color.White,
+                                        color = MaterialTheme.colors.onSurface,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
                                     )
