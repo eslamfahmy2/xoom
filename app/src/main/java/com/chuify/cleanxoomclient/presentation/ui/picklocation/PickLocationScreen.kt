@@ -294,7 +294,7 @@ fun PickLocationScreen(
                                         instructions.value = it
                                     },
                                     label = {
-                                        Text(text = "Instructions")
+                                        Text(text = stringResource(id = R.string.building_details))
                                     },
                                     keyboardOptions = KeyboardOptions(
                                         autoCorrect = false,
