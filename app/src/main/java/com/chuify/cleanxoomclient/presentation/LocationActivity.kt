@@ -148,10 +148,18 @@ class LocationActivity : AppCompatActivity(), OnMyLocationButtonClickListener,
                 binding.btnSaveLocation.isEnabled = true
             }
 
-            this.location = LatLng(
-                map.myLocation.latitude,
-                map.myLocation.longitude
-            )
+            if (map.myLocation == null) {
+                this.location = LatLng(
+                    -1.2846009,
+                    36.8201749
+                )
+            } else {
+                this.location = LatLng(
+                    map.myLocation.latitude,
+                    map.myLocation.longitude
+                )
+            }
+
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 18F))
             map.setOnCameraChangeListener { cameraPosition ->
                 map.clear()
