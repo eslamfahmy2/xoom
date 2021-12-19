@@ -27,9 +27,10 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
     //720242046
+    //703894372
     val userIntent = Channel<AuthenticationIntent>(Channel.UNLIMITED)
 
-    private val _phone: MutableStateFlow<String> = MutableStateFlow("720242047")
+    private val _phone: MutableStateFlow<String> = MutableStateFlow("703894372")
     val phone get() = _phone.asStateFlow()
 
     private val _firstName: MutableStateFlow<String> = MutableStateFlow(String())

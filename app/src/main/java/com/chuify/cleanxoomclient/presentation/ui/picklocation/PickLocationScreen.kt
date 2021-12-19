@@ -171,8 +171,7 @@ fun PickLocationScreen(
                 }
 
                 items(locations) {
-                    LocationItem(
-                        it,
+                    LocationItem(it,
                         Modifier.clickable {
                             coroutineScope.launch {
                                 it.id?.let { id ->

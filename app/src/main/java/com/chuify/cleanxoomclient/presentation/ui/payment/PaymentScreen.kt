@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.chuify.cleanxoomclient.R
+import com.chuify.cleanxoomclient.domain.model.Order
 import com.chuify.cleanxoomclient.domain.model.Payments
 import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
 import com.chuify.cleanxoomclient.presentation.components.PaymentItem
@@ -36,7 +37,9 @@ import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
 import com.chuify.cleanxoomclient.presentation.navigation.Screens
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutIntent
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutViewModel
+import com.chuify.cleanxoomclient.presentation.ui.order.component.OrderStatus
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 private const val TAG = "PaymentScreen"
@@ -362,7 +365,31 @@ fun SuccessScreen(
 
         Button(
             onClick = {
-                onClick(popUp, navHostController)
+                Gson().toJson(
+                    Order(
+                        image = String(),
+                        products = emptyList(),
+                        locationID = String(),
+                        paymentMethod = String(),
+                        price = String(),
+                        totalPrice = String(),
+                        refill = String(),
+                        size = String(),
+                        name = String(),
+                        id = "",
+                        status = OrderStatus.ORDER_STATUS_PROCESSING.status
+                    )
+                )?.let { json ->
+
+                    navHostController.popBackStack(navHostController.graph.startDestinationId, true)
+                    navHostController.graph.setStartDestination(Screens.Main.route)
+                    navHostController.navigate(Screens.Main.route)
+
+                    navHostController.navigate(
+                        Screens.Track.routeWithArgs(json)
+                    )
+                }
+
             },
             modifier = Modifier
                 .fillMaxWidth()

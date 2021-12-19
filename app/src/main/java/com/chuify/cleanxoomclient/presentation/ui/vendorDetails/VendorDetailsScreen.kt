@@ -101,6 +101,7 @@ fun VendorDetailsScreen(
                     when (selected.value) {
                         VendorDetails.GAS -> {
                             Button(
+                                modifier = Modifier.height(40.dp),
                                 onClick = {
 
                                 }) {
@@ -115,7 +116,8 @@ fun VendorDetailsScreen(
                                         width = 1.dp,
                                         shape = RoundedCornerShape(5.dp),
                                         color = Color.Gray,
-                                    ),
+                                    )
+                                    .height(40.dp),
                                 onClick = {
                                     coroutineScope.launch {
                                         selected.value = VendorDetails.ACCESSORIES
@@ -124,7 +126,10 @@ fun VendorDetailsScreen(
                                 },
 
                                 ) {
-                                Text(text = stringResource(R.string.accessories))
+                                Text(
+                                    modifier = Modifier.fillMaxHeight(),
+                                    text = stringResource(R.string.accessories)
+                                )
 
                             }
 
@@ -137,7 +142,8 @@ fun VendorDetailsScreen(
                                         width = 1.dp,
                                         shape = RoundedCornerShape(5.dp),
                                         color = Color.Gray,
-                                    ),
+                                    )
+                                    .height(40.dp),
                                 onClick = {
                                     coroutineScope.launch {
                                         selected.value = VendorDetails.GAS
@@ -146,13 +152,17 @@ fun VendorDetailsScreen(
                                 },
 
                                 ) {
-                                Text(text = stringResource(R.string.gas))
+                                Text(
+                                    modifier = Modifier.fillMaxHeight(),
+                                    text = stringResource(R.string.gas)
+                                )
 
                             }
 
                             Spacer(modifier = Modifier.padding(8.dp))
 
                             Button(
+                                modifier = Modifier.height(40.dp),
                                 onClick = {
 
                                 }) {

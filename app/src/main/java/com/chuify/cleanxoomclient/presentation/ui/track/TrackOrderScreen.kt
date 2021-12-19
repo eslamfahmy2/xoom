@@ -55,7 +55,6 @@ fun TrackOrderScreen(
 
     val scaffoldState = rememberScaffoldState()
 
-
     val state = viewModel.state.collectAsState().value
 
 
