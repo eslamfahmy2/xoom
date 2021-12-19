@@ -120,19 +120,6 @@ class LocationsViewModel @Inject constructor(
 
     }
 
-    fun saveCustomLocation(
-        addressUrl: String,
-        details: String,
-        instructions: String,
-        lat: Double,
-        lng: Double
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-
-        }
-
-    }
-
 
     private suspend fun loadLocations() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -167,6 +154,29 @@ class LocationsViewModel @Inject constructor(
                 }
                 is ResponseState.Success -> {
                     loadLocations()
+                }
+            }
+        }
+
+    }
+
+    fun loadLocationsAgain() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getLocationUseCase().collect { dataState ->
+                when (dataState) {
+                    is DataState.Error -> {
+                        Log.d(TAG, "Error: " + dataState.message)
+                        _state.value = LocationsState.Error(dataState.message)
+                    }
+                    is DataState.Loading -> {
+                        _state.value = LocationsState.Loading
+                    }
+                    is DataState.Success -> {
+                        Log.d(TAG, "Success: location " + dataState.data)
+                        dataState.data?.let {
+                            _state.value = LocationsState.Success(it)
+                        }
+                    }
                 }
             }
         }

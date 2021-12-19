@@ -1,5 +1,6 @@
 package com.chuify.cleanxoomclient.presentation.ui.locations
 
+import android.content.Intent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -14,14 +15,14 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.LocationCity
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -33,9 +34,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.domain.model.Location
+import com.chuify.cleanxoomclient.presentation.LocationActivity
 import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
 import com.chuify.cleanxoomclient.presentation.components.LoadingDialog
 import com.chuify.cleanxoomclient.presentation.components.LoadingListScreen
@@ -51,6 +56,7 @@ import kotlinx.coroutines.launch
 fun LocationsScreen(
     navHostController: NavHostController,
     viewModel: LocationsViewModel = hiltViewModel(),
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -58,6 +64,26 @@ fun LocationsScreen(
     val state = viewModel.state.collectAsState().value
 
     val showDialog = viewModel.showDialog.collectAsState().value
+    val context = LocalContext.current.applicationContext
+
+    // If `lifecycleOwner` changes, dispose and reset the effect
+    DisposableEffect(lifecycleOwner) {
+        // Create an observer that triggers our remembered callbacks
+        // for sending analytics events
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.loadLocationsAgain()
+            }
+        }
+
+        // Add the observer to the lifecycle
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // When the effect leaves the Composition, remove the observer
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -151,6 +177,31 @@ fun LocationsScreen(
                                         style = TextStyle(
                                             fontSize = 16.sp
                                         )
+                                    )
+                                }
+                            }
+
+                            item {
+                                Button(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    onClick = {
+                                        val intent = Intent(context, LocationActivity::class.java)
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        context.startActivity(intent)
+                                    },
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface)
+                                ) {
+
+                                    Icon(
+                                        modifier = Modifier.padding(8.dp),
+                                        imageVector = Icons.Filled.MyLocation,
+                                        contentDescription = null
+                                    )
+                                    Text(
+                                        text = stringResource(id = R.string.location_map),
+                                        color = MaterialTheme.colors.primary
                                     )
                                 }
                             }

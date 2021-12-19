@@ -1,6 +1,8 @@
 package com.chuify.cleanxoomclient.presentation
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.DisplayMetrics
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -28,6 +30,14 @@ class AuthenticationActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val configuration: Configuration = resources.configuration
+        configuration.fontScale = 1.toFloat() //0.85 small size, 1 normal size, 1,15 big etc
+
+        val metrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(metrics)
+        metrics.scaledDensity = configuration.fontScale * metrics.density
+        configuration.densityDpi = resources.displayMetrics.xdpi.toInt()
+        baseContext.resources.updateConfiguration(configuration, metrics)
         setContent {
             val isDark = flowSharedPreferences.getBoolean("IS_DARK", false).asFlow().collectAsState(
                 initial = false

@@ -3,8 +3,10 @@ package com.chuify.cleanxoomclient.presentation
 import android.Manifest
 import android.app.ProgressDialog
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.location.Location
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -56,7 +58,14 @@ class LocationActivity : AppCompatActivity(), OnMyLocationButtonClickListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val configuration: Configuration = resources.configuration
+        configuration.fontScale = 1.toFloat() //0.85 small size, 1 normal size, 1,15 big etc
 
+        val metrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(metrics)
+        metrics.scaledDensity = configuration.fontScale * metrics.density
+        configuration.densityDpi = resources.displayMetrics.xdpi.toInt()
+        baseContext.resources.updateConfiguration(configuration, metrics)
         val progressDialog = ProgressDialog(this@LocationActivity)
         progressDialog.setTitle("Loading")
         progressDialog.setCancelable(false)
