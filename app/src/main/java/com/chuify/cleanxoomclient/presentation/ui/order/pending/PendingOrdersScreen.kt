@@ -29,6 +29,8 @@ import com.chuify.cleanxoomclient.presentation.components.LoadingListScreen
 import com.chuify.cleanxoomclient.presentation.navigation.Screens
 import com.chuify.cleanxoomclient.presentation.ui.order.component.PendingOrderItem
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
@@ -91,37 +93,48 @@ fun PendingOrdersScreen(
             }
 
             is PendingOrdersState.Success -> {
-                val data = (state as PendingOrdersState.Success).orders
-                LazyColumn {
-                    items(data) { it ->
-                        PendingOrderItem(order = it, onTrack = {
-                            Gson().toJson(
-                                it.copy(
-                                    image = String(),
-                                    products = emptyList(),
-                                    locationID = String(),
-                                    paymentMethod = String(),
-                                    price = String(),
-                                    totalPrice = String(),
-                                    refill = String(),
-                                    size = String(),
-                                    name = String()
-                                )
-                            )?.let { json ->
-                                navHostController.navigate(
-                                    Screens.Track.routeWithArgs(json)
-                                )
-                            }
-                        }, onCancel = {
-                            coroutineScope.launch {
-                                viewModel.userIntent.send(PendingOrdersIntent.ShowCancel(it))
-                            }
-                        }, onCheckPayment = {
-                            navHostController.navigate(Screens.CheckPayment.routeWithArgs(it.id))
-                        })
-                    }
-                }
+                val isRefreshing by viewModel.refreshing.collectAsState()
+                SwipeRefresh(
+                    state = rememberSwipeRefreshState(isRefreshing),
+                    onRefresh = {
+                        coroutineScope.launch {
+                            viewModel.userIntent.send(PendingOrdersIntent.LoadPendingOrders)
+                        }
+                    },
+                ) {
 
+                    val data = (state as PendingOrdersState.Success).orders
+                    LazyColumn {
+                        items(data) { it ->
+                            PendingOrderItem(order = it, onTrack = {
+                                Gson().toJson(
+                                    it.copy(
+                                        image = String(),
+                                        products = emptyList(),
+                                        locationID = String(),
+                                        paymentMethod = String(),
+                                        price = String(),
+                                        totalPrice = String(),
+                                        refill = String(),
+                                        size = String(),
+                                        name = String()
+                                    )
+                                )?.let { json ->
+                                    navHostController.navigate(
+                                        Screens.Track.routeWithArgs(json)
+                                    )
+                                }
+                            }, onCancel = {
+                                coroutineScope.launch {
+                                    viewModel.userIntent.send(PendingOrdersIntent.ShowCancel(it))
+                                }
+                            }, onCheckPayment = {
+                                navHostController.navigate(Screens.CheckPayment.routeWithArgs(it.id))
+                            })
+                        }
+                    }
+
+                }
                 if (dialogState) {
 
                     val reason = remember {

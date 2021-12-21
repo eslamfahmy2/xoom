@@ -5,6 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class TrackDto(
 
+
+    @Expose
+    @SerializedName(value = "orderstatus", alternate = ["orderstatus"])
+    val orderstatus: String?,
+
     @Expose
     @SerializedName(value = "error", alternate = ["Error"])
     val error: String?,

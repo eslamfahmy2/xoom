@@ -13,10 +13,7 @@ import com.chuify.cleanxoomclient.domain.utils.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,6 +34,8 @@ class CompletedOrdersViewModel @Inject constructor(
     private val _progress: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val progress get() = _progress.asSharedFlow()
 
+    private val _refreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val refreshing get() = _refreshing.asStateFlow()
 
 
     init {
@@ -83,6 +82,7 @@ class CompletedOrdersViewModel @Inject constructor(
 
 
     private suspend fun loadCompletedOrders() = viewModelScope.launch(Dispatchers.IO) {
+        _refreshing.value = true
         getCompletedOrderListUseCase().collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {
@@ -99,6 +99,7 @@ class CompletedOrdersViewModel @Inject constructor(
 
                 }
             }
+            _refreshing.value = false
         }
     }
 

@@ -100,9 +100,7 @@ class CheckoutViewModel @Inject constructor(
                             }
                         }
                         Log.d(TAG, "handleIntent: $res")
-                        res.firstOrNull { it.selected }?.let {
-                            selectedLocation.value = it
-                        }
+                        selectedLocation.value = res.firstOrNull { it.selected }
                     }
                     is CheckoutIntent.ChangeStatus -> {
                         _state.value = CheckoutState.Success.OrderSubmitted()

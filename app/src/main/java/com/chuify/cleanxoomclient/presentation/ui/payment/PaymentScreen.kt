@@ -245,8 +245,8 @@ fun CheckPaymentScreen(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(true) {
-        if (state is CheckPaymentState.Loading)
-            viewModel.userIntent.send(CheckPaymentIntent.Check(id))
+        viewModel.userIntent.send(CheckPaymentIntent.Check(id))
+
     }
 
     when (state) {
@@ -315,7 +315,6 @@ fun CheckPaymentScreen(
                     )
                 }
             }
-
         }
     }
 }
@@ -475,7 +474,7 @@ fun FailScreen(navHostController: NavHostController, msg: String, popUp: Boolean
                 modifier = Modifier
                     .padding(8.dp)
                     .align(Alignment.CenterVertically),
-                text = "Check later",
+                text = "Confirm payment",
             )
         }
 

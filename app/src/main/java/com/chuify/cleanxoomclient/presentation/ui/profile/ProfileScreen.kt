@@ -128,33 +128,51 @@ fun ProfileScreen(
                                             modifier = Modifier.fillMaxWidth()
                                         ) {
 
-                                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                                Image(
-                                                    modifier = Modifier
-                                                        .padding(16.dp)
-                                                        .size(50.dp)
-                                                        .clip(CircleShape)
-                                                        .border(2.dp, Color.Gray, CircleShape)
-                                                        .padding(8.dp),
-                                                    imageVector = Icons.Filled.Person,
-                                                    contentDescription = "avatar",
-                                                    contentScale = ContentScale.Crop,
+                                            Image(
+                                                modifier = Modifier
+                                                    .padding(16.dp)
+                                                    .size(50.dp)
+                                                    .clip(CircleShape)
+                                                    .border(2.dp, Color.Gray, CircleShape)
+                                                    .padding(8.dp),
+                                                imageVector = Icons.Filled.Person,
+                                                contentDescription = "avatar",
+                                                contentScale = ContentScale.Crop,
 
-                                                    )
+                                                )
+
+                                            Divider(
+                                                color = Color.LightGray, thickness = 1.dp,
+                                                modifier = Modifier.padding(start = 56.dp),
+                                            )
+
+
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(8.dp),
+                                                horizontalArrangement = Arrangement.Start,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(
+                                                    modifier = Modifier.padding(8.dp),
+                                                    imageVector = Icons.Filled.PermIdentity,
+                                                    contentDescription = null,
+                                                    tint = Color.Green
+                                                )
 
                                                 Column {
 
                                                     Text(
-                                                        text = state.user.firstname,
-                                                        fontSize = 16.sp,
-                                                        modifier = Modifier.padding(8.dp)
+                                                        text = "First Name",
+                                                        fontSize = 12.sp,
+                                                        modifier = Modifier.padding(4.dp),
                                                     )
                                                     Text(
-                                                        text = state.user.phone,
+                                                        text = state.user.firstname,
                                                         fontSize = 16.sp,
-                                                        modifier = Modifier.padding(start = 8.dp),
+                                                        modifier = Modifier.padding(4.dp),
                                                     )
-
                                                 }
 
                                             }
@@ -164,6 +182,138 @@ fun ProfileScreen(
                                                 modifier = Modifier.padding(start = 56.dp),
                                             )
 
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(8.dp),
+                                                horizontalArrangement = Arrangement.Start,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(
+                                                    modifier = Modifier.padding(8.dp),
+                                                    imageVector = Icons.Filled.PermIdentity,
+                                                    contentDescription = null,
+                                                    tint = Color.Green
+                                                )
+
+                                                Column {
+
+                                                    Text(
+                                                        text = "Last Name",
+                                                        fontSize = 12.sp,
+                                                        modifier = Modifier.padding(4.dp),
+                                                    )
+                                                    Text(
+                                                        text = state.user.lastname,
+                                                        fontSize = 16.sp,
+                                                        modifier = Modifier.padding(4.dp),
+                                                    )
+                                                }
+
+                                            }
+
+                                            Divider(
+                                                color = Color.LightGray, thickness = 1.dp,
+                                                modifier = Modifier.padding(start = 56.dp),
+                                            )
+
+
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(8.dp),
+                                                horizontalArrangement = Arrangement.Start,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(
+                                                    modifier = Modifier.padding(8.dp),
+                                                    imageVector = Icons.Filled.Phone,
+                                                    contentDescription = null,
+                                                    tint = Color.Green
+                                                )
+
+                                                Column {
+
+                                                    Text(
+                                                        text = "Phone Number",
+                                                        fontSize = 12.sp,
+                                                        modifier = Modifier.padding(4.dp),
+                                                    )
+                                                    Text(
+                                                        text = state.user.phone,
+                                                        fontSize = 16.sp,
+                                                        modifier = Modifier.padding(4.dp),
+                                                    )
+                                                }
+
+                                            }
+
+                                        }
+
+                                    }
+
+
+                                }
+
+                                item {
+                                    Card(
+                                        elevation = 4.dp,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp)
+                                    ) {
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth()
+                                        ) {
+
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(8.dp),
+                                                horizontalArrangement = Arrangement.SpaceBetween,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Row(
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    Icon(
+                                                        modifier = Modifier.padding(8.dp),
+                                                        imageVector = Icons.Filled.DarkMode,
+                                                        contentDescription = null,
+                                                        tint = Color.Green
+                                                    )
+                                                    Text(
+                                                        text = "Dark mode",
+                                                        fontSize = 16.sp,
+                                                        modifier = Modifier.padding(4.dp),
+                                                    )
+                                                }
+                                                Log.d(TAG, "ProfileScreen: is dark $isDark")
+                                                Switch(
+                                                    checked = isDark,
+                                                    onCheckedChange = {
+                                                        coroutineScope.launch {
+                                                            viewModel.userIntent.send(
+                                                                ProfileIntent.ChangeTheme(
+                                                                    it
+                                                                )
+                                                            )
+                                                        }
+                                                    },
+                                                    colors = SwitchDefaults.colors(
+                                                        checkedThumbColor = Color.Green
+                                                    )
+
+                                                )
+
+                                            }
+
+
+
+                                            Divider(
+                                                color = Color.LightGray, thickness = 1.dp,
+                                                modifier = Modifier.padding(start = 56.dp),
+                                            )
 
                                             Row(
                                                 modifier = Modifier
@@ -239,132 +389,12 @@ fun ProfileScreen(
                                                     tint = Color.LightGray
                                                 )
                                             }
-                                        }
-
-                                    }
-
-
-                                }
-
-                                item {
-                                    Card(
-                                        elevation = 4.dp,
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp)
-                                    ) {
-                                        Column(
-                                            modifier = Modifier.fillMaxWidth()
-                                        ) {
-
-                                            Row(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(8.dp),
-                                                horizontalArrangement = Arrangement.SpaceBetween,
-                                                verticalAlignment = Alignment.CenterVertically
-                                            ) {
-                                                Row(
-                                                    verticalAlignment = Alignment.CenterVertically
-                                                ) {
-                                                    Icon(
-                                                        modifier = Modifier.padding(8.dp),
-                                                        imageVector = Icons.Filled.DarkMode,
-                                                        contentDescription = null,
-                                                        tint = Color.Green
-                                                    )
-                                                    Text(
-                                                        text = "Dark mode",
-                                                        fontSize = 16.sp,
-                                                        modifier = Modifier.padding(4.dp),
-                                                    )
-                                                }
-                                                Log.d(TAG, "ProfileScreen: is dark $isDark")
-                                                Switch(
-                                                    checked = isDark,
-                                                    onCheckedChange = {
-                                                        coroutineScope.launch {
-                                                            viewModel.userIntent.send(
-                                                                ProfileIntent.ChangeTheme(
-                                                                    it
-                                                                )
-                                                            )
-                                                        }
-                                                    },
-                                                    colors = SwitchDefaults.colors(
-                                                        checkedThumbColor = Color.Green
-                                                    )
-
-                                                )
-
-                                            }
-
-
 
                                             Divider(
                                                 color = Color.LightGray, thickness = 1.dp,
                                                 modifier = Modifier.padding(start = 56.dp),
                                             )
 
-                                            Row(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(8.dp),
-                                                horizontalArrangement = Arrangement.SpaceBetween,
-                                                verticalAlignment = Alignment.CenterVertically
-                                            ) {
-                                                Row(
-                                                    verticalAlignment = Alignment.CenterVertically
-                                                ) {
-                                                    Icon(
-                                                        modifier = Modifier.padding(8.dp),
-                                                        imageVector = Icons.Filled.PermIdentity,
-                                                        contentDescription = null,
-                                                        tint = Color.Green
-                                                    )
-                                                    Text(
-                                                        text = "First name " + state.user.firstname,
-                                                        fontSize = 16.sp,
-                                                        modifier = Modifier.padding(4.dp),
-                                                    )
-                                                }
-                                                Icon(
-                                                    modifier = Modifier,
-                                                    imageVector = Icons.Filled.KeyboardArrowRight,
-                                                    contentDescription = null,
-                                                    tint = Color.LightGray
-                                                )
-                                            }
-
-                                            Row(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(8.dp),
-                                                horizontalArrangement = Arrangement.SpaceBetween,
-                                                verticalAlignment = Alignment.CenterVertically
-                                            ) {
-                                                Row(
-                                                    verticalAlignment = Alignment.CenterVertically
-                                                ) {
-                                                    Icon(
-                                                        modifier = Modifier.padding(8.dp),
-                                                        imageVector = Icons.Filled.PermIdentity,
-                                                        contentDescription = null,
-                                                        tint = Color.Green
-                                                    )
-                                                    Text(
-                                                        text = "Last name " + state.user.lastname,
-                                                        fontSize = 16.sp,
-                                                        modifier = Modifier.padding(4.dp),
-                                                    )
-                                                }
-                                                Icon(
-                                                    modifier = Modifier,
-                                                    imageVector = Icons.Filled.KeyboardArrowRight,
-                                                    contentDescription = null,
-                                                    tint = Color.LightGray
-                                                )
-                                            }
 
 
                                             Row(
@@ -389,12 +419,7 @@ fun ProfileScreen(
                                                         modifier = Modifier.padding(4.dp),
                                                     )
                                                 }
-                                                Icon(
-                                                    modifier = Modifier,
-                                                    imageVector = Icons.Filled.KeyboardArrowRight,
-                                                    contentDescription = null,
-                                                    tint = Color.LightGray
-                                                )
+
                                             }
 
 

@@ -104,7 +104,7 @@ fun TrackOrderScreen(
                 }
                 is TrackOrderState.Success -> {
                     val trackingData = state.trackData
-                    val status = order.status
+                    val status = state.trackData.orderstatus
                     Column(modifier = Modifier.padding(8.dp)) {
 
                         Row(

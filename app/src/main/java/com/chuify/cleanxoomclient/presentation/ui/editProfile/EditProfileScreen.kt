@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
+import com.chuify.cleanxoomclient.presentation.components.LoadingDialog
 import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -74,7 +75,6 @@ fun EditProfileScreen(
             elevation = 20.dp
         )
         {
-
             Column(modifier = Modifier.padding(8.dp)) {
 
                 Text(
@@ -215,40 +215,33 @@ fun EditProfileScreen(
                         }
                     }
 
-                    when (state) {
-                        is EditProfileState.Error -> {
-                            state.message?.let {
-                                coroutineScope.launch {
-                                    scaffoldState.snackbarHostState.showSnackbar(
-                                        message = it,
-                                        actionLabel = "Dismiss",
-                                    )
-                                }
-                            }
-                        }
-                        EditProfileState.Loading -> {
-
-                        }
-                        is EditProfileState.Success -> {
-
-                        }
-                        EditProfileState.ProfileUpdated -> {
-                            coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    message = "Profile updated successfully",
-                                    actionLabel = "Dismiss",
-                                )
-                            }
-
-
-                            //    navHostController.popBackStack()
-                        }
-                    }
 
                 }
             }
 
+        }
 
+        when (state) {
+            is EditProfileState.Error -> {
+                state.message?.let {
+                    coroutineScope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = "Dismiss",
+                        )
+                    }
+                }
+            }
+            EditProfileState.Loading -> {
+                LoadingDialog()
+            }
+            is EditProfileState.Success -> {
+
+            }
+            EditProfileState.ProfileUpdated -> {
+                navHostController.popBackStack()
+                //
+            }
         }
 
     }

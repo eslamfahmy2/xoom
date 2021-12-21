@@ -7,6 +7,7 @@ import com.chuify.cleanxoomclient.domain.utils.ResponseState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -35,6 +36,8 @@ class PaymentViewModel @Inject constructor(
         MutableStateFlow(CheckPaymentState.Loading())
     val state get() = _state.asStateFlow()
 
+    private var breaker = true
+
     init {
         handleIntent()
     }
@@ -51,27 +54,36 @@ class PaymentViewModel @Inject constructor(
 
     private suspend fun checkPayment(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _state.value = CheckPaymentState.Loading()
-            when (val res = orderRepo.confirmPayment(id)) {
-                is ResponseState.Error -> {
-                    res.message?.let {
-                        _state.value = CheckPaymentState.Error(it)
-                    }
-                }
-                is ResponseState.Success -> {
-                    when (res.data.status) {
-                        300 -> {
-                            _state.value = CheckPaymentState.Loading(res.data.msg)
-                        }
-                        200 -> {
-                            _state.value = CheckPaymentState.Success(res.data.msg)
-                        }
-                        400 -> {
-                            _state.value = CheckPaymentState.Error(res.data.msg)
+
+            while (breaker) {
+                _state.value = CheckPaymentState.Loading()
+                when (val res = orderRepo.confirmPayment(id)) {
+                    is ResponseState.Error -> {
+                        res.message?.let {
+                            _state.value = CheckPaymentState.Error(it)
                         }
                     }
+                    is ResponseState.Success -> {
+                        when (res.data.status) {
+                            300 -> {
+                                _state.value = CheckPaymentState.Loading(res.data.msg)
+                                breaker = true
+                            }
+                            200 -> {
+                                _state.value = CheckPaymentState.Success(res.data.msg)
+                                breaker = false
+                            }
+                            400 -> {
+                                _state.value = CheckPaymentState.Error(res.data.msg)
+                                breaker = false
+                            }
+                        }
+                    }
                 }
+                delay(5000)
             }
+
+
         }
     }
 

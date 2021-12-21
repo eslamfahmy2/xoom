@@ -43,7 +43,6 @@ import com.chuify.cleanxoomclient.domain.model.Location
 import com.chuify.cleanxoomclient.presentation.LocationActivity
 import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
 import com.chuify.cleanxoomclient.presentation.components.LoadingDialog
-import com.chuify.cleanxoomclient.presentation.components.LoadingListScreen
 import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
@@ -62,6 +61,7 @@ fun LocationsScreen(
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.collectAsState().value
+    val locations = viewModel.locations.collectAsState().value
 
     val showDialog = viewModel.showDialog.collectAsState().value
     val context = LocalContext.current.applicationContext
@@ -122,6 +122,75 @@ fun LocationsScreen(
                     style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 )
 
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                ) {
+
+                    items(locations) { it ->
+                        LocationItem(it) { location ->
+                            location.id?.let {
+                                viewModel.delete(it)
+                            }
+                        }
+                    }
+
+                    item {
+
+                        Button(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .fillMaxWidth(),
+                            onClick = {
+                                coroutineScope.launch {
+                                    viewModel.userIntent.send(LocationsIntent.ShowDialog)
+                                }
+                            })
+                        {
+                            Text(
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .background(
+                                        shape = MaterialTheme.shapes.large,
+                                        color = MaterialTheme.colors.primary
+                                    ),
+                                text = "Add address",
+                                style = TextStyle(
+                                    fontSize = 16.sp
+                                )
+                            )
+                        }
+                    }
+
+                    item {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            onClick = {
+                                val intent = Intent(context, LocationActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                context.startActivity(intent)
+                            },
+                            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface)
+                        ) {
+
+                            Icon(
+                                modifier = Modifier.padding(8.dp),
+                                imageVector = Icons.Filled.MyLocation,
+                                contentDescription = null
+                            )
+                            Text(
+                                text = stringResource(id = R.string.location_map),
+                                color = MaterialTheme.colors.primary
+                            )
+                        }
+                    }
+
+
+                }
+
                 when (state) {
                     is LocationsState.Error -> {
                         state.message?.let {
@@ -134,80 +203,10 @@ fun LocationsScreen(
                         }
                     }
                     LocationsState.Loading -> {
-                        LoadingListScreen(
-                            count = 3,
-                            height = 250.dp
-                        )
+                        LoadingDialog()
                     }
                     is LocationsState.Success -> {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp)
-                        ) {
 
-                            items(state.locations) { it ->
-                                LocationItem(it) { location ->
-                                    location.id?.let {
-                                        viewModel.delete(it)
-                                    }
-                                }
-                            }
-
-                            item {
-
-                                Button(
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .fillMaxWidth(),
-                                    onClick = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(LocationsIntent.ShowDialog)
-                                        }
-                                    })
-                                {
-                                    Text(
-                                        modifier = Modifier
-                                            .padding(8.dp)
-                                            .background(
-                                                shape = MaterialTheme.shapes.large,
-                                                color = MaterialTheme.colors.primary
-                                            ),
-                                        text = "Add address",
-                                        style = TextStyle(
-                                            fontSize = 16.sp
-                                        )
-                                    )
-                                }
-                            }
-
-                            item {
-                                Button(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp),
-                                    onClick = {
-                                        val intent = Intent(context, LocationActivity::class.java)
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                        context.startActivity(intent)
-                                    },
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface)
-                                ) {
-
-                                    Icon(
-                                        modifier = Modifier.padding(8.dp),
-                                        imageVector = Icons.Filled.MyLocation,
-                                        contentDescription = null
-                                    )
-                                    Text(
-                                        text = stringResource(id = R.string.location_map),
-                                        color = MaterialTheme.colors.primary
-                                    )
-                                }
-                            }
-
-
-                        }
                     }
                     LocationsState.LoadSaveAddress -> {
                         LoadingDialog()

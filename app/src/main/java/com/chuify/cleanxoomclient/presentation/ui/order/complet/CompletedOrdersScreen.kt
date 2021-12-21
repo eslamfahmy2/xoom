@@ -23,6 +23,8 @@ import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
 import com.chuify.cleanxoomclient.presentation.components.LoadingListScreen
 import com.chuify.cleanxoomclient.presentation.ui.order.component.CompleteOrderItem
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
@@ -76,14 +78,27 @@ fun CompletedOrdersScreen(
             }
 
             is CompletedOrdersState.Success -> {
-                val data = (state as CompletedOrdersState.Success).orders
-                LazyColumn {
-                    items(data) {
-                        CompleteOrderItem(order = it, onReorder = {
-                            coroutineScope.launch {
-                                viewModel.userIntent.send(CompletedOrdersIntent.Reorder(it))
-                            }
-                        })
+
+                val isRefreshing by viewModel.refreshing.collectAsState()
+                SwipeRefresh(
+                    state = rememberSwipeRefreshState(isRefreshing),
+                    onRefresh = {
+                        coroutineScope.launch {
+                            viewModel.userIntent.send(CompletedOrdersIntent.LoadCompletedOrders)
+                        }
+                    },
+                ) {
+
+
+                    val data = (state as CompletedOrdersState.Success).orders
+                    LazyColumn {
+                        items(data) {
+                            CompleteOrderItem(order = it, onReorder = {
+                                coroutineScope.launch {
+                                    viewModel.userIntent.send(CompletedOrdersIntent.Reorder(it))
+                                }
+                            })
+                        }
                     }
                 }
 

@@ -30,7 +30,8 @@ class SubmitOrderUseCase @Inject constructor(
     ) = flow<SubmitOrderStatus> {
         try {
             emit(SubmitOrderStatus.Loading())
-            locations?.let { location ->
+            if (locations == null || locations.id.isNullOrEmpty()) throw Exception("please select location")
+            locations.let { location ->
 
                 val totalPrice = items.sumOf { item -> item.basePrice * item.quantity }
                 val orderJson = JsonObject()

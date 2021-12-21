@@ -1,8 +1,10 @@
 package com.chuify.cleanxoomclient.presentation.ui.locations
 
+
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.chuify.cleanxoomclient.domain.model.Location
 import com.chuify.cleanxoomclient.domain.repository.LocationRepo
 import com.chuify.cleanxoomclient.domain.usecase.location.GetLocationsUseCase
 import com.chuify.cleanxoomclient.domain.usecase.location.SaveLocationsUseCase
@@ -32,6 +34,8 @@ class LocationsViewModel @Inject constructor(
     private val _state: MutableStateFlow<LocationsState> =
         MutableStateFlow(LocationsState.Loading)
     val state get() = _state.asStateFlow()
+
+    val locations: MutableStateFlow<List<Location>> = MutableStateFlow(listOf())
 
     private val _showDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val showDialog get() = _showDialog.asStateFlow()
@@ -135,6 +139,7 @@ class LocationsViewModel @Inject constructor(
                     is DataState.Success -> {
                         Log.d(TAG, "Success: location " + dataState.data)
                         dataState.data?.let {
+                            locations.value = it
                             _state.value = LocationsState.Success(it)
                         }
 
@@ -147,6 +152,7 @@ class LocationsViewModel @Inject constructor(
 
     fun delete(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            _state.value = LocationsState.LoadSaveAddress
             when (val res = locationRepo.deleteAddress(id)) {
                 is ResponseState.Error -> {
                     Log.d(TAG, "Error: " + res.message)

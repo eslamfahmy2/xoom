@@ -12,14 +12,12 @@ import com.chuify.cleanxoomclient.domain.utils.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val TAG = "PendingOrdersViewModel"
+
 @HiltViewModel
 class PendingOrdersViewModel @Inject constructor(
     private val getPendingOrderListUseCase: GetPendingOrderListUseCase,
@@ -39,6 +37,9 @@ class PendingOrdersViewModel @Inject constructor(
     val progress get() = _progress.asSharedFlow()
 
     private val _orderToCancel: MutableState<Order?> = mutableStateOf(null)
+
+    private val _refreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val refreshing get() = _refreshing.asStateFlow()
 
     init {
         handleIntent()
@@ -97,6 +98,7 @@ class PendingOrdersViewModel @Inject constructor(
 
 
     private suspend fun loadPendingOrders() = viewModelScope.launch(Dispatchers.IO) {
+        _refreshing.value = true
         getPendingOrderListUseCase().collect { dataState ->
             when (dataState) {
                 is DataState.Error -> {
@@ -111,8 +113,10 @@ class PendingOrdersViewModel @Inject constructor(
                         _state.value = PendingOrdersState.Success(orders = it)
                     }
                     _progress.value = false
+
                 }
             }
+            _refreshing.value = false
         }
     }
 

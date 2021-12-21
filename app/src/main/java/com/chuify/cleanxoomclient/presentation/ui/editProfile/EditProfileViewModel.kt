@@ -99,7 +99,6 @@ class EditProfileViewModel @Inject constructor(
                     }
                     is DataState.Success -> {
                         _state.value = EditProfileState.ProfileUpdated
-
                     }
                 }
             }
@@ -111,10 +110,10 @@ class EditProfileViewModel @Inject constructor(
             when (dataState) {
                 is DataState.Error -> {
                     Log.d(TAG, "Error: " + dataState.message)
-                    //   _state.value = EditProfileState.Error(dataState.message)
+                    _state.value = EditProfileState.Error(dataState.message)
                 }
                 is DataState.Loading -> {
-                    //  _state.value = EditProfileState.Loading
+                    _state.value = EditProfileState.Loading
                 }
                 is DataState.Success -> {
                     dataState.data?.let {
@@ -122,7 +121,7 @@ class EditProfileViewModel @Inject constructor(
                         _firstName.value = dataState.data.firstname
                         _lastName.value = dataState.data.lastname
                         _email.value = dataState.data.email
-                        // _state.value = EditProfileState.Success(it)
+                        _state.value = EditProfileState.Success(it)
                     }
 
                 }
