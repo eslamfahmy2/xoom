@@ -25,12 +25,12 @@ android {
     }
     buildTypes {
         release {
-            resValue "string", "google_maps_api_key", "AIzaSyDd7ee5nS9rY_iSf03Lu0swXVAELPN-9eE"
+            resValue "string", "google_maps_api_key", "AIzaSyDTd2WiwUh-yQ1KAyLBv6ANqP2AMNnvKFQ"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            resValue "string", "google_maps_api_key", "AIzaSyDd7ee5nS9rY_iSf03Lu0swXVAELPN-9eE"
+            resValue "string", "google_maps_api_key", "AIzaSyDTd2WiwUh-yQ1KAyLBv6ANqP2AMNnvKFQ"
         }
     }
     compileOptions {
