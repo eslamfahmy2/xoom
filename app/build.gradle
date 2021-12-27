@@ -13,7 +13,7 @@ android {
         applicationId "com.chuify.cleanxoomclient"
         minSdk 21
         targetSdk 31
-        versionCode 6
+        versionCode 7
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -95,6 +95,8 @@ dependencies {
     //FireBase
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
     implementation platform('com.google.firebase:firebase-bom:29.0.0')
+    implementation 'com.google.android.gms:play-services-safetynet:18.0.0'
+    implementation 'androidx.browser:browser:1.4.0'
     // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-messaging-ktx'

@@ -353,7 +353,12 @@ fun CheckoutScreen(
 
         is CheckoutState.Error.PaymentError -> {
             state.message?.let {
-                navHostController.navigate(Screens.Fail.routeWithArgs(it))
+                coroutineScope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = it,
+                        actionLabel = "Dismiss",
+                    )
+                }
             }
         }
         is CheckoutState.Error.SubmitOrderError -> {

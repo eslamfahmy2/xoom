@@ -150,4 +150,6 @@ sealed class Screens(val route: String) {
     }
 
     object SignUp : Screens("SignUp")
+
+    object OTP : Screens("otp")
 }

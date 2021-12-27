@@ -1,5 +1,6 @@
 package com.chuify.cleanxoomclient.presentation.ui.authentication
 
+import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,7 +8,11 @@ import com.chuify.cleanxoomclient.domain.usecase.auth.LoginResult
 import com.chuify.cleanxoomclient.domain.usecase.auth.SignInUseCase
 import com.chuify.cleanxoomclient.domain.usecase.auth.SignUpUseCase
 import com.chuify.cleanxoomclient.domain.utils.DataState
-
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -16,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 private const val TAG = "LoginViewModel"
@@ -52,6 +58,9 @@ class LoginViewModel @Inject constructor(
         MutableStateFlow(AuthenticationState.Idl)
     val stateUp get() = _stateUp.asStateFlow()
 
+    private val _stateVerify: MutableStateFlow<AuthenticationState> =
+        MutableStateFlow(AuthenticationState.Idl)
+    val stateVerify get() = _stateVerify.asStateFlow()
 
     init {
         handleIntent()
@@ -136,6 +145,42 @@ class LoginViewModel @Inject constructor(
     fun idl() {
         _state.value = AuthenticationState.Idl
         _stateUp.value = AuthenticationState.Idl
+    }
+
+    fun verifyNumberCode(value: String, activity: Activity) {
+
+        val mAuth = FirebaseAuth.getInstance()
+        mAuth.firebaseAuthSettings.setAppVerificationDisabledForTesting(true)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _stateVerify.value = AuthenticationState.Loading
+            val callback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                    Log.d(TAG, "onVerificationCompleted: ")
+                }
+
+                override fun onVerificationFailed(e: FirebaseException) {
+                    Log.d(TAG, "onVerificationFailed: " + e.message)
+                    _stateVerify.value = AuthenticationState.Error(e.message)
+                }
+
+                override fun onCodeSent(
+                    verificationId: String,
+                    token: PhoneAuthProvider.ForceResendingToken,
+                ) {
+                    Log.d(TAG, "onCodeSent: ")
+                }
+            }
+            val options = PhoneAuthOptions.newBuilder(mAuth)
+                .setPhoneNumber(value)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setCallbacks(callback)
+                .setActivity(activity)
+                .build()
+
+            PhoneAuthProvider.verifyPhoneNumber(options)
+
+        }
     }
 
 

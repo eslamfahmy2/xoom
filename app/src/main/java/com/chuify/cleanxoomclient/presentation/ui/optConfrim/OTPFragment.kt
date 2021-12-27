@@ -20,12 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.chuify.cleanxoomclient.presentation.application.BaseApplication
 import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
 import com.chuify.cleanxoomclient.presentation.components.HomeBar
 import com.chuify.cleanxoomclient.presentation.theme.XoomGasClientTheme
-import com.chuify.cleanxoomclient.presentation.ui.optConfrim.component.OTPScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -90,13 +88,14 @@ class OTPFragment : Fragment() {
                             )
                         }
                     ) {
-
+/*
                         OTPScreen(
                             phone = phone,
                             coroutineScope = coroutineScope,
                             userIntent = viewModel.userIntent,
                             navController = findNavController()
                         )
+                        */
                         when (state) {
                             is OTPState.Error -> {
                                 (state as OTPState.Error).message?.let {

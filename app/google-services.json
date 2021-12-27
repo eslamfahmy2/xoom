@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "958735187527-3eesfc3v2j98opn4nk2802ml7hm1bkrv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chuify.cleanxoomclient",
+            "certificate_hash": "a826254a2634039426e29dd3d56a6bb1c734781c"
+          }
+        },
+        {
           "client_id": "958735187527-jvfgnvo5uflotruau5nca35mdol4et4n.apps.googleusercontent.com",
           "client_type": 3
         }

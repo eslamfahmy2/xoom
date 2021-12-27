@@ -8,6 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.chuify.cleanxoomclient.presentation.navigation.Screens
 import com.chuify.cleanxoomclient.presentation.ui.authentication.LoginViewModel
 import com.chuify.cleanxoomclient.presentation.ui.authentication.component.AuthenticationScreen
+import com.chuify.cleanxoomclient.presentation.ui.authentication.component.OTPScreen
 import com.chuify.cleanxoomclient.presentation.ui.authentication.component.SignupScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -39,6 +40,13 @@ fun AuthenticationNavigation(loginViewModel: LoginViewModel = hiltViewModel()) {
             route = Screens.SignUp.route,
         ) {
             SignupScreen(viewModel = loginViewModel, navHostController = navHostController)
+        }
+
+
+        composable(
+            route = Screens.OTP.route,
+        ) {
+            OTPScreen(viewModel = loginViewModel, navHostController = navHostController)
         }
 
     }
