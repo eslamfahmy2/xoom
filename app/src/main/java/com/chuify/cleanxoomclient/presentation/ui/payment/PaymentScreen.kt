@@ -175,36 +175,6 @@ fun PaymentScreen(
                             }
 
 
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-
-                                PaymentItem(
-                                    modifier = Modifier.fillMaxWidth(0.9f),
-                                    paymentMethod = Payments.Points
-                                )
-
-                                Checkbox(modifier = Modifier
-                                    .fillMaxWidth()
-                                    .align(Alignment.CenterVertically)
-                                    .padding(end = 16.dp),
-                                    checked = paymentMethod is Payments.Points,
-                                    onCheckedChange = {
-                                        coroutineScope.launch {
-                                            viewModel.userIntent.send(
-                                                CheckoutIntent.ChangePayment(
-                                                    Payments.Points
-                                                )
-                                            )
-                                            navHostController.popBackStack()
-                                        }
-                                    })
-
-                            }
-
-
                         }
 
                     }
