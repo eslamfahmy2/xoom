@@ -35,7 +35,7 @@ import coil.compose.rememberImagePainter
 import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.domain.model.Order
 import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
-import com.chuify.cleanxoomclient.presentation.components.LoadingListScreen
+import com.chuify.cleanxoomclient.presentation.components.LoadingDialog
 import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
 import com.chuify.cleanxoomclient.presentation.navigation.Screens
 import com.chuify.cleanxoomclient.presentation.ui.order.component.OrderStatus
@@ -99,8 +99,7 @@ fun TrackOrderScreen(
                     }
                 }
                 TrackOrderState.Loading -> {
-                    LoadingListScreen(count = 5, height = 240.dp)
-
+                    LoadingDialog()
                 }
                 is TrackOrderState.Success -> {
                     val trackingData = state.trackData
@@ -439,7 +438,8 @@ fun TrackOrderScreen(
                                                             .padding(8.dp)
                                                     ) {
 
-                                                        trackingData.driverRating?.let {
+
+                                                        if (!trackingData.driverRating.isNullOrEmpty()) {
                                                             Text(
                                                                 modifier = Modifier
                                                                     .wrapContentSize(),
@@ -456,10 +456,10 @@ fun TrackOrderScreen(
                                                             )
                                                         }
 
-                                                        trackingData.driverNumberOfTrips?.let {
+                                                        if (!trackingData.driverNumberOfTrips.isNullOrEmpty()) {
                                                             Text(
                                                                 modifier = Modifier.wrapContentSize(),
-                                                                text = "(" + it.toString() + ")",
+                                                                text = "($it)",
                                                                 color = Color.DarkGray
                                                             )
                                                         }
@@ -472,27 +472,34 @@ fun TrackOrderScreen(
 
                                             val context = LocalContext.current
 
-                                            Icon(
-                                                modifier = Modifier
-                                                    .padding(8.dp)
-                                                    .clickable {
-                                                        trackingData.driverPhone?.let {
-                                                            val dialIntent =
-                                                                Intent(Intent.ACTION_DIAL)
-                                                            dialIntent.data =
-                                                                Uri.parse("tel:$it")
-                                                            startActivity(context, dialIntent, null)
+                                            if (!trackingData.driverPhone.isNullOrEmpty()) {
+
+                                                Icon(
+                                                    modifier = Modifier
+                                                        .padding(8.dp)
+                                                        .clickable {
+                                                            trackingData.driverPhone.let {
+                                                                val dialIntent =
+                                                                    Intent(Intent.ACTION_DIAL)
+                                                                dialIntent.data =
+                                                                    Uri.parse("tel:$it")
+                                                                startActivity(
+                                                                    context,
+                                                                    dialIntent,
+                                                                    null
+                                                                )
+                                                            }
                                                         }
-                                                    }
-                                                    .background(
-                                                        Color.Green,
-                                                        shape = RoundedCornerShape(8.dp)
-                                                    )
-                                                    .padding(8.dp),
-                                                imageVector = Icons.Filled.Phone,
-                                                contentDescription = null,
-                                                tint = Color.White
-                                            )
+                                                        .background(
+                                                            Color.Green,
+                                                            shape = RoundedCornerShape(8.dp)
+                                                        )
+                                                        .padding(8.dp),
+                                                    imageVector = Icons.Filled.Phone,
+                                                    contentDescription = null,
+                                                    tint = Color.White
+                                                )
+                                            }
 
                                         }
 

@@ -7,7 +7,7 @@ data class TrackDto(
 
 
     @Expose
-    @SerializedName(value = "orderstatus", alternate = ["orderstatus"])
+    @SerializedName(value = "orderstatus")
     val orderstatus: String?,
 
     @Expose
@@ -56,7 +56,7 @@ data class TrackDto(
 
     @Expose
     @SerializedName(value = "driverNumberOfTrips")
-    val driverNumberOfTrips: Int?,
+    val driverNumberOfTrips: String?,
 
     @Expose
     @SerializedName(value = "driverPhone")
@@ -68,7 +68,7 @@ data class TrackDto(
 
     @Expose
     @SerializedName(value = "driverRating")
-    val driverRating: Int?,
+    val driverRating: String?,
 
     @Expose
     @SerializedName(value = "expectedDeliveryTime")
