@@ -76,10 +76,10 @@ sealed class Screens(val route: String) {
 
     object Track : Screens("track") {
 
-        const val trackArg = "order"
+        const val id = "id"
 
         fun fullRoute(): String {
-            return "$route/{$trackArg}"
+            return "$route/{$id}"
         }
 
         fun routeWithArgs(input: String): String {
@@ -110,14 +110,14 @@ sealed class Screens(val route: String) {
     object Success : Screens("success") {
 
         const val arg = "msg"
-        const val popUp = "pop"
+        const val id = "pop"
 
         fun fullRoute(): String {
-            return "$route/{$arg}/{$popUp}"
+            return "$route/{$arg}/{$id}"
         }
 
-        fun routeWithArgs(input: String, pop: Boolean = false): String {
-            return "$route/$input/$pop"
+        fun routeWithArgs(input: String, id: String): String {
+            return "$route/$input/$id"
         }
     }
 
@@ -138,6 +138,7 @@ sealed class Screens(val route: String) {
     object CheckPayment : Screens("CheckPayment") {
 
         const val arg = "msg"
+        const val orderID = "id"
 
         fun fullRoute(): String {
             return "$route/{$arg}"

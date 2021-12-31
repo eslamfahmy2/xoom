@@ -12,12 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.domain.model.Vendor
 
 
@@ -40,7 +38,7 @@ fun VendorItem(
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp),
+                    .height(250.dp),
                 painter = rememberImagePainter(
                     data = vendor.image,
                     builder = {
@@ -75,23 +73,6 @@ fun VendorItem(
                     fontWeight = FontWeight.Bold
                 )
 
-                Text(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(12.dp)
-                        .background(
-                            color = MaterialTheme.colors.primary,
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .padding(
-                            start = 24.dp,
-                            end = 24.dp,
-                            top = 8.dp,
-                            bottom = 8.dp
-                        ),
-                    text = stringResource(R.string.from_kes_1_500),
-                    fontSize = 17.sp
-                )
 
             }
 

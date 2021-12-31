@@ -72,7 +72,6 @@ fun CartItem(
                     contentScale = ContentScale.Crop
                 )
 
-
                 Column(
                     modifier = Modifier,
                 ) {
@@ -141,7 +140,7 @@ fun CartItem(
                 }
             }
 
-
+       /*
             Text(
                 text = "X ${order.quantity}",
                 color = MaterialTheme.colors.onSurface,
@@ -150,7 +149,7 @@ fun CartItem(
                     .padding(end = 16.dp, top = 8.dp)
 
             )
-
+*/
         }
 
 

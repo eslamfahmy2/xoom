@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.chuify.cleanxoomclient.domain.model.Order
 import com.chuify.cleanxoomclient.domain.model.Vendor
 import com.chuify.cleanxoomclient.presentation.ui.cart.CartScreen
 import com.chuify.cleanxoomclient.presentation.ui.checkout.CheckoutScreen
@@ -162,16 +161,12 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
 
         composable(
             route = Screens.Track.fullRoute(),
-            arguments = listOf(navArgument(Screens.Track.trackArg) {
+            arguments = listOf(navArgument(Screens.Track.id) {
                 type = NavType.StringType
             })
         ) { backStackEntry ->
-            backStackEntry.arguments?.getString(Screens.Track.trackArg)?.let {
-                Gson().fromJson(it, Order::class.java)?.let { order ->
-                    TrackOrderScreen(navHostController = navHostController, order = order)
-                }
-
-
+            backStackEntry.arguments?.getString(Screens.Track.id)?.let {
+                TrackOrderScreen(navHostController = navHostController, id = it)
             }
 
 
@@ -245,16 +240,15 @@ fun MainNavigation(viewModel: CheckoutViewModel = hiltViewModel()) {
             route = Screens.Success.fullRoute(),
             arguments = listOf(
                 navArgument(Screens.Success.arg) { type = NavType.StringType },
-                navArgument(Screens.Success.popUp) { type = NavType.BoolType },
+                navArgument(Screens.Success.id) { type = NavType.StringType },
             )
         ) { backStackEntry ->
-            val pop = backStackEntry.arguments?.getBoolean(Screens.Success.popUp)
-            backStackEntry.arguments?.getString(Screens.Success.arg)?.let {
+            val msg = backStackEntry.arguments?.getString(Screens.Success.arg) ?: ""
+            backStackEntry.arguments?.getString(Screens.Success.id)?.let {
                 SuccessScreen(
                     navHostController = navHostController,
-                    msg = it,
-                    popUp = pop
-
+                    msg = msg,
+                    id = it
                 )
             }
         }

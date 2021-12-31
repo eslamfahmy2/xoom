@@ -10,14 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.domain.model.Vendor
 import com.chuify.cleanxoomclient.presentation.components.CartPreview
 import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
@@ -105,7 +103,7 @@ fun VendorDetailsScreen(
                                 onClick = {
 
                                 }) {
-                                Text(text = stringResource(R.string.gas))
+                                Text(text = "LPG")
                             }
                             Spacer(modifier = Modifier.padding(8.dp))
 
@@ -128,7 +126,7 @@ fun VendorDetailsScreen(
                                 ) {
                                 Text(
                                     modifier = Modifier.fillMaxHeight(),
-                                    text = stringResource(R.string.accessories)
+                                    text = "ACCESSORIES"
                                 )
 
                             }
@@ -154,7 +152,7 @@ fun VendorDetailsScreen(
                                 ) {
                                 Text(
                                     modifier = Modifier.fillMaxHeight(),
-                                    text = stringResource(R.string.gas)
+                                    text = "LPG"
                                 )
 
                             }
@@ -166,7 +164,7 @@ fun VendorDetailsScreen(
                                 onClick = {
 
                                 }) {
-                                Text(text = stringResource(R.string.accessories))
+                                Text(text = "ACCESSORIES")
                             }
 
 

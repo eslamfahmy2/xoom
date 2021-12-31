@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.chuify.cleanxoomclient.R
@@ -27,21 +28,25 @@ fun ProductItem(
 
     Surface(
         modifier = Modifier
-
     ) {
 
         Card(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(10.dp)
                 .fillMaxWidth(),
             elevation = 15.dp,
         ) {
             Row(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row {
-
+                Row(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .weight(0.7f),
+                ) {
                     Image(
                         modifier = Modifier
                             .padding(8.dp)
@@ -128,7 +133,8 @@ fun ProductItem(
                 }
                 Column(
                     modifier = Modifier
-                        .fillMaxHeight(),
+                        .wrapContentSize()
+                        .weight(0.3f),
                     horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.SpaceEvenly
                 ) {
@@ -151,13 +157,13 @@ fun ProductItem(
                         Text(
                             text = product.price.toString(),
                             color = MaterialTheme.colors.primary,
-
-                            )
+                            fontWeight = FontWeight.SemiBold
+                        )
                         Text(
                             text = stringResource(R.string.currency),
                             color = MaterialTheme.colors.primary,
-
-                            )
+                            fontWeight = FontWeight.SemiBold
+                        )
 
                     }
 

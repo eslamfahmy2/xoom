@@ -71,6 +71,7 @@ fun CompleteOrderItem(
 
                     Column(
                         modifier = Modifier
+                            .weight(0.7f)
                             .padding(start = 8.dp),
                     ) {
 
@@ -171,7 +172,7 @@ fun CompleteOrderItem(
                     }
 
                     Column(
-                        modifier = Modifier,
+                        modifier = Modifier.weight(0.3f),
                     ) {
 
                         Text(
@@ -282,6 +283,7 @@ fun PendingOrderItem(
 
                     Column(
                         modifier = Modifier
+                            .weight(0.7f)
                             .padding(start = 8.dp),
                     ) {
 
@@ -383,7 +385,8 @@ fun PendingOrderItem(
                     }
 
                     Column(
-                        modifier = Modifier,
+                        modifier = Modifier
+                            .weight(0.3f),
                     ) {
 
                         Text(
@@ -447,7 +450,7 @@ fun PendingOrderItem(
                         text = stringResource(id = R.string.cancel)
                     )
                 }
-
+/*
                 if (order.status == OrderStatus.ORDER_STATUS_SUBMITTED.status) {
 
                     Button(
@@ -476,7 +479,7 @@ fun PendingOrderItem(
                     }
 
                 } else {
-
+*/
 
                     Button(
                         modifier = Modifier
@@ -503,7 +506,8 @@ fun PendingOrderItem(
                         )
                     }
 
-                }
+                // }
+
             }
         }
 

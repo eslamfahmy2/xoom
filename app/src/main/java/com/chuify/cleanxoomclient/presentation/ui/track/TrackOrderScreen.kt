@@ -33,7 +33,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.chuify.cleanxoomclient.R
-import com.chuify.cleanxoomclient.domain.model.Order
 import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
 import com.chuify.cleanxoomclient.presentation.components.LoadingDialog
 import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
@@ -50,7 +49,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 fun TrackOrderScreen(
     navHostController: NavHostController,
     viewModel: TrackOrderViewModel = hiltViewModel(),
-    order: Order,
+    id: String,
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -122,7 +121,7 @@ fun TrackOrderScreen(
                                 modifier = Modifier
                                     .padding(16.dp)
                                     .clickable {
-                                        navHostController.navigate(Screens.QR.routeWithArgs(order.id))
+                                        navHostController.navigate(Screens.QR.routeWithArgs(id))
                                     },
                                 imageVector = Icons.Filled.QrCode,
                                 contentDescription = null,
@@ -379,7 +378,6 @@ fun TrackOrderScreen(
                                             )
                                         )
 
-
                                         Row(
                                             horizontalArrangement = Arrangement.SpaceBetween,
                                             verticalAlignment = Alignment.CenterVertically,
@@ -425,7 +423,7 @@ fun TrackOrderScreen(
                                                                 .wrapContentSize()
                                                                 .padding(start = 8.dp)
                                                                 .align(Alignment.Start),
-                                                            text = it,
+                                                            text = trackingData.driverPhone,
                                                             color = MaterialTheme.colors.onSurface,
 
                                                             )
@@ -434,8 +432,7 @@ fun TrackOrderScreen(
                                                     Row(
                                                         horizontalArrangement = Arrangement.Start,
                                                         verticalAlignment = Alignment.CenterVertically,
-                                                        modifier = Modifier
-                                                            .padding(8.dp)
+                                                        modifier = Modifier.padding(8.dp)
                                                     ) {
 
 
@@ -443,7 +440,7 @@ fun TrackOrderScreen(
                                                             Text(
                                                                 modifier = Modifier
                                                                     .wrapContentSize(),
-                                                                text = it.toString(),
+                                                                text = trackingData.driverRating,
                                                                 color = MaterialTheme.colors.primary,
                                                                 fontWeight = FontWeight.Bold
                                                             )
@@ -459,7 +456,7 @@ fun TrackOrderScreen(
                                                         if (!trackingData.driverNumberOfTrips.isNullOrEmpty()) {
                                                             Text(
                                                                 modifier = Modifier.wrapContentSize(),
-                                                                text = "($it)",
+                                                                text = "(" + trackingData.driverNumberOfTrips + ")",
                                                                 color = Color.DarkGray
                                                             )
                                                         }
@@ -482,7 +479,7 @@ fun TrackOrderScreen(
                                                                 val dialIntent =
                                                                     Intent(Intent.ACTION_DIAL)
                                                                 dialIntent.data =
-                                                                    Uri.parse("tel:$it")
+                                                                    Uri.parse("tel:" + trackingData.driverPhone)
                                                                 startActivity(
                                                                     context,
                                                                     dialIntent,
@@ -518,7 +515,7 @@ fun TrackOrderScreen(
     }
 
     LaunchedEffect(true) {
-        viewModel.userIntent.send(TrackOrderIntent.TrackOrder(order.id))
+        viewModel.userIntent.send(TrackOrderIntent.TrackOrder(id))
         // viewModel.userIntent.send(TrackOrderIntent.TrackOrder("25514"))
     }
 

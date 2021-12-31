@@ -31,7 +31,6 @@ import com.chuify.cleanxoomclient.presentation.ui.order.component.PendingOrderIt
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 
@@ -107,23 +106,9 @@ fun PendingOrdersScreen(
                     LazyColumn {
                         items(data) { it ->
                             PendingOrderItem(order = it, onTrack = {
-                                Gson().toJson(
-                                    it.copy(
-                                        image = String(),
-                                        products = emptyList(),
-                                        locationID = String(),
-                                        paymentMethod = String(),
-                                        price = String(),
-                                        totalPrice = String(),
-                                        refill = String(),
-                                        size = String(),
-                                        name = String()
-                                    )
-                                )?.let { json ->
-                                    navHostController.navigate(
-                                        Screens.Track.routeWithArgs(json)
-                                    )
-                                }
+                                navHostController.navigate(
+                                    Screens.Track.routeWithArgs(it.id)
+                                )
                             }, onCancel = {
                                 coroutineScope.launch {
                                     viewModel.userIntent.send(PendingOrdersIntent.ShowCancel(it))
