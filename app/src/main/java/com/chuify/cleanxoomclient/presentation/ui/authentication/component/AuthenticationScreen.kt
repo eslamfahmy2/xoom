@@ -118,7 +118,9 @@ fun AuthenticationScreen(
                                     )
                                 )
                             }
-                        }
+                        },
+                        navHostController = navHostController,
+                        viewModel = viewModel
                     )
                 }
 

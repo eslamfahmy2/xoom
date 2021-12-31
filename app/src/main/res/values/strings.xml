@@ -22,7 +22,7 @@
     <string name="ordered">ordered</string>
     <string name="delivery_date">Delivery Date</string>
     <string name="from_kes_1_500">From KES: 1,500</string>
-    <string name="currency">KES.</string>
+    <string name="currency"> KES. </string>
 
     <string name="total">Total</string>
     <string name="checkout">Checkout</string>
@@ -62,7 +62,7 @@
     <string name="building_details"><![CDATA[Building & details]]></string>
     <string name="details">Details</string>
     <string name="title">Title</string>
-    <string name="please_add_address_title_and_deatails">Please, add address title and deatails</string>
+    <string name="please_add_address_title_and_deatails">Please, add address title and details</string>
     <string name="nextarrow">Next</string>
     <string name="location_map">Set location on map</string> <!--gray-->
 

@@ -3,6 +3,7 @@ package com.chuify.cleanxoomclient.presentation.ui.authentication.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -23,8 +24,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.chuify.cleanxoomclient.R
 import com.chuify.cleanxoomclient.domain.utils.Validator
+import com.chuify.cleanxoomclient.presentation.navigation.Screens
+import com.chuify.cleanxoomclient.presentation.ui.authentication.LoginViewModel
 
 
 @Composable
@@ -32,6 +36,8 @@ fun LoginScreen(
     phone: String,
     onLogin: () -> Unit,
     onValueChanged: (String) -> Unit,
+    navHostController: NavHostController,
+    viewModel: LoginViewModel,
 ) {
 
     Column(
@@ -137,6 +143,39 @@ fun LoginScreen(
                 )
             )
         }
+
+        Spacer(modifier = Modifier.padding(4.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+
+        ) {
+            Text(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .padding(8.dp),
+                text = "Don't you have account?",
+                color = MaterialTheme.colors.onSurface,
+                fontSize = 16.sp
+            )
+
+            Text(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .padding(8.dp)
+                    .clickable {
+                        focusManager.clearFocus()
+                        viewModel.idl()
+                        navHostController.navigate(Screens.SignUp.route)
+                    },
+                text = "Signup",
+                color = MaterialTheme.colors.primary,
+                fontSize = 16.sp
+            )
+        }
+
 
     }
 
