@@ -450,7 +450,7 @@ fun PendingOrderItem(
                         text = stringResource(id = R.string.cancel)
                     )
                 }
-/*
+
                 if (order.status == OrderStatus.ORDER_STATUS_SUBMITTED.status) {
 
                     Button(
@@ -479,7 +479,7 @@ fun PendingOrderItem(
                     }
 
                 } else {
-*/
+
 
                     Button(
                         modifier = Modifier
@@ -506,7 +506,7 @@ fun PendingOrderItem(
                         )
                     }
 
-                // }
+                }
 
             }
         }

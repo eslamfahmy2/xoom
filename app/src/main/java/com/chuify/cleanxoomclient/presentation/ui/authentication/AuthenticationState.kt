@@ -9,3 +9,12 @@ sealed class AuthenticationState {
     object Loading : AuthenticationState()
     object Idl : AuthenticationState()
 }
+
+sealed class OTPState {
+    data class OnVerificationCompleted(val message: String? = null) : OTPState()
+    data class OnVerificationFailed(val message: String? = null) : OTPState()
+    data class OnCodeSent(val message: String? = null) : OTPState()
+    object Loading : OTPState()
+    object Idl : OTPState()
+
+}

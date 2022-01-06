@@ -36,7 +36,7 @@ class LoginViewModel @Inject constructor(
     //703894372
     val userIntent = Channel<AuthenticationIntent>(Channel.UNLIMITED)
 
-    private val _phone: MutableStateFlow<String> = MutableStateFlow(String())
+    private val _phone: MutableStateFlow<String> = MutableStateFlow("703894372")
     val phone get() = _phone.asStateFlow()
 
     private val _firstName: MutableStateFlow<String> = MutableStateFlow(String())
@@ -58,9 +58,11 @@ class LoginViewModel @Inject constructor(
         MutableStateFlow(AuthenticationState.Idl)
     val stateUp get() = _stateUp.asStateFlow()
 
-    private val _stateVerify: MutableStateFlow<AuthenticationState> =
-        MutableStateFlow(AuthenticationState.Idl)
+    private val _stateVerify: MutableStateFlow<OTPState> =
+        MutableStateFlow(OTPState.Idl)
     val stateVerify get() = _stateVerify.asStateFlow()
+
+    private var codeVerificationId = ""
 
     init {
         handleIntent()
@@ -147,21 +149,22 @@ class LoginViewModel @Inject constructor(
         _stateUp.value = AuthenticationState.Idl
     }
 
-    fun verifyNumberCode(value: String, activity: Activity) {
+    fun sendSmsCode(value: String, activity: Activity) {
 
         val mAuth = FirebaseAuth.getInstance()
-        mAuth.firebaseAuthSettings.setAppVerificationDisabledForTesting(true)
+        //   mAuth.firebaseAuthSettings.setAppVerificationDisabledForTesting(true)
 
         viewModelScope.launch(Dispatchers.IO) {
-            _stateVerify.value = AuthenticationState.Loading
+            _stateVerify.value = OTPState.Loading
             val callback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                     Log.d(TAG, "onVerificationCompleted: ")
+                    _stateVerify.value = OTPState.OnVerificationCompleted(credential.smsCode)
                 }
 
                 override fun onVerificationFailed(e: FirebaseException) {
                     Log.d(TAG, "onVerificationFailed: " + e.message)
-                    _stateVerify.value = AuthenticationState.Error(e.message)
+                    _stateVerify.value = OTPState.OnVerificationFailed(e.message)
                 }
 
                 override fun onCodeSent(
@@ -169,10 +172,12 @@ class LoginViewModel @Inject constructor(
                     token: PhoneAuthProvider.ForceResendingToken,
                 ) {
                     Log.d(TAG, "onCodeSent: ")
+                    codeVerificationId = verificationId
+                    _stateVerify.value = OTPState.OnCodeSent(verificationId)
                 }
             }
             val options = PhoneAuthOptions.newBuilder(mAuth)
-                .setPhoneNumber(value)
+                .setPhoneNumber("+254$value")
                 .setTimeout(60L, TimeUnit.SECONDS)
                 .setCallbacks(callback)
                 .setActivity(activity)
@@ -183,5 +188,24 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun verifyCode(code: String, activity: Activity) {
 
+        val mAuth = FirebaseAuth.getInstance()
+        val credential = PhoneAuthProvider.getCredential(codeVerificationId, code)
+        _stateVerify.value = OTPState.Loading
+        viewModelScope.launch(Dispatchers.IO) {
+
+            mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(activity) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success")
+                        _stateVerify.value = OTPState.OnVerificationCompleted()
+                    } else {
+                        // Sign in failed, display a message and update the UI
+                        _stateVerify.value = OTPState.OnVerificationFailed(task.exception?.message)
+                    }
+                }
+        }
+    }
 }

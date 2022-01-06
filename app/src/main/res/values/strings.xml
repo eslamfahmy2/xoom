@@ -64,7 +64,8 @@
     <string name="title">Title</string>
     <string name="please_add_address_title_and_deatails">Please, add address title and details</string>
     <string name="nextarrow">Next</string>
-    <string name="location_map">Set location on map</string> <!--gray-->
+    <string name="location_map">Set location on map</string>
+    <string name="resend">Resend in %1$ss</string>
 
 
 </resources>
