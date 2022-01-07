@@ -30,10 +30,10 @@ class SignUpUseCase @Inject constructor(
             if (!Validator.isValidPhone(phoneNumber)) {
                 throw Exception("phone not valid")
             }
-            if (!Validator.isValidName(firstname)) {
+            if (!Validator.isValidName(firstname.trim())) {
                 throw Exception("first name not valid")
             }
-            if (!Validator.isValidName(lastname)) {
+            if (!Validator.isValidName(lastname.trim())) {
                 throw Exception("last name not valid")
             }
             if (!Validator.isValidEmail(email)) {

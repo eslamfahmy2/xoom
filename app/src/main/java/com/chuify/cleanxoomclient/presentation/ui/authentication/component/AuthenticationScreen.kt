@@ -198,7 +198,7 @@ fun AuthenticationScreen(
                 }
                 LoginResult.Signup -> {
                     viewModel.idl()
-                    navHostController.navigate(Screens.SignUp.route)
+                    navHostController.navigate(Screens.OTP.route)
                 }
             }
         }
