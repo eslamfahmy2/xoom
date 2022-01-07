@@ -44,8 +44,9 @@ fun ProductItem(
             ) {
                 Row(
                     modifier = Modifier
-                        .wrapContentSize()
-                        .weight(0.7f),
+                        .fillMaxWidth()
+                        .weight(0.7f, true),
+                    horizontalArrangement = Arrangement.Start
                 ) {
                     Image(
                         modifier = Modifier
@@ -131,10 +132,11 @@ fun ProductItem(
                     }
 
                 }
+
                 Column(
                     modifier = Modifier
-                        .wrapContentSize()
-                        .weight(0.3f),
+                        .fillMaxWidth()
+                        .weight(0.3f, true),
                     horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.SpaceEvenly
                 ) {

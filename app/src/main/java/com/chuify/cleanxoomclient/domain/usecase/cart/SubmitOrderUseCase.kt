@@ -30,7 +30,7 @@ class SubmitOrderUseCase @Inject constructor(
     ) = flow<SubmitOrderStatus> {
         try {
             emit(SubmitOrderStatus.Loading())
-            if (locations == null || locations.id.isNullOrEmpty()) throw Exception("please select location")
+            if (locations == null || locations.id.isNullOrEmpty()) throw Exception("Address is required. Please provide a delivery address")
             locations.let { location ->
 
                 val totalPrice = items.sumOf { item -> item.basePrice * item.quantity }
@@ -77,7 +77,7 @@ class SubmitOrderUseCase @Inject constructor(
                     }
                 }
 
-            } ?: throw Exception("please select location")
+            }
 
 
         } catch (e: Exception) {

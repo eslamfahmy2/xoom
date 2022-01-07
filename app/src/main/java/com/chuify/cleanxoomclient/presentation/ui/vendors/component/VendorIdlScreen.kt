@@ -1,11 +1,7 @@
 package com.chuify.cleanxoomclient.presentation.ui.vendors.component
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -20,7 +16,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chuify.cleanxoomclient.R
-import com.chuify.cleanxoomclient.domain.model.Accessory
 import com.chuify.cleanxoomclient.domain.model.Vendor
 
 
@@ -28,14 +23,17 @@ import com.chuify.cleanxoomclient.domain.model.Vendor
 @Composable
 fun VendorIdlScreen(
     data: List<Vendor>,
-    accessories: List<Accessory>,
     onItemClicked: (Vendor) -> Unit,
     searchText: String,
     onTextChange: (String) -> Unit,
-    onAccessoryClicked: (Accessory) -> Unit,
 ) {
 
-    Column {
+    Column(
+        Modifier
+            .fillMaxSize()
+    ) {
+        Spacer(modifier = Modifier.padding(top = 8.dp))
+
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -67,7 +65,7 @@ fun VendorIdlScreen(
 
         )
         Spacer(modifier = Modifier.padding(top = 8.dp))
-
+/*
         LazyRow {
             items(accessories) {
                 AccessoryChip(accessory = it) { accessory ->
@@ -77,8 +75,7 @@ fun VendorIdlScreen(
         }
 
         Spacer(modifier = Modifier.padding(top = 8.dp))
-
-
+*/
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(data) { it ->
                 VendorItem(vendor = it, onItemClick = { onItemClicked(it) })

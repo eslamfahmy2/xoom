@@ -48,6 +48,7 @@
         tools:ignore="ImageContrastCheck" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:gravity="center"
         android:id="@+id/btnConfirmLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,6 +59,7 @@
         android:layout_marginBottom="16dp"
         android:background="@color/purple_500"
         android:enabled="true"
+        android:padding="8dp"
         android:text="@string/nextarrow"
         android:textAllCaps="false"
         android:visibility="visible" />
@@ -95,6 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:backgroundTint="@color/purple_200"
                 android:hint="@string/title"
                 android:imeOptions="actionNext"
                 android:inputType="text"
@@ -106,6 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:hint="@string/details"
+                android:backgroundTint="@color/purple_200"
                 android:imeOptions="actionNext"
                 android:inputType="text"
                 android:maxLines="1" />
@@ -116,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:hint="@string/building_details"
+                android:backgroundTint="@color/purple_200"
                 android:imeOptions="actionNext"
                 android:inputType="text"
                 android:maxLines="1" />

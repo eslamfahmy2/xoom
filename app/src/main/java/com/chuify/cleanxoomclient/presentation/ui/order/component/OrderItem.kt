@@ -45,7 +45,7 @@ fun CompleteOrderItem(
     ) {
         Column {
             Row(
-                horizontalArrangement = Arrangement.Start,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxSize()
@@ -71,8 +71,10 @@ fun CompleteOrderItem(
 
                     Column(
                         modifier = Modifier
-                            .weight(0.7f)
+                            .fillMaxWidth()
+                            .weight(0.7f, true)
                             .padding(start = 8.dp),
+                        horizontalAlignment = Alignment.Start,
                     ) {
 
                         Text(
@@ -172,7 +174,10 @@ fun CompleteOrderItem(
                     }
 
                     Column(
-                        modifier = Modifier.weight(0.3f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.3f, true),
+                        horizontalAlignment = Alignment.End,
                     ) {
 
                         Text(
@@ -187,6 +192,7 @@ fun CompleteOrderItem(
                         Row(
                             modifier = Modifier
                                 .wrapContentSize()
+                                .align(Alignment.End)
                                 .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
                         ) {
                             Text(
@@ -255,7 +261,8 @@ fun PendingOrderItem(
             .fillMaxWidth(),
         elevation = 4.dp
     ) {
-        Column {
+        Column(Modifier.fillMaxWidth()) {
+
             Row(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
@@ -280,11 +287,11 @@ fun PendingOrderItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-
                     Column(
                         modifier = Modifier
-                            .weight(0.7f)
+                            .weight(0.7f, true)
                             .padding(start = 8.dp),
+                        horizontalAlignment = Alignment.Start
                     ) {
 
                         Text(
@@ -386,7 +393,8 @@ fun PendingOrderItem(
 
                     Column(
                         modifier = Modifier
-                            .weight(0.3f),
+                            .weight(0.3f, true),
+                        horizontalAlignment = Alignment.End
                     ) {
 
                         Text(
@@ -402,6 +410,7 @@ fun PendingOrderItem(
                         Row(
                             modifier = Modifier
                                 .wrapContentSize()
+                                .align(Alignment.End)
                                 .padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
                         ) {
                             Text(

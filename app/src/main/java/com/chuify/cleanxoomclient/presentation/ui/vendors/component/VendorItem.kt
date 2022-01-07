@@ -48,6 +48,7 @@ fun VendorItem(
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
+
             Spacer(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -57,6 +58,7 @@ fun VendorItem(
                         shape = RoundedCornerShape(0.dp)
                     )
             )
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,

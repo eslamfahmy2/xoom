@@ -4,14 +4,16 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,13 +26,17 @@ import com.chuify.cleanxoomclient.presentation.components.DefaultSnackBar
 import com.chuify.cleanxoomclient.presentation.components.HomeBar
 import com.chuify.cleanxoomclient.presentation.components.LoadingListScreen
 import com.chuify.cleanxoomclient.presentation.navigation.Screens
-import com.chuify.cleanxoomclient.presentation.ui.accessoryDetails.AccessoryDetailsIntent
+import com.chuify.cleanxoomclient.presentation.ui.accessory.component.AccessoryScreen
 import com.chuify.cleanxoomclient.presentation.ui.accessoryDetails.AccessoryDetailsState
 import com.chuify.cleanxoomclient.presentation.ui.accessoryDetails.AccessoryDetailsViewModel
 import com.chuify.cleanxoomclient.presentation.ui.accessoryDetails.component.AccessoryPref
+import com.chuify.cleanxoomclient.presentation.ui.vendorDetails.VendorDetails
 import com.chuify.cleanxoomclient.presentation.ui.vendors.VendorIntent
 import com.chuify.cleanxoomclient.presentation.ui.vendors.VendorState
 import com.chuify.cleanxoomclient.presentation.ui.vendors.VendorViewModel
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.gson.Gson
@@ -38,6 +44,8 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "VendorScreen"
 
+@ExperimentalPagerApi
+@ExperimentalComposeUiApi
 @SuppressLint("StateFlowValueCalledInComposition")
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
@@ -58,11 +66,13 @@ fun VendorScreen(
 
     val scaffoldState = rememberScaffoldState()
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Scaffold(
         topBar = {
             HomeBar(
                 action = {
-                  navHostController.navigate(Screens.Cart.route)
+                    navHostController.navigate(Screens.Cart.route)
                 },
                 cartCount = cartCount
             )
@@ -127,35 +137,125 @@ fun VendorScreen(
                                 }
                             },
                         ) {
-                            VendorIdlScreen(
-                                data = state.data,
-                                accessories = viewModel.accessories.value,
-                                onItemClicked = {
-                                    Gson().toJson(it.copy(image = String()))?.let { json ->
-                                        navHostController.navigate(
-                                            Screens.VendorDetails.routeWithArgs(
-                                                json
-                                            )
-                                        )
+
+                            Column(Modifier.fillMaxSize()) {
+
+                                val pagerState = rememberPagerState()
+
+                                Row(modifier = Modifier.padding(8.dp)) {
+
+                                    val selected = remember {
+                                        mutableStateOf(VendorDetails.GAS)
                                     }
-                                },
-                                searchText = state.searchText,
-                                onTextChange = {
-                                    coroutineScope.launch {
-                                        viewModel.userIntent.send(VendorIntent.Filter(it))
+
+                                    when (selected.value) {
+                                        VendorDetails.GAS -> {
+                                            Button(
+                                                modifier = Modifier.height(40.dp),
+                                                onClick = {
+
+                                                }) {
+                                                Text(text = "LPG")
+                                            }
+                                            Spacer(modifier = Modifier.padding(8.dp))
+
+                                            Button(
+                                                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                                                modifier = Modifier
+                                                    .border(
+                                                        width = 1.dp,
+                                                        shape = RoundedCornerShape(5.dp),
+                                                        color = Color.Gray,
+                                                    )
+                                                    .height(40.dp),
+                                                onClick = {
+                                                    coroutineScope.launch {
+                                                        selected.value = VendorDetails.ACCESSORIES
+                                                        pagerState.animateScrollToPage(1)
+                                                        keyboardController?.hide()
+                                                    }
+                                                },
+
+                                                ) {
+                                                Text(
+                                                    modifier = Modifier.fillMaxHeight(),
+                                                    text = "ACCESSORIES"
+                                                )
+
+                                            }
+
+                                        }
+                                        VendorDetails.ACCESSORIES -> {
+                                            Button(
+                                                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface),
+                                                modifier = Modifier
+                                                    .border(
+                                                        width = 1.dp,
+                                                        shape = RoundedCornerShape(5.dp),
+                                                        color = Color.Gray,
+                                                    )
+                                                    .height(40.dp),
+                                                onClick = {
+                                                    coroutineScope.launch {
+                                                        selected.value = VendorDetails.GAS
+                                                        pagerState.animateScrollToPage(0)
+                                                    }
+                                                },
+
+                                                ) {
+                                                Text(
+                                                    modifier = Modifier.fillMaxHeight(),
+                                                    text = "LPG"
+                                                )
+
+                                            }
+
+                                            Spacer(modifier = Modifier.padding(8.dp))
+
+                                            Button(
+                                                modifier = Modifier.height(40.dp),
+                                                onClick = {
+
+                                                }) {
+                                                Text(text = "ACCESSORIES")
+                                            }
+
+
+                                        }
                                     }
-                                },
-                                onAccessoryClicked = {
-                                    coroutineScope.launch {
-                                        Log.d(TAG, "onAccessoryClicked: $it")
-                                        accessoryDetailsViewModel.userIntent.send(
-                                            AccessoryDetailsIntent.OpenAccessoryPreview(
-                                                it
-                                            )
+
+                                }
+
+                                HorizontalPager(
+                                    state = pagerState,
+                                    count = 2,
+                                ) {
+                                    if (it == 0) {
+                                        VendorIdlScreen(
+                                            data = state.data,
+                                            onItemClicked = {
+                                                Gson().toJson(it.copy(image = String()))
+                                                    ?.let { json ->
+                                                        navHostController.navigate(
+                                                            Screens.VendorDetails.routeWithArgs(
+                                                                json
+                                                            )
+                                                        )
+                                                    }
+                                            },
+                                            searchText = state.searchText,
+                                            onTextChange = {
+                                                coroutineScope.launch {
+                                                    viewModel.userIntent.send(VendorIntent.Filter(it))
+                                                }
+                                            },
                                         )
+                                    } else {
+                                        AccessoryScreen(viewModel = hiltViewModel())
                                     }
                                 }
-                            )
+
+                            }
                         }
 
                         when (stateAccessoryPref) {

@@ -30,6 +30,7 @@ import com.chuify.cleanxoomclient.presentation.components.*
 import com.chuify.cleanxoomclient.presentation.navigation.Screens
 import com.chuify.cleanxoomclient.presentation.ui.cart.CartItem
 import com.google.accompanist.pager.ExperimentalPagerApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -358,6 +359,12 @@ fun CheckoutScreen(
                         message = it,
                         actionLabel = "Dismiss",
                     )
+                    delay(500)
+                    viewModel.userIntent.send(
+                        CheckoutIntent.ChangeStatus(
+                            CheckoutState.Success.OrderSubmitted()
+                        )
+                    )
                 }
             }
         }
@@ -367,6 +374,12 @@ fun CheckoutScreen(
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it,
                         actionLabel = "Dismiss",
+                    )
+                    delay(500)
+                    viewModel.userIntent.send(
+                        CheckoutIntent.ChangeStatus(
+                            CheckoutState.Success.OrderSubmitted()
+                        )
                     )
                 }
             }

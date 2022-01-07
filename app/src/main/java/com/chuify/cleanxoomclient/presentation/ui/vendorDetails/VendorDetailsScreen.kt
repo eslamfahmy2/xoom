@@ -2,14 +2,17 @@ package com.chuify.cleanxoomclient.presentation.ui.vendorDetails
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,12 +23,8 @@ import com.chuify.cleanxoomclient.domain.model.Vendor
 import com.chuify.cleanxoomclient.presentation.components.CartPreview
 import com.chuify.cleanxoomclient.presentation.components.SecondaryBar
 import com.chuify.cleanxoomclient.presentation.navigation.Screens
-import com.chuify.cleanxoomclient.presentation.ui.accessory.component.AccessoryScreen
 import com.chuify.cleanxoomclient.presentation.ui.product.component.ProductsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.launch
 
 enum class VendorDetails {
     GAS,
@@ -88,6 +87,10 @@ fun VendorDetailsScreen(
                     style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 )
 
+                ProductsScreen(id = vendor.id)
+
+
+                /*
                 val pagerState = rememberPagerState()
 
                 Row(modifier = Modifier.padding(8.dp)) {
@@ -185,6 +188,7 @@ fun VendorDetailsScreen(
                         }
                     }
                 }
+                */
 
             }
 

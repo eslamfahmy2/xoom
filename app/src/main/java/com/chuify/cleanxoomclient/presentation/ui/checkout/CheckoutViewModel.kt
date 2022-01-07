@@ -211,7 +211,7 @@ class CheckoutViewModel @Inject constructor(
                 }
                 is SubmitOrderStatus.PaymentFail -> {
                     Log.d(TAG, "Error: " + dataState.msg)
-                    _state.value = CheckoutState.Success.OrderSubmitted(dataState.msg)
+                    _state.value = CheckoutState.Error.SubmitOrderError(dataState.msg)
                 }
                 is SubmitOrderStatus.PaymentSuccess -> {
                     Log.d(TAG, "Error: " + dataState.msg)
